@@ -1,12 +1,12 @@
 package ru.practicum.android.diploma.data.dto
 
- class VacancyRequest(
-     private val text: String,
-     private val area: String?,
-     private val pageLimit: Int,
-     private val showSalary: Boolean,
-     private val industry: String?,
-     private val salary: Int?,
+class VacancyRequest(
+    private val text: String,
+    private val area: String?,
+    private val pageLimit: Int,
+    private val showSalary: Boolean,
+    private val industry: String?,
+    private val salary: Int?,
 ) {
     fun map(): HashMap<String, String> {
         val options: HashMap<String, String> = HashMap()
