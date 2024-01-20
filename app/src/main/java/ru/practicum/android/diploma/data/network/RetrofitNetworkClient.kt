@@ -34,9 +34,9 @@ class RetrofitNetworkClient(
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities != null) {
             when {
-                (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) or
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) or
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) or
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) -> return true
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
             }
         }
         return false
