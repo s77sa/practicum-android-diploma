@@ -1,16 +1,14 @@
 package ru.practicum.android.diploma.data.dto
 
-data class VacancyRequest(
-    val text: String,
-    val area: String?,
-    val pageLimit: Int,
-    val showSalary: Boolean,
-    val industry: String?,
-    val salary: Int?,
+ class VacancyRequest(
+     private val text: String,
+     private val area: String?,
+     private val pageLimit: Int,
+     private val showSalary: Boolean,
+     private val industry: String?,
+     private val salary: Int?,
 ) {
-
-
-    fun request(): HashMap<String, String> {
+    fun map(): HashMap<String, String> {
         val options: HashMap<String, String> = HashMap()
         options["text"] = text
         options["per_page"] = pageLimit.toString()
