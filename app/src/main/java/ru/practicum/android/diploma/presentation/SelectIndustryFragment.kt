@@ -10,8 +10,8 @@ import ru.practicum.android.diploma.R
 class SelectIndustryFragment : Fragment() {
 
     override fun onCreateView(
-
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_select_industry, container, false)
