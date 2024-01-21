@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.DI
 
-
 import com.google.gson.Gson
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -13,7 +12,7 @@ val searchModule = module {
 
     single<HHApi> {
         Retrofit.Builder()
-            .baseUrl("https://itunes.apple.com")
+            .baseUrl("https://api.hh.ru/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(HHApi::class.java)
