@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("ru.practicum.android.diploma.plugins.developproperties")
-    id ("kotlin-kapt")
+    id("kotlin-kapt")
 }
 
 android {
@@ -74,10 +74,10 @@ dependencies {
 
     //Fragment
     implementation(libs.androidx.fragment.ktx)
-    implementation (libs.androidx.preference.ktx)
+    implementation(libs.androidx.preference.ktx)
 
     //Recyclerview
-    implementation (libs.androidx.recyclerview.selection)
+    implementation(libs.androidx.recyclerview.selection)
 
     //Glide
     implementation(libs.glide)
@@ -90,7 +90,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     // To use Kotlin annotation processing tool (kapt)
-    kapt (libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
     // To use Kotlin Symbol Processing (KSP)
     //ksp("androidx.room:room-compiler:2.6.1")
     // optional - Kotlin Extensions and Coroutines support for Room
