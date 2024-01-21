@@ -58,42 +58,37 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
-    //Koin
+    // Koin
     implementation(libs.koin.android)
 
-    //Retrofit
+    // Retrofit
     implementation(libs.retrofit)
 
-    //Gson
+    // Gson
     implementation(libs.gson)
     implementation(libs.converter.gson)
 
-    //NavigationGraph
+    // NavigationGraph
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
-    //Fragment
+    // Fragment
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.preference.ktx)
 
-    //Recyclerview
+    // Recyclerview
     implementation(libs.androidx.recyclerview.selection)
 
-    //Glide
+    // Glide
     implementation(libs.glide)
 
-    //ViewModel
+    // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    //Room
-    //val room_version=("2.6.1")
+    // Room
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
-    // To use Kotlin annotation processing tool (kapt)
     kapt(libs.androidx.room.compiler)
-    // To use Kotlin Symbol Processing (KSP)
-    //ksp("androidx.room:room-compiler:2.6.1")
-    // optional - Kotlin Extensions and Coroutines support for Room
     implementation(libs.androidx.room.ktx)
 
 }
