@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.practicum.android.diploma.databinding.FragmentFiltersSettingsBinding
 
-
 class FiltersSettingsFragment : Fragment() {
     private var _binding: FragmentFiltersSettingsBinding? = null
     private val binding get() = _binding!!
