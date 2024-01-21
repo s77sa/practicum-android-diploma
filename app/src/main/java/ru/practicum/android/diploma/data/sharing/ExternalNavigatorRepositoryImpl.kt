@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.data.sharing
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -17,7 +18,7 @@ class ExternalNavigatorRepositoryImpl(private val context: Context) : ExternalNa
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(shareIntent)
             null
-        } catch (e: Exception) {
+        } catch (e: ActivityNotFoundException) {
             e.message
         }
     }
@@ -30,7 +31,7 @@ class ExternalNavigatorRepositoryImpl(private val context: Context) : ExternalNa
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(shareIntent)
             null
-        } catch (e: Exception) {
+        } catch (e: ActivityNotFoundException) {
             e.message
         }
     }
@@ -41,7 +42,7 @@ class ExternalNavigatorRepositoryImpl(private val context: Context) : ExternalNa
             shareIntent.data = Uri.parse("tel:$number")
             context.startActivity(shareIntent)
             null
-        } catch (e: Exception) {
+        } catch (e: ActivityNotFoundException) {
             e.message
         }
     }
