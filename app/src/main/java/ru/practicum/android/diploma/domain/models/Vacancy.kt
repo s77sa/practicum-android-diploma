@@ -1,13 +1,7 @@
-package ru.practicum.android.diploma.data.db.entity
+package ru.practicum.android.diploma.domain.models
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.util.Calendar
-
-@Entity(tableName = "favourite_vacancy_table")
-data class FavouriteVacancyEntity(
-    @PrimaryKey
-    val vacancyId: String,
+data class Vacancy(
+    val id: String,
     val name: String,
     val city: String,
     val employer: String?,
@@ -27,6 +21,6 @@ data class FavouriteVacancyEntity(
     val experience: String?,
     val skills: String,
     val schedule: String?,
-    val isFavourite: Boolean = false,
-    val inDbDate: Long = Calendar.getInstance().time.time
+    val isFavourite: Boolean?,
 )
+
