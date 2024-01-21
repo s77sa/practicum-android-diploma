@@ -19,4 +19,3 @@ interface HHApi {
         @QueryMap params: Map<String, String>
     ): Response<VacancyResponse>
 }
-
