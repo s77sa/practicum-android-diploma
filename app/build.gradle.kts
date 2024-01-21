@@ -42,15 +42,12 @@ android {
 dependencies {
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
-
     // UI layer libraries
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
-
     // region Unit tests
     testImplementation(libs.unitTests.junit)
     // endregion
-
     // region UI tests
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
