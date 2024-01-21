@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.DI
+package ru.practicum.android.diploma.data.di
 
 import com.google.gson.Gson
 import org.koin.dsl.module
