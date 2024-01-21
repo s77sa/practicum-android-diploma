@@ -33,7 +33,6 @@ class VacancyConverter {
         )
     }
 
-
     fun map(vacancy: FavouriteVacancyEntity): VacancyDTO {
         return VacancyDTO(
             vacancy.vacancyId,
