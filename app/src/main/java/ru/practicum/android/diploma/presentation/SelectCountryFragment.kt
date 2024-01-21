@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.R
 class SelectCountryFragment : Fragment() {
 
     override fun onCreateView(
+
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
