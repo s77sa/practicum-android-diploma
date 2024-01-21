@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.R
 class SelectWorkplaceFragment : Fragment() {
 
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {

@@ -10,10 +10,12 @@ import ru.practicum.android.diploma.R
 class SimilarVacanciesFragment : Fragment() {
 
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_similar_vacancies, container, false)
     }
+
 }
 

@@ -17,5 +17,6 @@ class App : Application() {
             modules(listOf(searchModule))
         }
     }
+
 }
 

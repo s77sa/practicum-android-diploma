@@ -10,11 +10,12 @@ import ru.practicum.android.diploma.databinding.ActivityRootBinding
 
 class RootActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRootBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRootBinding.inflate(layoutInflater)
+
+        val binding by lazy {
+            ActivityRootBinding.inflate(layoutInflater)
+        }
         val view = binding.root
         setContentView(view)
 
