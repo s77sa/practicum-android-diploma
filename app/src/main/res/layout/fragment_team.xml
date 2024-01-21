@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ru.practicum.android.diploma.presentation.TeamFragment">
+
+    <TextView
+        android:id="@+id/toolbar_settings"
+        style="@style/HeaderStyle"
+        android:layout_width="0dp"
+        android:text="Команда"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_main"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/ys_display_bold"
+        android:text="Над приложением работали"
+        android:textColor="@color/blackDayWhiteNight"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_settings" />
+
+    <TextView
+        android:id="@+id/text_name1"
+        style="@style/TeamStyle"
+        android:layout_marginTop="32dp"
+        android:text="Александр Семенов - лид"
+        app:layout_constraintStart_toStartOf="@+id/text_main"
+        app:layout_constraintTop_toBottomOf="@+id/text_main" />
+
+    <TextView
+        android:id="@+id/text_name2"
+        style="@style/TeamStyle"
+        android:text="Виталий Захарин"
+        app:layout_constraintStart_toStartOf="@+id/text_main"
+        app:layout_constraintTop_toBottomOf="@+id/text_name1" />
+
+    <TextView
+        android:id="@+id/text_name3"
+        style="@style/TeamStyle"
+        android:text="Олег Бугров"
+        app:layout_constraintStart_toStartOf="@+id/text_main"
+        app:layout_constraintTop_toBottomOf="@+id/text_name2" />
+
+    <TextView
+        android:id="@+id/text_name4"
+        style="@style/TeamStyle"
+        android:text="Алексей Маржина"
+        app:layout_constraintStart_toStartOf="@+id/text_main"
+        app:layout_constraintTop_toBottomOf="@+id/text_name3" />
+
+    <TextView
+        android:id="@+id/text_name5"
+        style="@style/TeamStyle"
+        android:text="Александр Харханов"
+        app:layout_constraintStart_toStartOf="@+id/text_main"
+        app:layout_constraintTop_toBottomOf="@+id/text_name4" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

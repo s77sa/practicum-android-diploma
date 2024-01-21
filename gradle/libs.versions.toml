@@ -8,7 +8,7 @@ java = "VERSION_1_8"
 
 # Build constants
 koinAndroid = "3.4.2"
-kotlinxCoroutinesAndroid = "1.6.4"
+kotlinxCoroutinesAndroid = "1.7.1"
 lifecycleViewmodelKtx = "2.7.0"
 minSdk = "26"
 compileSdk = "34"
@@ -21,6 +21,7 @@ targetSdk = "33"
 # Detekt
 detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
+
 
 [libraries]
 
@@ -53,7 +54,7 @@ androidX-core = "androidx.core:core-ktx:1.12.0"
 androidX-appCompat = "androidx.appcompat:appcompat:1.6.1"
 
 # UI layer libraries
-ui-material = "com.google.android.material:material:1.10.0"
+ui-material = "com.google.android.material:material:1.11.0"
 ui-constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 
 # Unit tests
@@ -62,5 +63,6 @@ unitTests-junit = "junit:junit:4.13.2"
 # UI tests
 uiTests-junitExt = "androidx.test.ext:junit:1.1.5"
 uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
+navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 
 [bundles]
