@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.data.dto
 class VacancyRequest(
     private val text: String,
     private val area: String?,
-    private val pageLimit: Int,
+    private val pageLimit: Int = 20,
     private val showSalary: Boolean,
     private val industry: String?,
     private val salary: Int?,

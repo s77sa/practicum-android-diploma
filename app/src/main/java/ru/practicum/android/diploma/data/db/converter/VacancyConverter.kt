@@ -1,43 +1,61 @@
 package ru.practicum.android.diploma.data.db.converter
 
 import ru.practicum.android.diploma.data.db.entity.FavouriteVacancyEntity
-import ru.practicum.android.diploma.data.dto.VacancyDTO
+import ru.practicum.android.diploma.domain.models.Vacancy
 import java.util.Calendar
 
 class VacancyConverter {
 
-    fun map(vacancy: VacancyDTO): FavouriteVacancyEntity {
+    fun map(vacancy: Vacancy): FavouriteVacancyEntity {
         return FavouriteVacancyEntity(
-            vacancy.id,
-            vacancy.name,
-            city = "",
-            employer = "",
-            employerLogoUrl = "",
-            department = "",
-            salaryCurrency = "",
-            salaryFrom = 0,
-            salaryTo = "",
-            contactEmail = "",
-            contactName = "",
-            contactPhones = "",
-            contactComment = "",
-            description = "",
-            vacancy.url,
-            area = "",
-            logo = "",
-            experience = "",
-            skills = "",
-            schedule = "",
+            vacancyId = vacancy.id,
+            name = vacancy.name,
+            city = vacancy.city,
+            employer = vacancy.employer,
+            employerLogoUrl = vacancy.employerLogoUrl,
+            department = vacancy.department,
+            salaryCurrency = vacancy.salaryCurrency,
+            salaryFrom = vacancy.salaryFrom,
+            salaryTo = vacancy.salaryTo,
+            contactEmail = vacancy.contactEmail,
+            contactName = vacancy.contactName,
+            contactPhones = vacancy.contactPhones,
+            contactComment = vacancy.contactComment,
+            description = vacancy.description,
+            url = vacancy.url,
+            area = vacancy.area,
+            logo = vacancy.logo,
+            experience = vacancy.experience,
+            skills = vacancy.skills,
+            schedule = vacancy.schedule,
             isFavourite = false,
             inDbDate = Calendar.getInstance().time.time
         )
     }
 
-    fun map(vacancy: FavouriteVacancyEntity): VacancyDTO {
-        return VacancyDTO(
-            vacancy.vacancyId,
-            vacancy.name,
-            vacancy.url
+    fun map(vacancy: FavouriteVacancyEntity): Vacancy {
+        return Vacancy(
+            id = vacancy.vacancyId,
+            name = vacancy.name,
+            city = vacancy.city,
+            employer = vacancy.employer,
+            employerLogoUrl = vacancy.employerLogoUrl,
+            department = vacancy.department,
+            salaryCurrency = vacancy.salaryCurrency,
+            salaryFrom = vacancy.salaryFrom,
+            salaryTo = vacancy.salaryTo,
+            contactEmail = vacancy.contactEmail,
+            contactName = vacancy.contactName,
+            contactPhones = vacancy.contactPhones,
+            contactComment = vacancy.contactComment,
+            description = vacancy.description,
+            url = vacancy.url,
+            area = vacancy.area,
+            logo = vacancy.logo,
+            experience = vacancy.experience,
+            skills = vacancy.skills,
+            schedule = vacancy.schedule,
+            isFavourite = vacancy.isFavourite,
         )
     }
 }
