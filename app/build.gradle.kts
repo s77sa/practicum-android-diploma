@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("ru.practicum.android.diploma.plugins.developproperties")
+    id("kotlin-kapt")
 }
 
 android {
@@ -41,16 +42,6 @@ android {
 }
 
 dependencies {
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("io.insert-koin:koin-android:3.3.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
-    implementation("androidx.fragment:fragment-ktx:1.5.6")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
     // UI layer libraries
@@ -63,4 +54,41 @@ dependencies {
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
     // endregion
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+
+    // Koin
+    implementation(libs.koin.android)
+
+    // Retrofit
+    implementation(libs.retrofit)
+
+    // Gson
+    implementation(libs.gson)
+    implementation(libs.converter.gson)
+
+    // NavigationGraph
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+
+    // Fragment
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.preference.ktx)
+
+    // Recyclerview
+    implementation(libs.androidx.recyclerview.selection)
+
+    // Glide
+    implementation(libs.glide)
+
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
 }
