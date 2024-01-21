@@ -7,9 +7,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import ru.practicum.android.diploma.DI.searchModule
 
-
 class App : Application() {
-
     override fun onCreate() {
         super.onCreate()
 
