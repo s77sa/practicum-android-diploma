@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.data.dto
 
-data class ContactsDTO(
+data class ContactsDto(
     val email: String,
     val name: String,
-    val phones: List<PhonesDTO>?
+    val phones: List<PhonesDto>?
 )

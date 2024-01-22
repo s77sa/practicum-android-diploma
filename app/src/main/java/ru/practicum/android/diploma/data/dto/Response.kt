@@ -1,5 +1,5 @@
 package ru.practicum.android.diploma.data.dto
 
-data class KeySkillDTO(
-    val name: String
-)
+open class Response {
+    var resultCode = 0
+}
