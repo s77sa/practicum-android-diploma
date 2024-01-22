@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/select_region_back_arrow_imageview"
-        style="@style/BackHeaderBackArrowStyle"
+        style="@style/HeaderBackArrowStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

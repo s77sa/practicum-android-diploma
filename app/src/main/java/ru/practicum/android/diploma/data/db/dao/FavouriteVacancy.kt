@@ -19,7 +19,7 @@ interface FavouriteVacancy {
     suspend fun getFavouriteVacanciesByTime(): List<FavouriteVacancyEntity>
 
     @Query("SELECT * FROM favourite_vacancy_table WHERE isFavourite=1 AND vacancyId = :vacancyId")
-    suspend fun getFavoriteTrack(vacancyId: String): List<FavouriteVacancyEntity>
+    suspend fun getFavoriteVacancy(vacancyId: String): List<FavouriteVacancyEntity>
 
     @Query("DELETE FROM favourite_vacancy_table WHERE isFavourite=1 AND vacancyId = :vacancyId")
     suspend fun deleteFavoriteVacancy(vacancyId: String)
