@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-class VacancyDetailResponse(
+data class VacancyDetailResponse(
     val id: String,
     val name: String,
     val url: String,
@@ -18,5 +18,4 @@ class VacancyDetailResponse(
     val professionalRoles: List<ProfessionalRoleDto>?,
     val salary: SalaryDto?,
     val schedule: ScheduleDto?
-):Response()
-
+) : Response()
