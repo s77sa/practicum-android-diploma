@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.data.dto
 
-data class PhonesDTO(
+data class PhonesDto(
     val city: String,
     val comment: String?,
     val country: String,

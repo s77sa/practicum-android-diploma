@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class LogoUrlDTO(
+data class LogoUrlDto(
     @SerializedName("90")
     val smallSize: String,
     @SerializedName("240")

@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.data.dto
 
-data class ProfessionalRoleDTO(
+data class ProfessionalRoleDto(
     val id: String,
     val name: String
 )
