@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.practicum.android.diploma.data.dto.AreaResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
@@ -39,6 +40,26 @@ class RetrofitNetworkClient(
             when (response.isSuccessful) {
                 true -> {
                     val responseReturn = response.body() as VacancyDetailResponse
+                    responseReturn.apply { resultCode = response.code() }
+                }
+
+                else -> {
+                    Response().apply { resultCode = response.code() }
+                }
+            }
+        }
+    }
+
+    override suspend fun getAreas(): Response {
+        if (!isConnected()) {
+            return Response().apply { resultCode = -1 }
+        }
+        return withContext(Dispatchers.IO) {
+            val response = hhApi.getArea()
+
+            when (response.isSuccessful) {
+                true -> {
+                    val responseReturn = response.body() as AreaResponse
                     responseReturn.apply { resultCode = response.code() }
                 }
 
