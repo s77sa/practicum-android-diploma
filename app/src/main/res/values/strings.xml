@@ -5,4 +5,5 @@
     <string name="no_internet">Нет интернета</string>
     <string name="nothing_found">Не удалось получить \nсписок вакансий</string>
     <string name="vacancy_search">Поиск Вакансий</string>
+    <string name="search_placeholder">Найдено 1000 вакансий</string>
 </resources>

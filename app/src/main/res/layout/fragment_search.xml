@@ -117,7 +117,7 @@
         android:paddingTop="@dimen/dp_4"
         android:paddingEnd="@dimen/dp_12"
         android:paddingBottom="@dimen/dp_4"
-        android:text="@string/search_palecholder"
+        android:text="@string/search_placeholder"
         android:textColor="@color/yp_white"
         android:textFontWeight="400"
         android:textSize="@dimen/sp_16"
