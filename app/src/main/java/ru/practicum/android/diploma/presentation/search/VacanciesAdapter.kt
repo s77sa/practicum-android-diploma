@@ -11,14 +11,9 @@ class VacanciesAdapter(
     private val clickListener: String // ToDo заменить String на : VacancyClickListener
 ) : RecyclerView.Adapter<VacancyViewHolder>() {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacancyViewHolder {
         return VacancyViewHolder(
-            LayoutSearchVacancyBinding
-                .inflate(
-                    LayoutInflater
-                        .from(parent.context), parent, false
-                )
+            LayoutSearchVacancyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
