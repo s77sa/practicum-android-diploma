@@ -6,7 +6,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
-import ru.practicum.android.diploma.data.dto.AreaResponse
+import ru.practicum.android.diploma.data.dto.AreaNestedDto
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 
@@ -30,5 +30,9 @@ interface HHApi {
     suspend fun getVacancy(@Path("vacancy_id") id: String): Response<VacancyDetailResponse>
 
     @GET("/areas/")
-    suspend fun getArea(): Response<AreaResponse>
+    suspend fun getArea(): Response<List<AreaNestedDto>>
+
+    @GET("/areas/{area_id}/")
+    suspend fun getNestedArea(@Path("area_id") id: String): Response<AreaNestedDto>
+
 }

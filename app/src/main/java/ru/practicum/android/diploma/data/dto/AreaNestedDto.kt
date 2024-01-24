@@ -2,10 +2,10 @@ package ru.practicum.android.diploma.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class EmployerDto(
+data class AreaNestedDto(
     val id: String,
-    @SerializedName("logo_urls")
-    val logoUrls: LogoUrlDto?,
     val name: String,
-    val url: String
-)
+    val areas: List<AreaNestedDto>?,
+    @SerializedName("parent_id")
+    val parentId: String?,
+) : Response()

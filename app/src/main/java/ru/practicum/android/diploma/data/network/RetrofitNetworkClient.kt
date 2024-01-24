@@ -22,9 +22,15 @@ class RetrofitNetworkClient(
             val response = hhApi.search(request)
 
             when (response.isSuccessful) {
-                true -> VacancyResponse(items = response.body()?.items).apply { resultCode = response.code() }
+                true -> VacancyResponse(
+                    items = response.body()?.items,
+                    found = response.body()?.found,
+                    page = response.body()?.page,
+                    pages = response.body()?.pages
+                ).apply { resultCode = response.code() }
+
                 else -> {
-                    VacancyResponse(items = emptyList()).apply { resultCode = response.code() }
+                    Response().apply { resultCode = response.code() }
                 }
             }
         }
@@ -59,8 +65,33 @@ class RetrofitNetworkClient(
 
             when (response.isSuccessful) {
                 true -> {
-                    val responseReturn = response.body() as AreaResponse
-                    responseReturn.apply { resultCode = response.code() }
+                    AreaResponse().apply {
+                        resultCode = response.code()
+                        items = response.body()!!
+                    }
+                }
+
+                else -> {
+                    Response().apply { resultCode = response.code() }
+                }
+            }
+        }
+    }
+
+    override suspend fun getNestedAreas(id: String): Response {
+        if (!isConnected()) {
+            return Response().apply { resultCode = -1 }
+        }
+        return withContext(Dispatchers.IO) {
+            val response = hhApi.getNestedArea(id)
+//            val responseBody = response.body()?.areas?.map { it.areas }
+
+            when (response.isSuccessful) {
+                true -> {
+                    AreaResponse().apply {
+                        resultCode = response.code()
+                        items = response.body()?.areas!!
+                    }
                 }
 
                 else -> {
