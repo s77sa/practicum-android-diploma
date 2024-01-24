@@ -4,22 +4,247 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    android:orientation="vertical"
     tools:context="ru.practicum.android.diploma.presentation.VacancyFragment">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/ys_display_medium"
-        android:text="Вакансия"
-        android:textColor="@color/blackDayWhiteNight"
-        android:textSize="22sp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/spacing_16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/spacing_16dp" />
+
+    <!-- Блок с заголовком и кнопкой назад -->
+
+    <LinearLayout
+        android:id="@+id/ll_vacancy_details_header"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/spacing_24dp"
+        android:layout_marginTop="@dimen/spacing_20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </TextView>
+        <!-- Левые элементы -->
+
+        <ImageView
+            android:id="@+id/iv_details_back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16dp"
+            android:src="@drawable/ic_back_arrow_2" />
+
+        <TextView
+            android:id="@+id/tv_vacancy_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16dp"
+            android:text="@string/vacancy"
+            android:textAppearance="@style/medium_font_22px" />
+
+        <!-- Пустой View, чтобы создать пространство между элементами -->
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
+
+        <!-- Правые элементы -->
+
+        <ImageView
+            android:id="@+id/iv_details_share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_16dp"
+            android:src="@drawable/ic_sharing" />
+
+        <ImageView
+            android:id="@+id/detailsFavouriteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_20dp"
+            app:srcCompat="@drawable/ic_favorites_unchecked" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_24dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/right_guideline"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/ll_vacancy_details_header"
+        app:layout_constraintVertical_bias="1.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_job_title"
+                style="@style/bold_font_32sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/android_developer" />
+
+            <TextView
+                android:id="@+id/tv_salary_level"
+                style="@style/medium_font_22px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_job_title"
+                tools:text="@string/_100_000" />
+
+            <!-- Карточка работодателя -->
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_employer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_80dp"
+                android:layout_marginTop="@dimen/spacing_16dp"
+                android:backgroundTint="@color/yp_lightGray"
+                app:cardCornerRadius="@dimen/radius_12dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/spacing_16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_employer_logo"
+                        android:layout_width="@dimen/spacing_48dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_company_logo" />
+
+                    <TextView
+                        android:id="@+id/tv_employer_title"
+                        style="@style/medium_font_22px"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_8dp"
+                        android:layout_toEndOf="@id/iv_employer_logo"
+                        android:maxLines="1"
+                        android:textColor="@color/blackDayWhiteNight"
+                        tools:text="@string/food" />
+
+                    <TextView
+                        android:id="@+id/tv_employer_city"
+                        style="@style/regular_font_16sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_employer_title"
+                        android:layout_marginStart="@dimen/spacing_8dp"
+                        android:layout_toEndOf="@id/iv_employer_logo"
+                        android:textColor="@color/blackDayWhiteNight"
+                        tools:text="@string/moscow" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_required_experience_title"
+                style="@style/medium_font_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="@string/required_experience" />
+
+            <TextView
+                android:id="@+id/tv_actual_experience"
+                style="@style/regular_font_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="@string/from_1_to_3" />
+
+            <TextView
+                android:id="@+id/tv_employment_and_remote"
+                style="@style/regular_font_16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="@string/working_condition" />
+
+            <!-- Описание вакансии -->
+
+            <WebView
+                android:id="@+id/wv_job_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_32dp"
+                android:autoLink="all"
+                android:clickable="true"
+                android:focusable="true"
+                android:scrollbars="vertical"
+                tools:ignore="WebViewLayout" />
+
+            <Button
+                android:id="@+id/similar_vacancies_button"
+                style="@style/big_blue_button"
+                android:layout_marginTop="@dimen/spacing_24dp"
+                android:text="@string/similar_vacancies" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="@dimen/spacing_48dp"
+        android:layout_height="@dimen/spacing_48dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/spacing_288dp"
+        android:indeterminateTint="@color/yp_blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_vacancy_details_header" />
+
+    <LinearLayout
+        android:id="@+id/ll_error_pole"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/spacing_271dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_error_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_223dp"
+            android:layout_gravity="center"
+            android:src="@drawable/il_7_1_1" />
+
+        <TextView
+            android:id="@+id/error_text"
+            style="@style/medium_font_22px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_16dp"
+            android:gravity="center"
+            android:text="@string/server_error" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
