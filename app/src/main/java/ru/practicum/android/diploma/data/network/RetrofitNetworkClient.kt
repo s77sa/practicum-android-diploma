@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.AreaResponse
@@ -63,7 +62,6 @@ class RetrofitNetworkClient(
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getArea()
-            val responseBody = response.body()?.map { it.areas }
 
             when (response.isSuccessful) {
                 true -> {
