@@ -19,5 +19,6 @@ class App : Application() {
             modules(listOf(searchModule, dbModule, viewModelModule))
         }
     }
+
 }
 

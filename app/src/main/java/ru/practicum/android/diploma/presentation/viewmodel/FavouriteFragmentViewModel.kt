@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.viewmodels
+package ru.practicum.android.diploma.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,9 +7,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.models.FavoriteVacancyState
 
-class FavouriteFragmentViewModel() :
+class FavouriteFragmentViewModel :
     ViewModel() {
-
     private val _state = MutableStateFlow<FavoriteVacancyState>(FavoriteVacancyState.Empty)
     val state: StateFlow<FavoriteVacancyState> = _state
 

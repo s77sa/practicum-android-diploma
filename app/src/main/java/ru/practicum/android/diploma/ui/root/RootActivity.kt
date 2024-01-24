@@ -9,11 +9,12 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 
 class RootActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityRootBinding
+    val binding by lazy {
+        ActivityRootBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navHostFragment =
@@ -38,5 +39,6 @@ class RootActivity : AppCompatActivity() {
     fun hideBottomNavigationView() {
         binding.bottomNavigationView.isVisible = false
     }
+
 }
 
