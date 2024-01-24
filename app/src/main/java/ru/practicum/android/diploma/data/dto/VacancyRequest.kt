@@ -7,6 +7,7 @@ class VacancyRequest(
     private val showSalary: Boolean,
     private val industry: String?,
     private val salary: Int?,
+    private val page: Int?,
 ) {
     fun map(): HashMap<String, String> {
         val options: HashMap<String, String> = HashMap()
@@ -20,6 +21,9 @@ class VacancyRequest(
         }
         if (salary != null) {
             options["salary"] = salary.toString()
+        }
+        if (page != null) {
+            options["page"] = page.toString()
         }
         options["only_with_salary"] = showSalary.toString()
         return options
