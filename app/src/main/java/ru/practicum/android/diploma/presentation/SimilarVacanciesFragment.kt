@@ -19,4 +19,3 @@ class SimilarVacanciesFragment : Fragment() {
         return binding.root
     }
 }
-

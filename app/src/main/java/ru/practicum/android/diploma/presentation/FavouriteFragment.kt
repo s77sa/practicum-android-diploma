@@ -17,7 +17,7 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.search.VacanciesAdapter
 import ru.practicum.android.diploma.presentation.viewmodel.FavouriteFragmentViewModel
 
-class FavouriteFragment : Fragment() { /// VacanciesAdapter{
+class FavouriteFragment : Fragment() {
 
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
@@ -36,8 +36,6 @@ class FavouriteFragment : Fragment() { /// VacanciesAdapter{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /// favoriteAdapter = VacanciesAdapter(this, requireContext())
-
         binding.recyclerViewFavorite.layoutManager = LinearLayoutManager(requireActivity())
         binding.recyclerViewFavorite.adapter = favoriteAdapter
 
@@ -54,8 +52,6 @@ class FavouriteFragment : Fragment() { /// VacanciesAdapter{
                     is FavoriteVacancyState.VacancyLoaded -> {
                         binding.placeHolderFavorite.visibility = View.GONE
                         binding.recyclerViewFavorite.visibility = View.VISIBLE
-                        /// val vacancy = state.vacancy.map { it.toVacancyShort() }
-                        /// favoriteAdapter!!.setVacancyList(vacancy)
                     }
                 }
             }

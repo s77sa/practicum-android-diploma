@@ -22,4 +22,3 @@ data class Vacancy(
     val schedule: String?,
     val isFavourite: Boolean?,
 )
-
