@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ru.practicum.android.diploma.presentation.SearchFragment">
-
     <TextView
         android:id="@+id/textView"
         style="@style/HeaderStyle"

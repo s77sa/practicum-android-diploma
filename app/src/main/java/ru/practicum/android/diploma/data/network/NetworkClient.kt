@@ -6,4 +6,5 @@ interface NetworkClient {
     suspend fun doRequest(request: Map<String, String>): Response
     suspend fun getVacancy(id: String): Response
     suspend fun getAreas(): Response
+    suspend fun getNestedAreas(id: String): Response
 }
