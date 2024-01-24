@@ -21,10 +21,7 @@ class RetrofitNetworkClient(
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.search(request)
-            Log.v("Response items", "code :${response.code()} , found ${response.body()?.found}")
-            Log.v("Response items", "code :${response.code()} , page ${response.body()?.page}")
-            Log.v("Response items", "code :${response.code()} , pages ${response.body()?.pages}")
-            Log.v("Response items", "code :${response.code()} , items ${response.body()?.items}")
+
             when (response.isSuccessful) {
                 true -> VacancyResponse(
                     items = response.body()?.items,
@@ -46,9 +43,7 @@ class RetrofitNetworkClient(
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getVacancy(id)
-            Log.v("Response Vacancy", "code :${response.code()} , items ${response.body()?.description}")
-            Log.v("Response Vacancy", "code :${response.code()} , items ${response.body()?.keySkills}")
-            Log.v("Response Vacancy", "code :${response.code()} , items ${response.body()?.contacts}")
+
             when (response.isSuccessful) {
                 true -> {
                     val responseReturn = response.body() as VacancyDetailResponse
@@ -69,8 +64,7 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             val response = hhApi.getArea()
             val responseBody = response.body()?.map { it.areas }
-            Log.v("Response area", "code :${response.code()} , items ${response.body()}")
-            Log.v("Response area", "code :${response.code()} , items $responseBody")
+
             when (response.isSuccessful) {
                 true -> {
                     AreaResponse().apply {
@@ -92,9 +86,8 @@ class RetrofitNetworkClient(
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getNestedArea(id)
-            val responseBody = response.body()?.areas?.map { it.areas }
-            Log.v("Response area", "code :${response.code()} , items ${response.body()}")
-            Log.v("Response area", "code :${response.code()} , items $responseBody")
+//            val responseBody = response.body()?.areas?.map { it.areas }
+
             when (response.isSuccessful) {
                 true -> {
                     AreaResponse().apply {
