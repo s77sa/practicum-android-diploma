@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="similar_vacancies">Похожие вакансии</string>
+    <string name="vacancy">Вакансия</string>
+    <string name="moscow">Москва</string>
+    <string name="food">Еда</string>
+    <string name="required_experience">Требуемый опыт</string>
+    <string name="_100_000">от 100 000 ₽</string>
+    <string name="android_developer">Android-разработчик</string>
+    <string name="working_condition">Полная занятость, Удаленная работа</string>
+    <string name="server_error">Ошибка сервера</string>
+    <string name="from_1_to_3">От 1 года до 3 лет</string>
 </resources>
