@@ -9,30 +9,34 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 
 class RootActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRootBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val binding by lazy {
-            ActivityRootBinding.inflate(layoutInflater)
-        }
-        val view = binding.root
-        setContentView(view)
+        binding = ActivityRootBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.container_view) as NavHostFragment
         val navController = navHostFragment.navController
-
         binding.bottomNavigationView.setupWithNavController(navController)
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.searchFragment,
                 R.id.favouriteFragment,
-                R.id.teamFragment -> binding.bottomNavigationView.isVisible = true
+                R.id.teamFragment -> showBottomNavigationView()
 
-                else -> binding.bottomNavigationView.isVisible = false
+                else -> hideBottomNavigationView()
             }
         }
     }
+
+    fun showBottomNavigationView() {
+        binding.bottomNavigationView.isVisible = true
+    }
+
+    fun hideBottomNavigationView() {
+        binding.bottomNavigationView.isVisible = false
+    }
 }
+
