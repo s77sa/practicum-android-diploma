@@ -7,6 +7,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import ru.practicum.android.diploma.data.di.dbModule
 import ru.practicum.android.diploma.data.di.searchModule
+import ru.practicum.android.diploma.data.di.viewModelModule
 
 class App : Application() {
 
@@ -15,7 +16,7 @@ class App : Application() {
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@App)
-            modules(listOf(searchModule, dbModule))
+            modules(listOf(searchModule, dbModule, viewModelModule))
         }
     }
 }

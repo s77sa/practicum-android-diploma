@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">Practicum-Android-Diploma</string>
     <string name="similar_vacancies">Похожие вакансии</string>
     <string name="vacancy">Вакансия</string>
@@ -10,4 +11,11 @@
     <string name="working_condition">Полная занятость, Удаленная работа</string>
     <string name="server_error">Ошибка сервера</string>
     <string name="from_1_to_3">От 1 года до 3 лет</string>
+    <string name="description">Description</string>
+    <string name="search_input">Введите запрос</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="nothing_found">Не удалось получить \nсписок вакансий</string>
+    <string name="vacancy_search">Поиск Вакансий</string>
+    <string name="search_placeholder">Найдено 1000 вакансий</string>
+
 </resources>
