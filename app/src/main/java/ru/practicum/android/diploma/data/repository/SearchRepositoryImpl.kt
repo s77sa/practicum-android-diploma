@@ -13,21 +13,24 @@ import ru.practicum.android.diploma.domain.api.SearchRepository
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.util.Resource
 
+const val SUCCESS = 200
+const val NO_CONNECTION = -1
+
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
     private val context: Context,
     private val converter: VacancyMapper
 ) : SearchRepository {
     private var vacancyCurrentPage: Int? = null
+
     override fun searchVacancies(request: Map<String, String>): Flow<Resource<List<Vacancy>>> = flow {
         val response = networkClient.doRequest(request)
-
         when (response.resultCode) {
-            -1 -> {
+            NO_CONNECTION -> {
                 emit(Resource.Error(getString(context, R.string.no_internet)))
             }
 
-            200 -> {
+            SUCCESS -> {
                 with(response as VacancyResponse) {
                     vacancyCurrentPage = response.page
                     val data = items?.map {
@@ -52,14 +55,13 @@ class SearchRepositoryImpl(
                             experience = "",
                             skills = emptyList(),
                             schedule = "",
-                            isFavourite = false// TODO "it.id  in appDatabase.dao().getFavouritesId()"
+                            isFavourite = false
                         )
                     }
                     emit(Resource.Success(data))
                 }
 
             }
-
             else -> {
                 emit(Resource.Error("Ошибка ${response.resultCode}"))
             }
@@ -68,18 +70,18 @@ class SearchRepositoryImpl(
 
     override suspend fun getDetails(id: String): Resource<Vacancy> {
         val response = networkClient.getVacancy(id)
-        when (response.resultCode) {
+        return when (response.resultCode) {
             -1 -> {
-                return Resource.Error(getString(context, R.string.no_internet))
+                Resource.Error(getString(context, R.string.no_internet))
             }
 
             200 -> {
                 val vacancy = converter.map(response as VacancyDetailResponse)
-                return Resource.Success(vacancy)
+                Resource.Success(vacancy)
             }
 
             else -> {
-                return Resource.Error("Ошибка ${response.resultCode}")
+                Resource.Error("Ошибка ${response.resultCode}")
             }
         }
     }

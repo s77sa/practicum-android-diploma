@@ -3,10 +3,8 @@ package ru.practicum.android.diploma.data.conventers
 import ru.practicum.android.diploma.data.dto.PhonesDto
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.domain.models.Vacancy
-
 class VacancyMapper {
     fun map(response: VacancyDetailResponse): Vacancy {
-
         return Vacancy(
             id = response.id,
             name = response.name,
@@ -20,7 +18,7 @@ class VacancyMapper {
             contactEmail = response.contacts?.email,
             contactName = response.contacts?.name,
             contactPhones = phonesMap(response.contacts?.phones),
-            contactComment =contactsMap(response.contacts?.phones),
+            contactComment = contactsMap(response.contacts?.phones),
             description = response.description,
             url = response.url,
             area = response.area.name,
@@ -32,9 +30,9 @@ class VacancyMapper {
         )
     }
 
-    private fun phonesMap(phones: List<PhonesDto>?): List<String>{
+    private fun phonesMap(phones: List<PhonesDto>?): List<String> {
         val phonesList = mutableListOf<String>()
-        if(phones !=null){
+        if (phones != null) {
             for (i in phones) {
                 phonesList.add(i.number)
             }
@@ -42,9 +40,9 @@ class VacancyMapper {
         return phonesList
     }
 
-    private fun contactsMap(phones: List<PhonesDto>?): List<String>{
+    private fun contactsMap(phones: List<PhonesDto>?): List<String> {
         val contactList = mutableListOf<String>()
-        if(phones !=null){
+        if (phones != null) {
             for (i in phones) {
                 i.comment?.let { contactList.add(it) }
             }
