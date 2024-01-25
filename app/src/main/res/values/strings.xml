@@ -17,5 +17,30 @@
     <string name="no_vacancy">Не удалось получить \nсписок вакансий</string>
     <string name="vacancy_search">Поиск Вакансий</string>
     <string name="search_placeholder">Найдено 1000 вакансий</string>
+    // Team
+    <string name="team">Команда</string>
+    <string name="done_by">Над приложением работали</string>
+    <string name="team_Semenov">Александр Семенов - лид</string>
+    <string name="team_Zaharin">Виталий Захарин</string>
+    <string name="team_Bugrov">Олег Бугров</string>
+    <string name="team_Margina">Алексей Маржина</string>
+    <string name="team_Harhanov">Александр Харханов</string>
+    // Favourite
+    <string name="fav_header">Избранное</string>
+    <string name="fav_empty">Список пуст</string>
+    // Filters
+    <string name="filters_header">Настройки фильтрации</string>
+    // Select Country
+    <string name="country_header">Выбор страны</string>
+    // Select Industry
+    <string name="industry_header">Выбор отрасли</string>
+    // Select Region
+    <string name="region_header">Выбор региона</string>
+    // Select Workplace
+    <string name="workplace_header">Выбор места работы</string>
+    // Bottom Navigation
+    <string name="main">Главная</string>
+    <string name="favourite">Избранное</string>
+
 
 </resources>

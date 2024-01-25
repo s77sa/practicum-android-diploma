@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/textView"
         style="@style/HeaderStyle"
-        android:text="Настройки фильтрации"
+        android:text="@string/filters_header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
     </TextView>

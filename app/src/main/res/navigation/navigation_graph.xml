@@ -39,20 +39,8 @@
         android:name="ru.practicum.android.diploma.presentation.VacancyFragment"
         android:label="VacancyFragment"
         tools:layout="@layout/fragment_vacancy">
-        <action
-            android:id="@+id/action_vacancyFragment_to_similarVacanciesFragment"
-            app:destination="@id/similarVacanciesFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/similarVacanciesFragment"
-        android:name="ru.practicum.android.diploma.presentation.SimilarVacanciesFragment"
-        android:label="fragment_similar_vacancies"
-        tools:layout="@layout/fragment_similar_vacancies">
-        <action
-            android:id="@+id/action_similarVacanciesFragment_to_vacancyFragment"
-            app:destination="@id/vacancyFragment" />
-    </fragment>
 
     <fragment
         android:id="@+id/filtersSettingsFragment"

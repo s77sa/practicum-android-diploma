@@ -10,7 +10,7 @@
         android:id="@+id/toolbar_settings"
         style="@style/HeaderStyle"
         android:layout_width="0dp"
-        android:text="Команда"
+        android:text="@string/team"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,11 +19,11 @@
         android:id="@+id/text_main"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/size_36"
+        android:layout_marginEnd="@dimen/dp_16"
         android:fontFamily="@font/ys_display_bold"
-        android:text="Над приложением работали"
+        android:text="@string/done_by"
         android:textColor="@color/blackDayWhiteNight"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,36 +33,36 @@
     <TextView
         android:id="@+id/text_name1"
         style="@style/TeamStyle"
-        android:layout_marginTop="32dp"
-        android:text="Александр Семенов - лид"
+        android:layout_marginTop="@dimen/spacing_32dp"
+        android:text="@string/team_Semenov"
         app:layout_constraintStart_toStartOf="@+id/text_main"
         app:layout_constraintTop_toBottomOf="@+id/text_main" />
 
     <TextView
         android:id="@+id/text_name2"
         style="@style/TeamStyle"
-        android:text="Виталий Захарин"
+        android:text="@string/team_Zaharin"
         app:layout_constraintStart_toStartOf="@+id/text_main"
         app:layout_constraintTop_toBottomOf="@+id/text_name1" />
 
     <TextView
         android:id="@+id/text_name3"
         style="@style/TeamStyle"
-        android:text="Олег Бугров"
+        android:text="@string/team_Bugrov"
         app:layout_constraintStart_toStartOf="@+id/text_main"
         app:layout_constraintTop_toBottomOf="@+id/text_name2" />
 
     <TextView
         android:id="@+id/text_name4"
         style="@style/TeamStyle"
-        android:text="Алексей Маржина"
+        android:text="@string/team_Margina"
         app:layout_constraintStart_toStartOf="@+id/text_main"
         app:layout_constraintTop_toBottomOf="@+id/text_name3" />
 
     <TextView
         android:id="@+id/text_name5"
         style="@style/TeamStyle"
-        android:text="Александр Харханов"
+        android:text="@string/team_Harhanov"
         app:layout_constraintStart_toStartOf="@+id/text_main"
         app:layout_constraintTop_toBottomOf="@+id/text_name4" />
 

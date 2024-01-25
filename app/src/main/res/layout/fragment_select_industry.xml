@@ -15,7 +15,7 @@
     <TextView
         android:id="@+id/choose_industry_header_textview"
         style="@style/SelectHeaderStyle"
-        android:text="Выбор отрасли"
+        android:text="@string/industry_header"
         app:layout_constraintStart_toEndOf="@+id/select_industry_back_arrow_imageview"
         app:layout_constraintTop_toTopOf="parent" />
 
