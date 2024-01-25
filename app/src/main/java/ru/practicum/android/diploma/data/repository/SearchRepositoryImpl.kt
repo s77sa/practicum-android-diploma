@@ -29,34 +29,12 @@ class SearchRepositoryImpl(
             NO_CONNECTION -> {
                 emit(Resource.Error(getString(context, R.string.no_internet)))
             }
+
             SUCCESS -> {
                 with(response as VacancyResponse) {
                     vacancyCurrentPage = response.page
-                    val data = items?.map {
-                        Vacancy(
-                            id = it.id,
-                            name = it.name,
-                            city = it.area.name,
-                            employer = it.employer?.name,
-                            employerLogoUrl = it.employer?.logoUrls?.originalSize,
-                            department = "",
-                            salaryCurrency = it.salary?.currency,
-                            salaryFrom = it.salary?.from,
-                            salaryTo = it.salary?.to,
-                            contactEmail = it.contacts?.email,
-                            contactName = it.contacts?.name,
-                            contactPhones = emptyList(),
-                            contactComment = emptyList(),
-                            description = "",
-                            url = it.url,
-                            area = it.area.name,
-                            logo = it.employer?.logoUrls?.smallSize,
-                            experience = "",
-                            skills = emptyList(),
-                            schedule = "",
-                            isFavourite = false
-                        )
-                    }
+                    val data = converter.mapList(response)
+
                     emit(Resource.Success(data))
                 }
             }

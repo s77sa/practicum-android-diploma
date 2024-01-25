@@ -2,7 +2,9 @@ package ru.practicum.android.diploma.data.conventers
 
 import ru.practicum.android.diploma.data.dto.PhonesDto
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
+import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.domain.models.Vacancy
+
 class VacancyMapper {
     fun map(response: VacancyDetailResponse): Vacancy {
         return Vacancy(
@@ -28,6 +30,35 @@ class VacancyMapper {
             schedule = response.schedule?.name,
             isFavourite = false
         )
+    }
+
+    fun mapList(response: VacancyResponse): List<Vacancy>? {
+        val data = response.items?.map {
+            Vacancy(
+                id = it.id,
+                name = it.name,
+                city = it.area.name,
+                employer = it.employer?.name,
+                employerLogoUrl = it.employer?.logoUrls?.originalSize,
+                department = "",
+                salaryCurrency = it.salary?.currency,
+                salaryFrom = it.salary?.from,
+                salaryTo = it.salary?.to,
+                contactEmail = it.contacts?.email,
+                contactName = it.contacts?.name,
+                contactPhones = emptyList(),
+                contactComment = emptyList(),
+                description = "",
+                url = it.url,
+                area = it.area.name,
+                logo = it.employer?.logoUrls?.smallSize,
+                experience = "",
+                skills = emptyList(),
+                schedule = "",
+                isFavourite = false
+            )
+        }
+        return data
     }
 
     private fun phonesMap(phones: List<PhonesDto>?): List<String> {
