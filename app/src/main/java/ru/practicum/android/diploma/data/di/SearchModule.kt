@@ -4,9 +4,12 @@ import com.google.gson.Gson
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.practicum.android.diploma.data.conventers.VacancyMapper
 import ru.practicum.android.diploma.data.network.HHApi
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
+import ru.practicum.android.diploma.data.repository.SearchRepositoryImpl
+import ru.practicum.android.diploma.domain.api.SearchRepository
 
 val searchModule = module {
 
@@ -22,4 +25,10 @@ val searchModule = module {
     single<NetworkClient> {
         RetrofitNetworkClient(context = get(), hhApi = get())
     }
+
+    single<SearchRepository> {
+        SearchRepositoryImpl(networkClient = get(), context = get(), converter = get())
+    }
+
+    factory { VacancyMapper() }
 }

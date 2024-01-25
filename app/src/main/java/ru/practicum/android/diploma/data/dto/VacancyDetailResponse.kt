@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class VacancyDetailResponse(
     val id: String,
     val name: String,
+    @SerializedName("alternate_url")
     val url: String,
     val area: AreaDto,
     val contacts: ContactsDto?,
@@ -15,7 +16,7 @@ data class VacancyDetailResponse(
     @SerializedName("key_skills")
     val keySkills: List<KeySkillDto>,
     @SerializedName("professional_roles")
-    val professionalRoles: List<ProfessionalRoleDto>?,
+    val professionalRoles: List<ProfessionalRoleDto>,
     val salary: SalaryDto?,
     val schedule: ScheduleDto?
 ) : Response()

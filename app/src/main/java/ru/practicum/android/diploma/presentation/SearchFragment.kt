@@ -41,6 +41,7 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 bottomNavigationView?.isVisible = s.isNullOrEmpty()
             }
+
             override fun afterTextChanged(s: Editable?) = Unit
         })
 
