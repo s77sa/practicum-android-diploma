@@ -98,8 +98,8 @@
             android:singleLine="true"
             android:textColor="@color/yp_black"
             android:textColorHint="@color/yp_gray"
-            android:textFontWeight="400"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_16"
+            android:autofillHints="no" />
 
     </FrameLayout>
 
@@ -131,7 +131,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:layout_marginTop="@dimen/dp_8"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/foundResults"
         tools:itemCount="10" />
@@ -140,7 +140,8 @@
         layout="@layout/placeholder_item_blank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
