@@ -12,5 +12,6 @@
     <dimen name="size_28">28dp</dimen>
     <dimen name="size_36">36dp</dimen>
     <dimen name="size_48">48dp</dimen>
+    <dimen name="size_44">44dp</dimen>
     <dimen name="size_56">56dp</dimen>
 </resources>

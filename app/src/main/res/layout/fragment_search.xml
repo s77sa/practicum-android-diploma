@@ -125,27 +125,16 @@
         app:layout_constraintTop_toBottomOf="@id/searchStack"
         tools:text="@string/search_placeholder" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_gravity="center"
-        android:indeterminateTint="@color/yp_blue"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchStack" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
         android:layout_marginTop="@dimen/dp_8"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/foundResults"
-        tools:itemCount="4" />
+        tools:itemCount="10" />
 
     <include
         layout="@layout/placeholder_item_blank"
@@ -176,5 +165,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchStack" />
+
+    <include
+        layout="@layout/placeholder_item_progress_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchStack" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/placeholder_item_progress_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_80dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
