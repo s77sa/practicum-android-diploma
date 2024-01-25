@@ -15,7 +15,7 @@
     <TextView
         android:id="@+id/choose_industry_header_textview"
         style="@style/SelectHeaderStyle"
-        android:text="Выбор региона"
+        android:text="@string/region_header"
         app:layout_constraintStart_toEndOf="@+id/select_region_back_arrow_imageview"
         app:layout_constraintTop_toTopOf="parent" />
 
