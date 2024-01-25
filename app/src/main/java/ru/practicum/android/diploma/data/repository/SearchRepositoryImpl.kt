@@ -29,7 +29,6 @@ class SearchRepositoryImpl(
             NO_CONNECTION -> {
                 emit(Resource.Error(getString(context, R.string.no_internet)))
             }
-
             SUCCESS -> {
                 with(response as VacancyResponse) {
                     vacancyCurrentPage = response.page
@@ -60,8 +59,8 @@ class SearchRepositoryImpl(
                     }
                     emit(Resource.Success(data))
                 }
-
             }
+
             else -> {
                 emit(Resource.Error("Ошибка ${response.resultCode}"))
             }
@@ -71,11 +70,11 @@ class SearchRepositoryImpl(
     override suspend fun getDetails(id: String): Resource<Vacancy> {
         val response = networkClient.getVacancy(id)
         return when (response.resultCode) {
-            -1 -> {
+            NO_CONNECTION -> {
                 Resource.Error(getString(context, R.string.no_internet))
             }
 
-            200 -> {
+            SUCCESS -> {
                 val vacancy = converter.map(response as VacancyDetailResponse)
                 Resource.Success(vacancy)
             }
