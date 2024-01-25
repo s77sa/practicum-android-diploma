@@ -6,10 +6,10 @@ import ru.practicum.android.diploma.presentation.PlaceholdersSearch
 
 class SearchViewModel : ViewModel() {
 
-    private val placeholderStatusMutable = MutableLiveData<PlaceholdersSearch>().apply { PlaceholdersSearch.SHOW_BLANK }
+    private val placeholderStatusMutable = MutableLiveData<PlaceholdersSearch>()
     val placeholderStatusData get() = placeholderStatusMutable
 
-    fun setPlaceholder(placeholdersSearch: PlaceholdersSearch){
+    fun setPlaceholder(placeholdersSearch: PlaceholdersSearch) {
         placeholderStatusMutable.value = placeholdersSearch
     }
 
