@@ -10,9 +10,7 @@ import ru.practicum.android.diploma.databinding.FragmentSimilarVacanciesBinding
 class SimilarVacanciesFragment : Fragment() {
     private var _binding: FragmentSimilarVacanciesBinding? = null
     private val binding get() = _binding!!
-
     override fun onCreateView(
-
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -21,4 +19,3 @@ class SimilarVacanciesFragment : Fragment() {
         return binding.root
     }
 }
-

@@ -10,7 +10,6 @@ import ru.practicum.android.diploma.data.di.searchModule
 import ru.practicum.android.diploma.data.di.viewModelModule
 
 class App : Application() {
-
     override fun onCreate() {
         super.onCreate()
         startKoin {

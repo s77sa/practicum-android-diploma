@@ -17,7 +17,7 @@ class VacancyViewHolder(private val binding: LayoutSearchVacancyBinding) : Recyc
         binding.salaryCurrency.text = vacancy.salaryCurrency
 
         Glide.with(itemView).load(vacancy.employerLogoUrl)
-            .placeholder(R.drawable.ic_main_menu) // ToDo заменить на плэйсхолдер работодателя
+            .placeholder(R.drawable.placeholder_vacancy) // DONE заменить на плэйсхолдер работодателя
             .centerCrop().into(binding.logo)
     }
 }
