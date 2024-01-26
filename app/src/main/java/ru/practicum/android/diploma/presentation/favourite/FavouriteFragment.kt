@@ -14,9 +14,9 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouriteBinding
 import ru.practicum.android.diploma.domain.models.FavoriteVacancyState
 import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.presentation.favourite.viewmodel.FavouriteFragmentViewModel
 import ru.practicum.android.diploma.presentation.search.recyclerview.VacanciesAdapter
 import ru.practicum.android.diploma.presentation.vacancy.VacancyFragment
-import ru.practicum.android.diploma.presentation.favourite.viewmodel.FavouriteFragmentViewModel
 
 class FavouriteFragment : Fragment() {
 
