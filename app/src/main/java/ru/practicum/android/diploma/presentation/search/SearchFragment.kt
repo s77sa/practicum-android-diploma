@@ -3,25 +3,33 @@ package ru.practicum.android.diploma.presentation.search
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.presentation.search.recyclerview.VacanciesAdapter
 import ru.practicum.android.diploma.presentation.search.viewmodel.SearchViewModel
+import ru.practicum.android.diploma.presentation.util.debounce
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-
     private var bottomNavigationView: BottomNavigationView? = null
-
     private val viewModel: SearchViewModel by viewModel()
+    private var vacancies = ArrayList<Vacancy>()
+    private lateinit var clickListener: (Vacancy) -> Unit
+    private val adapter = VacanciesAdapter (vacancies) { clickListener(it) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +48,14 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initRecyclerView()
+        initClickListener()
+        checkAdapter()
     }
 
     private fun initObservers() {
@@ -101,5 +117,38 @@ class SearchFragment : Fragment() {
             PlaceholdersEnum.HIDE_ALL -> {}
 
         }
+    }
+
+    private fun checkAdapter(){
+        vacancies = arrayListOf(
+            Vacancy("111", "222","333","444", "555", "666", "777", 10000,
+                2000, "888", "1111", arrayListOf(), arrayListOf(),"222","333","444",
+                "555", "666", arrayListOf(),"777", false)
+        )
+        binding.recyclerView.adapter?.notifyDataSetChanged()
+        binding.recyclerView.isVisible = true
+        binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).isVisible = false
+        binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).isVisible = false
+        binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoVacancy).isVisible = false
+        binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).isVisible = false
+        binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).isVisible = false
+    }
+
+    private fun initRecyclerView() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
+    }
+
+    private fun initClickListener() {
+        clickListener = debounce(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope, false
+        ) { vacancy ->
+            findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment)
+        }
+    }
+
+    companion object {
+        const val CLICK_DEBOUNCE_DELAY = 300L
     }
 }
