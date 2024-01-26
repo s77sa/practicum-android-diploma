@@ -7,9 +7,13 @@ import ru.practicum.android.diploma.databinding.VacancyItemBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
 
 class VacanciesAdapter(
-    val vacancies: ArrayList<Vacancy>,
-    private val clickListener: VacancyClickListener
+    private val clickListener: (vacancy: Vacancy) -> Unit,
+    val vacancies: ArrayList<Vacancy>
 ) : RecyclerView.Adapter<VacancyViewHolder>() {
+
+
+    var onItemClick: ((Vacancy) -> Unit)? = null
+    var items: List<Vacancy> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacancyViewHolder {
         return VacancyViewHolder(
@@ -21,13 +25,11 @@ class VacanciesAdapter(
 
     override fun onBindViewHolder(holder: VacancyViewHolder, position: Int) {
         holder.bind(vacancies[position])
-        holder.itemView.setOnClickListener {
-            clickListener.onVacancyClick(vacancies.get(position))
-        }
+        holder.itemView.setOnClickListener { this@VacanciesAdapter.clickListener(vacancies[position]) }
     }
 
     fun interface VacancyClickListener {
-        fun onVacancyClick(track: Vacancy)
+        fun onVacancyClick(vacancy: Vacancy)
     }
 
 }

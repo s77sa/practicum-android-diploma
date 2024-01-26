@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.presentation.search
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,12 +24,13 @@ import ru.practicum.android.diploma.presentation.util.debounce
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding !!
     private var bottomNavigationView: BottomNavigationView? = null
     private val viewModel: SearchViewModel by viewModel()
     private var vacancies = ArrayList<Vacancy>()
-    private lateinit var clickListener: (Vacancy) -> Unit
-    private val adapter = VacanciesAdapter(vacancies) { clickListener(it) }
+    private var onVacancyClickDebounce: ((Vacancy) -> Unit)? = null
+    private val vacancyAdapter =
+        VacanciesAdapter(clickListener = { data -> onVacancyClickDebounce?.invoke(data) }, vacancies)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -119,11 +121,16 @@ class SearchFragment : Fragment() {
 
     private fun initRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = vacancyAdapter
+        vacancyAdapter.onItemClick = { vacancy ->
+
+            // do something with your item
+            Log.d("TAG", "$vacancy")
+        }
     }
 
     private fun initClickListener() {
-        clickListener = debounce(
+        onVacancyClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope, false
         ) { vacancy ->
