@@ -23,7 +23,7 @@ import ru.practicum.android.diploma.presentation.util.debounce
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding !!
+    private val binding get() = _binding!!
     private var bottomNavigationView: BottomNavigationView? = null
     private val viewModel: SearchViewModel by viewModel()
     private var vacancies = ArrayList<Vacancy>()
