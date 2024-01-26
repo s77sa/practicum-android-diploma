@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.practicum.android.diploma.presentation.SearchFragment">
+    tools:context="ru.practicum.android.diploma.presentation.search.SearchFragment">
 
     <FrameLayout
         android:id="@+id/systemBar"
@@ -141,7 +141,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -181,7 +180,7 @@
         layout="@layout/placeholder_item_progress_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/spacing_80dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

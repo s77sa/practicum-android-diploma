@@ -7,7 +7,7 @@
 
 
     <application
-        android:name="ru.practicum.android.diploma.ui.root.App"
+        android:name="ru.practicum.android.diploma.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,7 +18,7 @@
         android:theme="@style/Theme.PracticumAndroidDiploma"
         tools:targetApi="31">
         <activity
-            android:name=".ui.root.RootActivity"
+            android:name=".presentation.root.RootActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
