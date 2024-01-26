@@ -14,18 +14,18 @@ class VacancyViewHolder(private val binding: VacancyItemBinding) : RecyclerView.
     fun bind(vacancy: Vacancy) {
         binding.vacancyTextView.text = vacancy.name + ", " + vacancy.city
         binding.employerTextView.text = vacancy.employer
-        salary.text = formatSalary(vacancy.salaryFrom, vacancy.salaryTo, vacancy.salaryCurrency, salary.context  )
+        salary.text = formatSalary(vacancy.salaryFrom, vacancy.salaryTo, vacancy.salaryCurrency, salary.context)
 
         Glide.with(itemView).load(vacancy.employerLogoUrl)
             .placeholder(R.drawable.placeholder_vacancy) // DONE заменить на плэйсхолдер работодателя
             .centerCrop().into(binding.vacancyImageView)
     }
 
-    private fun formatSalary(salaryFrom: Int?, salaryTo: Int?, salaryCurrency: String?, context: Context) : String {
+    private fun formatSalary(salaryFrom: Int?, salaryTo: Int?, salaryCurrency: String?, context: Context): String {
         var salary = ""
-        if (salaryFrom !=null) salary += "${context.getString(R.string.from)} $salaryFrom"
-        if (salaryTo !=null) salary += " ${context.getString(R.string.to)} $salaryTo"
-        if (salaryCurrency !=null) salary+= " $salaryCurrency"
+        if (salaryFrom != null) salary += "${context.getString(R.string.from)} $salaryFrom"
+        if (salaryTo != null) salary += " ${context.getString(R.string.to)} $salaryTo"
+        if (salaryCurrency != null) salary += " $salaryCurrency"
         if (salaryFrom == null && salaryTo == null) salary = context.getString(R.string.salary_not_specified)
         return salary
     }

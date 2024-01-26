@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.presentation.search
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,12 +23,12 @@ import ru.practicum.android.diploma.presentation.util.debounce
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding !!
     private var bottomNavigationView: BottomNavigationView? = null
     private val viewModel: SearchViewModel by viewModel()
     private var vacancies = ArrayList<Vacancy>()
     private lateinit var clickListener: (Vacancy) -> Unit
-    private val adapter = VacanciesAdapter (vacancies) { clickListener(it) }
+    private val adapter = VacanciesAdapter(vacancies) { clickListener(it) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,7 +54,6 @@ class SearchFragment : Fragment() {
 
         initRecyclerView()
         initClickListener()
-        checkAdapter()
     }
 
     private fun initObservers() {
@@ -117,21 +115,6 @@ class SearchFragment : Fragment() {
             PlaceholdersEnum.HIDE_ALL -> {}
 
         }
-    }
-
-    private fun checkAdapter(){
-        vacancies = arrayListOf(
-            Vacancy("111", "222","333","444", "555", "666", "777", 10000,
-                2000, "888", "1111", arrayListOf(), arrayListOf(),"222","333","444",
-                "555", "666", arrayListOf(),"777", false)
-        )
-        binding.recyclerView.adapter?.notifyDataSetChanged()
-        binding.recyclerView.isVisible = true
-        binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).isVisible = false
-        binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).isVisible = false
-        binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoVacancy).isVisible = false
-        binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).isVisible = false
-        binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).isVisible = false
     }
 
     private fun initRecyclerView() {
