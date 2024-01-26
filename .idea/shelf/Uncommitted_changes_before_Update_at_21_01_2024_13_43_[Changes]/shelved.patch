@@ -1,0 +1,210 @@
+Index: app/src/main/java/ru/practicum/android/diploma/ui/root/RootActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ru.practicum.android.diploma.ui.root\r\n\r\nimport android.os.Bundle\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport ru.practicum.android.diploma.BuildConfig\r\nimport ru.practicum.android.diploma.R\r\n\r\nclass RootActivity : AppCompatActivity() {\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_root)\r\n\r\n        // Пример использования access token для HeadHunter API\r\n        networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)\r\n    }\r\n\r\n    private fun networkRequestExample(accessToken: String) {\r\n        // ...\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ru/practicum/android/diploma/ui/root/RootActivity.kt b/app/src/main/java/ru/practicum/android/diploma/ui/root/RootActivity.kt
+--- a/app/src/main/java/ru/practicum/android/diploma/ui/root/RootActivity.kt	(revision 5e9eccb35cc047571800cc05b3984c1c1388ae7e)
++++ b/app/src/main/java/ru/practicum/android/diploma/ui/root/RootActivity.kt	(date 1705758752139)
+@@ -2,10 +2,13 @@
+ 
+ import android.os.Bundle
+ import androidx.appcompat.app.AppCompatActivity
++import androidx.navigation.fragment.NavHostFragment
+ import ru.practicum.android.diploma.BuildConfig
+ import ru.practicum.android.diploma.R
+ 
++
+ class RootActivity : AppCompatActivity() {
++
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_root)
+@@ -18,4 +21,8 @@
+         // ...
+     }
+ 
++    val navHostFragment =
++        supportFragmentManager.findFragmentById(R.id.container_view) as NavHostFragment
++    val navController = navHostFragment.navController
++
+ }
+Index: app/src/main/res/layout/activity_root.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".ui.root.RootActivity\">\r\n\r\n    <TextView\r\n        android:id=\"@+id/buildConfigReadExampleTextView\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Hello World!\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_root.xml b/app/src/main/res/layout/activity_root.xml
+--- a/app/src/main/res/layout/activity_root.xml	(revision 5e9eccb35cc047571800cc05b3984c1c1388ae7e)
++++ b/app/src/main/res/layout/activity_root.xml	(date 1705758927076)
+@@ -4,16 +4,37 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+-    tools:context=".ui.root.RootActivity">
++    tools:context="ui.root.RootActivity">
++
++    <androidx.fragment.app.FragmentContainerView
++        android:id="@+id/container_view"
++        android:name="androidx.navigation.fragment.NavHostFragment"
++        android:layout_width="0dp"
++        android:layout_height="0dp"
++        app:defaultNavHost="true"
++        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent"
++        app:navGraph="@navigation/navigation_graph" />
+ 
+-    <TextView
+-        android:id="@+id/buildConfigReadExampleTextView"
+-        android:layout_width="wrap_content"
++    <View
++        android:id="@+id/border"
++        android:layout_width="match_parent"
++        android:layout_height="2dp"
++        android:background="@color/yp_gray"
++        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
++        app:layout_constraintTop_toBottomOf="@id/container_view" />
++
++    <com.google.android.material.bottomnavigation.BottomNavigationView
++        android:id="@+id/bottomNavigationView"
++        style="@style/NavigationViewStyle"
++        android:layout_width="0dp"
+         android:layout_height="wrap_content"
+-        android:text="Hello World!"
++        app:itemRippleColor="@null"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.0"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent" />
+-
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
++        app:menu="@menu/bottom_navigation_menu" />
++</androidx.constraintlayout.widget.ConstraintLayout>
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id(\"com.android.application\")\r\n    id(\"org.jetbrains.kotlin.android\")\r\n    id(\"ru.practicum.android.diploma.plugins.developproperties\")\r\n}\r\n\r\nandroid {\r\n    namespace = \"ru.practicum.android.diploma\"\r\n    compileSdk = libs.versions.compileSdk.get().toInt()\r\n\r\n    defaultConfig {\r\n        applicationId = \"ru.practicum.android.diploma\"\r\n        minSdk = libs.versions.minSdk.get().toInt()\r\n        targetSdk = libs.versions.targetSdk.get().toInt()\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n\r\n        buildConfigField(type = \"String\", name = \"HH_ACCESS_TOKEN\", value = \"\\\"${developProperties.hhAccessToken}\\\"\")\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(getDefaultProguardFile(\"proguard-android-optimize.txt\"), \"proguard-rules.pro\")\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_1_8\r\n        targetCompatibility = JavaVersion.VERSION_1_8\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = \"1.8\"\r\n    }\r\n\r\n    buildFeatures {\r\n        buildConfig = true\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation(libs.androidX.core)\r\n    implementation(libs.androidX.appCompat)\r\n\r\n    // UI layer libraries\r\n    implementation(libs.ui.material)\r\n    implementation(libs.ui.constraintLayout)\r\n\r\n    // region Unit tests\r\n    testImplementation(libs.unitTests.junit)\r\n    // endregion\r\n\r\n    // region UI tests\r\n    androidTestImplementation(libs.uiTests.junitExt)\r\n    androidTestImplementation(libs.uiTests.espressoCore)\r\n    // endregion\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 5e9eccb35cc047571800cc05b3984c1c1388ae7e)
++++ b/app/build.gradle.kts	(date 1705758216097)
+@@ -46,6 +46,7 @@
+     // UI layer libraries
+     implementation(libs.ui.material)
+     implementation(libs.ui.constraintLayout)
++    implementation(libs.navigation.fragment.ktx)
+ 
+     // region Unit tests
+     testImplementation(libs.unitTests.junit)
+@@ -55,4 +56,9 @@
+     androidTestImplementation(libs.uiTests.junitExt)
+     androidTestImplementation(libs.uiTests.espressoCore)
+     // endregion
++
++    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
++    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
++    implementation("androidx.fragment:fragment-ktx:1.6.2")
++
+ }
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<resources>\r\n    <color name=\"black\">#FF000000</color>\r\n    <color name=\"white\">#FFFFFFFF</color>\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/colors.xml b/app/src/main/res/values/colors.xml
+--- a/app/src/main/res/values/colors.xml	(revision 5e9eccb35cc047571800cc05b3984c1c1388ae7e)
++++ b/app/src/main/res/values/colors.xml	(date 1705756666013)
+@@ -2,4 +2,14 @@
+ <resources>
+     <color name="black">#FF000000</color>
+     <color name="white">#FFFFFFFF</color>
+-</resources>
+\ No newline at end of file
++
++    <color name="yp_black">#1A1B22</color>
++    <color name="yp_white">#FDFDFD</color>
++    <color name="yp_red">#F56B6C</color>
++    <color name="yp_blue">#3772E7</color>
++    <color name="yp_lightGray">#E6E8EB</color>
++    <color name="yp_gray">#AEAFB4</color>
++
++    <color name="blackDayWhiteNight">@color/yp_black</color>
++    <color name="whiteDayBlackNight">@color/yp_white</color>
++</resources>
+Index: gradle/libs.versions.toml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[versions]\r\n\r\njava = \"VERSION_1_8\"\r\n\r\n# Build constants\r\nminSdk = \"26\"\r\ncompileSdk = \"34\"\r\ntargetSdk = \"33\"\r\n\r\n# Detekt\r\ndetekt = \"1.23.3\"\r\ndetektTwitterComposeRules =\"0.0.26\"\r\n\r\n[libraries]\r\n\r\n# Detekt\r\nstaticAnalysis-detektPlugin = { module = \"io.gitlab.arturbosch.detekt:detekt-gradle-plugin\", version.ref = \"detekt\" }\r\nstaticAnalysis-detektCli = { module = \"io.gitlab.arturbosch.detekt:detekt-cli\", version.ref = \"detekt\" }\r\nstaticAnalysis-detektApi = { module = \"io.gitlab.arturbosch.detekt:detekt-api\", version.ref = \"detekt\" }\r\nstaticAnalysis-detektTest = { module = \"io.gitlab.arturbosch.detekt:detekt-test\", version.ref = \"detekt\" }\r\nstaticAnalysis-detektFormatting = { module = \"io.gitlab.arturbosch.detekt:detekt-formatting\", version.ref = \"detekt\" }\r\nstaticAnalysis-detektLibraries = { module = \"io.gitlab.arturbosch.detekt:detekt-rules-libraries\", version.ref = \"detekt\" }\r\nstaticAnalysis-detektTwitterComposeRules = { module = \"com.twitter.compose.rules:detekt\", version.ref = \"detektTwitterComposeRules\" }\r\n\r\n# AndroidX\r\nandroidX-core = \"androidx.core:core-ktx:1.12.0\"\r\nandroidX-appCompat = \"androidx.appcompat:appcompat:1.6.1\"\r\n\r\n# UI layer libraries\r\nui-material = \"com.google.android.material:material:1.10.0\"\r\nui-constraintLayout = \"androidx.constraintlayout:constraintlayout:2.1.4\"\r\n\r\n# Unit tests\r\nunitTests-junit = \"junit:junit:4.13.2\"\r\n\r\n# UI tests\r\nuiTests-junitExt = \"androidx.test.ext:junit:1.1.5\"\r\nuiTests-espressoCore = \"androidx.test.espresso:espresso-core:3.5.1\"\r\n\r\n[bundles]\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+--- a/gradle/libs.versions.toml	(revision 5e9eccb35cc047571800cc05b3984c1c1388ae7e)
++++ b/gradle/libs.versions.toml	(date 1705756961029)
+@@ -10,6 +10,7 @@
+ # Detekt
+ detekt = "1.23.3"
+ detektTwitterComposeRules ="0.0.26"
++navigationFragmentKtx = "2.7.6"
+ 
+ [libraries]
+ 
+@@ -36,5 +37,6 @@
+ # UI tests
+ uiTests-junitExt = "androidx.test.ext:junit:1.1.5"
+ uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
++navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+ 
+ [bundles]
+Index: app/src/main/res/mipmap-anydpi/ic_launcher.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<adaptive-icon xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n    <background android:drawable=\"@drawable/ic_launcher_background\" />\r\n    <foreground android:drawable=\"@drawable/ic_launcher_foreground\" />\r\n    <monochrome android:drawable=\"@drawable/ic_launcher_foreground\" />\r\n</adaptive-icon>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/mipmap-anydpi/ic_launcher.xml b/app/src/main/res/mipmap-anydpi/ic_launcher.xml
+--- a/app/src/main/res/mipmap-anydpi/ic_launcher.xml	(revision 5e9eccb35cc047571800cc05b3984c1c1388ae7e)
++++ b/app/src/main/res/mipmap-anydpi/ic_launcher.xml	(date 1704912604771)
+@@ -1,6 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+-    <background android:drawable="@drawable/ic_launcher_background" />
+-    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+-    <monochrome android:drawable="@drawable/ic_launcher_foreground" />
++    <background android:drawable="@drawable/ic_launcher_background"/>
++    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+ </adaptive-icon>
+\ No newline at end of file
+Index: app/src/main/res/mipmap-anydpi/ic_launcher_round.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<adaptive-icon xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n    <background android:drawable=\"@drawable/ic_launcher_background\" />\r\n    <foreground android:drawable=\"@drawable/ic_launcher_foreground\" />\r\n    <monochrome android:drawable=\"@drawable/ic_launcher_foreground\" />\r\n</adaptive-icon>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml b/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml
+--- a/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml	(revision 5e9eccb35cc047571800cc05b3984c1c1388ae7e)
++++ b/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml	(date 1704912604771)
+@@ -1,6 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+-    <background android:drawable="@drawable/ic_launcher_background" />
+-    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+-    <monochrome android:drawable="@drawable/ic_launcher_foreground" />
++    <background android:drawable="@drawable/ic_launcher_background"/>
++    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+ </adaptive-icon>
+\ No newline at end of file

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="NavigationViewStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/whiteDayBlackNight</item>
+        <item name="itemIconTint">@drawable/bottomnav_main_menu_color</item>
+        <item name="itemTextColor">@drawable/bottomnav_main_menu_color</item>
+        <item name="menu">@menu/bottom_navigation_menu</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="HeaderStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/blackDayWhiteNight</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TeamStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">16sp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/blackDayWhiteNight</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="HeaderBackArrowStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="srcCompat">@drawable/ic_back_arrow</item>
+    </style>
+
+    <style name="SelectHeaderStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/blackDayWhiteNight</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+</resources>
