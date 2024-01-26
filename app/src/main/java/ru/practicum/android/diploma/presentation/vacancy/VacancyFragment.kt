@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
+    val id = arguments?.getString(VACANCY_ID)
 
     override fun onCreateView(
 
@@ -24,6 +25,6 @@ class VacancyFragment : Fragment() {
 
     companion object {
         fun createArgs(vacancyId: String?) = bundleOf(VACANCY_ID to vacancyId)
-        private const val VACANCY_ID = "VACANCY_ID"
+        const val VACANCY_ID = "VACANCY_ID"
     }
 }

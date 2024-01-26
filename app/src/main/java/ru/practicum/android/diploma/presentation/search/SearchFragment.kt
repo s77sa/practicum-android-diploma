@@ -21,10 +21,11 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.search.recyclerview.VacanciesAdapter
 import ru.practicum.android.diploma.presentation.search.viewmodel.SearchViewModel
 import ru.practicum.android.diploma.presentation.util.debounce
+import ru.practicum.android.diploma.presentation.vacancy.VacancyFragment
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding !!
+    private val binding get() = _binding!!
     private var bottomNavigationView: BottomNavigationView? = null
     private val viewModel: SearchViewModel by viewModel()
     private var vacancies = ArrayList<Vacancy>()
@@ -122,11 +123,6 @@ class SearchFragment : Fragment() {
     private fun initRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = vacancyAdapter
-        vacancyAdapter.onItemClick = { vacancy ->
-
-            // do something with your item
-            Log.d("TAG", "$vacancy")
-        }
     }
 
     private fun initClickListener() {
@@ -134,7 +130,13 @@ class SearchFragment : Fragment() {
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope, false
         ) { vacancy ->
-            findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment)
+            val bundle = Bundle().apply {
+                putString(VacancyFragment.VACANCY_ID, vacancy.id)
+            }
+            findNavController().navigate(
+                R.id.action_searchFragment_to_vacancyFragment,
+                bundle
+            )
         }
     }
 

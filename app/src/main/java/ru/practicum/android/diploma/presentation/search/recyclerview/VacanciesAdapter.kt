@@ -11,10 +11,6 @@ class VacanciesAdapter(
     val vacancies: ArrayList<Vacancy>
 ) : RecyclerView.Adapter<VacancyViewHolder>() {
 
-
-    var onItemClick: ((Vacancy) -> Unit)? = null
-    var items: List<Vacancy> = emptyList()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacancyViewHolder {
         return VacancyViewHolder(
             VacancyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -27,9 +23,4 @@ class VacanciesAdapter(
         holder.bind(vacancies[position])
         holder.itemView.setOnClickListener { this@VacanciesAdapter.clickListener(vacancies[position]) }
     }
-
-    fun interface VacancyClickListener {
-        fun onVacancyClick(vacancy: Vacancy)
-    }
-
 }
