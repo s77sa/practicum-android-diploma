@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.practicum.android.diploma.presentation.SelectIndustryFragment">
+    tools:context="ru.practicum.android.diploma.presentation.filters.SelectIndustryFragment">
 
     <ImageView
         android:id="@+id/select_industry_back_arrow_imageview"

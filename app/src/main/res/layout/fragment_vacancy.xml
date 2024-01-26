@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
     android:orientation="vertical"
-    tools:context="ru.practicum.android.diploma.presentation.VacancyFragment">
+    tools:context="ru.practicum.android.diploma.presentation.vacancy.VacancyFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"

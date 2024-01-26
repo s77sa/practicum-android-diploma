@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.domain.api.SearchRepository
 import ru.practicum.android.diploma.domain.models.Vacancy
-import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.presentation.util.Resource
 
 const val SUCCESS = 200
 const val NO_CONNECTION = -1

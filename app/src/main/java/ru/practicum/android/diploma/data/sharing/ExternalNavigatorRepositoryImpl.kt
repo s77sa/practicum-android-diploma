@@ -4,7 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import ru.practicum.android.diploma.domain.sharing.ExternalNavigatorRepository
+import ru.practicum.android.diploma.domain.api.ExternalNavigatorRepository
 
 class ExternalNavigatorRepositoryImpl(private val context: Context) : ExternalNavigatorRepository {
 
