@@ -19,7 +19,9 @@ class SearchViewModel : ViewModel() {
     }
 
     private val vacancySearchDebounce = debounce<String>(
-        SEARCH_DEBOUNCE_DELAY, viewModelScope, true
+        SEARCH_DEBOUNCE_DELAY,
+        viewModelScope,
+        true
     ) { changedText ->
         searchVacancy(changedText)
     }
@@ -36,8 +38,8 @@ class SearchViewModel : ViewModel() {
             // ToDo Обновить состояние обсервера
 
             viewModelScope.launch {
-                Log.i("Diploma", "searchVacancy. ToDo: Передача запроса в интерактор с текстом # $changedText #")
-                Log.i("Diploma","searchVacancy. ToDo: обработка ответа: .collect {pair -> processResult(pair.first, pair.second)}")
+                Log.i("Diploma", "searchVacancy. ToDo: Передача запроса в интерактор с текстом $changedText")
+                // ToDo Обработка ответа: .collect {pair -> processResult(pair.first, pair.second)}")
             }
         }
     }
