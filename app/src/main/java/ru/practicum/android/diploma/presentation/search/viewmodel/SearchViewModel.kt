@@ -21,7 +21,6 @@ class SearchViewModel(
     private val context: Context
 ) : ViewModel() {
 
-
     private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
@@ -61,7 +60,7 @@ class SearchViewModel(
                             area = null,
                             showSalary = true,
                             industry = null,
-                            salary = 100000,
+                            salary = 100_000,
                             page = 0
                         ).map()
                     )
@@ -70,10 +69,9 @@ class SearchViewModel(
                     }
             }
         }
-    }// ToDo Протеститьб вытащить foundItems из интерактора и заменить часть параметров VacancyRequest на Класс фильтра")
+    } // ToDo Протестить вытащить foundItems из интерактора,заменить часть параметров VacancyRequest на Фильтр")
 
     private fun processResult(foundVacancies: List<Vacancy>?, errorMessage: String?) {
-
         val vacancyList = mutableListOf<Vacancy>()
         if (foundVacancies != null) {
             vacancyList.clear()
@@ -97,10 +95,9 @@ class SearchViewModel(
                 stateLiveData.postValue(SearchState.Content(vacancyList, foundItems = 0))
             }
         }
-    }// ToDo foundItems вытащить из searchVacancy
+    } // ToDo foundItems вытащить из searchVacancy
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
-
 }

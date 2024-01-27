@@ -46,7 +46,6 @@ class SearchRepositoryImpl(
         }
     }
 
-
     override suspend fun getDetails(id: String): Resource<Vacancy> {
         val response = networkClient.getVacancy(id)
         return when (response.resultCode) {
