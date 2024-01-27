@@ -65,17 +65,17 @@ class SearchViewModel(
                         ).map()
                     )
                     .collect { pair ->
-                        processResult(pair.first, pair.second)
+                        processResult(pair.first, pair.second,searchInteractor.foundItems)
                     }
             }
         }
-    } // ToDo Протестить вытащить foundItems из интерактора,заменить часть параметров VacancyRequest на Фильтр")
+    } // ToDo Протестить ,заменить часть параметров VacancyRequest на Фильтр")
 
-    private fun processResult(foundVacancies: List<Vacancy>?, errorMessage: String?) {
+    private fun processResult(foundVacancies: List<Vacancy>?, errorMessage: String?,foundItems:Int?) {
         val vacancyList = mutableListOf<Vacancy>()
         if (foundVacancies != null) {
             vacancyList.clear()
-            vacancyList.addAll(vacancyList)
+            vacancyList.addAll(foundVacancies)
         }
 
         when {
@@ -92,10 +92,10 @@ class SearchViewModel(
 
             else -> {
                 setPlaceholder(PlaceholdersEnum.SHOW_RESULT)
-                stateLiveData.postValue(SearchState.Content(vacancyList, foundItems = 0))
+                stateLiveData.postValue(SearchState.Content(vacancyList, foundItems = foundItems))
             }
         }
-    } // ToDo foundItems вытащить из searchVacancy
+    }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
