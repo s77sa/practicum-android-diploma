@@ -28,7 +28,8 @@ class VacancyMapper {
             experience = response.experience?.name,
             skills = response.keySkills.map { it.name },
             schedule = response.schedule?.name,
-            isFavourite = false
+            isFavourite = false,
+            address = response.address?.raw
         )
     }
 
@@ -55,7 +56,8 @@ class VacancyMapper {
                 experience = "",
                 skills = emptyList(),
                 schedule = "",
-                isFavourite = false
+                isFavourite = false,
+                address = ""
             )
         }
         return data
