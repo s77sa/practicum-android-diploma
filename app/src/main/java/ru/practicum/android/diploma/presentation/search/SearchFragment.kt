@@ -17,6 +17,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.presentation.search.models.SearchState
 import ru.practicum.android.diploma.presentation.search.recyclerview.VacanciesAdapter
 import ru.practicum.android.diploma.presentation.search.viewmodel.SearchViewModel
 import ru.practicum.android.diploma.presentation.util.debounce
@@ -62,6 +63,7 @@ class SearchFragment : Fragment() {
         viewModel.placeholderStatusData.observe(viewLifecycleOwner) {
             setPlaceholder(it)
         }
+        viewModel.observeState().observe(viewLifecycleOwner) { updateScreen(it) }
     }
 
     private fun initListeners() {
@@ -123,6 +125,19 @@ class SearchFragment : Fragment() {
     private fun initRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = vacancyAdapter
+    }
+
+    private fun updateScreen(state: SearchState) {
+        when (state) {
+            is SearchState.Content -> {
+                vacancies.clear()
+                vacancies.addAll(state.vacancies)
+                vacancyAdapter.notifyDataSetChanged()
+                binding.foundResults.text = "Найдено ${state.foundItems} вакансий"
+                binding.foundResults.isVisible = true
+            }
+            else -> {}
+        }
     }
 
     private fun initClickListener() {
