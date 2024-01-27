@@ -9,19 +9,28 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.presentation.search.recyclerview.VacanciesAdapter
 import ru.practicum.android.diploma.presentation.search.viewmodel.SearchViewModel
+import ru.practicum.android.diploma.presentation.util.debounce
+import ru.practicum.android.diploma.presentation.vacancy.VacancyFragment
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-
     private var bottomNavigationView: BottomNavigationView? = null
-
     private val viewModel: SearchViewModel by viewModel()
+    private var vacancies = ArrayList<Vacancy>()
+    private var onVacancyClickDebounce: ((Vacancy) -> Unit)? = null
+    private val vacancyAdapter =
+        VacanciesAdapter(clickListener = { data -> onVacancyClickDebounce?.invoke(data) }, vacancies)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +49,13 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initRecyclerView()
+        initClickListener()
     }
 
     private fun initObservers() {
@@ -101,5 +117,29 @@ class SearchFragment : Fragment() {
             PlaceholdersEnum.HIDE_ALL -> {}
 
         }
+    }
+
+    private fun initRecyclerView() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = vacancyAdapter
+    }
+
+    private fun initClickListener() {
+        onVacancyClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope, false
+        ) { vacancy ->
+            val bundle = Bundle().apply {
+                putString(VacancyFragment.VACANCY_ID, vacancy.id)
+            }
+            findNavController().navigate(
+                R.id.action_searchFragment_to_vacancyFragment,
+                bundle
+            )
+        }
+    }
+
+    companion object {
+        const val CLICK_DEBOUNCE_DELAY = 300L
     }
 }
