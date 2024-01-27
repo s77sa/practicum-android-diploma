@@ -1,11 +1,13 @@
 package ru.practicum.android.diploma.presentation.search
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -135,6 +137,7 @@ class SearchFragment : Fragment() {
                 vacancyAdapter.notifyDataSetChanged()
                 binding.foundResults.text = "Найдено ${state.foundItems} вакансий"
                 binding.foundResults.isVisible = true
+                hideKeyBoard()
             }
             else -> {}
         }
@@ -153,6 +156,13 @@ class SearchFragment : Fragment() {
                 bundle
             )
         }
+    }
+
+    private fun hideKeyBoard() {
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(binding.searchInput.windowToken, 0)
+        binding.searchInput.clearFocus()
     }
 
     companion object {
