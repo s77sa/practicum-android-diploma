@@ -65,13 +65,13 @@ class SearchViewModel(
                         ).map()
                     )
                     .collect { pair ->
-                        processResult(pair.first, pair.second,searchInteractor.foundItems)
+                        processResult(pair.first, pair.second, searchInteractor.foundItems)
                     }
             }
         }
-    } // ToDo Протестить ,заменить часть параметров VacancyRequest на Фильтр")
+    } // ToDo Протестить , заменить часть параметров VacancyRequest на Фильтр")
 
-    private fun processResult(foundVacancies: List<Vacancy>?, errorMessage: String?,foundItems:Int?) {
+    private fun processResult(foundVacancies: List<Vacancy>?, errorMessage: String?, foundItems: Int?) {
         val vacancyList = mutableListOf<Vacancy>()
         if (foundVacancies != null) {
             vacancyList.clear()
