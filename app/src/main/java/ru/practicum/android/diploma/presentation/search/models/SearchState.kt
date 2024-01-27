@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.presentation.search.models
 import ru.practicum.android.diploma.domain.models.Vacancy
 
 sealed interface SearchState {
-    object Loading : SearchState
+    data object Loading : SearchState
 
     data class Content(
         val vacancies: List<Vacancy>,
