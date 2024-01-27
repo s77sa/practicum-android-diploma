@@ -21,8 +21,8 @@ class SearchRepositoryImpl(
     private val context: Context,
     private val converter: VacancyMapper
 ) : SearchRepository {
-    private var vacancyCurrentPage: Int? = null
-    private var foundItems: Int? = null
+    override var vacancyCurrentPage: Int? = null
+    override var foundItems: Int? = null
     override fun searchVacancies(request: Map<String, String>): Flow<Resource<List<Vacancy>>> = flow {
         val response = networkClient.doRequest(request)
         when (response.resultCode) {
