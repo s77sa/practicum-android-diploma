@@ -55,6 +55,7 @@ class VacancyConverter {
             experience = vacancy.experience,
             skills = emptyList(),
             schedule = vacancy.schedule,
+            address = "",
             isFavourite = vacancy.isFavourite,
         )
     }

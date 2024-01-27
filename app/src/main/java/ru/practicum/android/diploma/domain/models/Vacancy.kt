@@ -21,4 +21,5 @@ data class Vacancy(
     val skills: List<String>?,
     val schedule: String?,
     val isFavourite: Boolean?,
+    val address:String?
 )
