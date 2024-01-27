@@ -9,7 +9,9 @@ import ru.practicum.android.diploma.data.network.HHApi
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.data.repository.SearchRepositoryImpl
+import ru.practicum.android.diploma.domain.api.SearchInteractor
 import ru.practicum.android.diploma.domain.api.SearchRepository
+import ru.practicum.android.diploma.domain.impl.SearchInteractorImpl
 
 val searchModule = module {
 
@@ -28,6 +30,10 @@ val searchModule = module {
 
     single<SearchRepository> {
         SearchRepositoryImpl(networkClient = get(), context = get(), converter = get())
+    }
+
+    single<SearchInteractor> {
+        SearchInteractorImpl(repository = get())
     }
 
     factory { VacancyMapper() }

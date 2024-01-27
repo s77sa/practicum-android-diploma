@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.presentation.search.viewmodel.SearchViewMode
 val viewModelModule = module {
 
     viewModel<SearchViewModel> {
-        SearchViewModel()
+        SearchViewModel(searchInteractor = get(), context = get())
     }
 
     viewModel<FavouriteFragmentViewModel> {
