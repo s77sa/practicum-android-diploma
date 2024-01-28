@@ -30,3 +30,4 @@ class VacancyViewHolder(private val binding: VacancyItemBinding) : RecyclerView.
         return salary
     }
 }
+

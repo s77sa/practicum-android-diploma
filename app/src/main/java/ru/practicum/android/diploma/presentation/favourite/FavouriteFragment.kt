@@ -12,13 +12,13 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouriteBinding
-import ru.practicum.android.diploma.domain.models.FavoriteVacancyState
+
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.favourite.viewmodel.FavouriteFragmentViewModel
 import ru.practicum.android.diploma.presentation.search.recyclerview.VacanciesAdapter
 import ru.practicum.android.diploma.presentation.vacancy.VacancyFragment
 
-class FavouriteFragment : Fragment() {
+class FavouriteFragment : Fragment(), VacanciesAdapter.ClickListener {
 
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
@@ -37,6 +37,8 @@ class FavouriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+       // favoriteAdapter = VacanciesAdapter(this, requireContext())
+
         binding.recyclerViewFavorite.layoutManager = LinearLayoutManager(requireActivity())
         binding.recyclerViewFavorite.adapter = favoriteAdapter
 
@@ -45,21 +47,23 @@ class FavouriteFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
                 when (state) {
-                    is FavoriteVacancyState.Empty -> {
+                    is FavouriteVacancyState.Empty -> {
                         binding.placeHolderFavorite.visibility = View.VISIBLE
                         binding.recyclerViewFavorite.visibility = View.GONE
                     }
 
-                    is FavoriteVacancyState.VacancyLoaded -> {
+                    is FavouriteVacancyState.VacancyLoaded -> {
                         binding.placeHolderFavorite.visibility = View.GONE
                         binding.recyclerViewFavorite.visibility = View.VISIBLE
+                        val vacancy = state.vacancy.map { it }
+
                     }
                 }
             }
         }
     }
 
-    fun onClick(vacancy: Vacancy) {
+    override fun onClick(vacancy: Vacancy) {
         findNavController().navigate(
             R.id.action_favouriteFragment_to_vacancyFragment,
             VacancyFragment.createArgs(vacancy.id)
@@ -76,3 +80,4 @@ class FavouriteFragment : Fragment() {
         _binding = null
     }
 }
+

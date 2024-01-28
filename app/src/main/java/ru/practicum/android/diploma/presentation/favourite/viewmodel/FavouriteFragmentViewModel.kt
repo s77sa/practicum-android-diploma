@@ -5,12 +5,16 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.models.FavoriteVacancyState
+import ru.practicum.android.diploma.feature.favourite.domain.usecase.GetAllVacancyUseCase
+import ru.practicum.android.diploma.presentation.favourite.FavouriteVacancyState
 
-class FavouriteFragmentViewModel :
+class FavouriteFragmentViewModel(
+    private val getAllVacancyUseCase: GetAllVacancyUseCase
+) :
     ViewModel() {
-    private val _state = MutableStateFlow<FavoriteVacancyState>(FavoriteVacancyState.Empty)
-    val state: StateFlow<FavoriteVacancyState> = _state
+
+    private val _state = MutableStateFlow<FavouriteVacancyState>(FavouriteVacancyState.Empty)
+    val state: StateFlow<FavouriteVacancyState> = _state
 
     init {
         getAllVacancies()
@@ -18,6 +22,14 @@ class FavouriteFragmentViewModel :
 
     fun getAllVacancies() {
         viewModelScope.launch {
+            getAllVacancyUseCase().collect { vacancy ->
+                if (vacancy.isNotEmpty()) {
+                    _state.value = FavouriteVacancyState.VacancyLoaded(vacancy)
+                } else {
+                    _state.value = FavouriteVacancyState.Empty
+                }
+            }
         }
     }
 }
+
