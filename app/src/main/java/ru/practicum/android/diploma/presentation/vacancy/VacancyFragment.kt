@@ -1,11 +1,13 @@
 package ru.practicum.android.diploma.presentation.vacancy
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.presentation.viewmodel.VacancyViewModel
@@ -17,6 +19,7 @@ class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VacancyViewModel by viewModel()
+    private var vacancyId: String? = null
     override fun onCreateView(
 
         inflater: LayoutInflater,
@@ -24,11 +27,13 @@ class VacancyFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentVacancyBinding.inflate(inflater, container, false)
-        val vacancyId = arguments?.getString(VACANCY_ID)
-        val vacancy = getVacancyById(vacancyId = "91287835")
+//        vacancyId = arguments?.getString(VACANCY_ID)
+        vacancyId = "91287835"
+        val vacancy = getVacancyById(vacancyId)
 
         // Заполняем макет данными из вакансии
-        binding.tvJobTitle.text = vacancy?.name ?: "Unknown Vacancy"
+        binding.tvJobTitle.text = vacancy?.name ?: ""
+        Log.d("Проверка", "$vacancy")
         binding.tvSalaryLevel.text = formatSalary(vacancy?.salaryFrom, vacancy?.salaryTo, vacancy?.salaryCurrency)
 
         // Заполнение блока с работодателем
@@ -36,12 +41,13 @@ class VacancyFragment : Fragment() {
             binding.tvEmployerTitle.text = it
         }
 
-//        val addressText = if (!vacancy?.address.isNullOrEmpty()) {
-//            vacancy?.address.raw
-//        } else {
-//            vacancy?.area ?: "Unknown Region"
-//        }
-//        binding.tvEmployerCity.text = addressText
+        val addressText = if (!vacancy?.address.isNullOrEmpty()) {
+            vacancy?.address
+        } else {
+            vacancy?.area ?: ""
+        }
+        binding.tvEmployerCity.text = addressText
+
         binding.tvEmployerCity.text = vacancy?.city ?: ""
 
         // Загрузка логотипа работодателя в ImageView с обработкой плейсхолдера
@@ -61,13 +67,30 @@ class VacancyFragment : Fragment() {
         return binding.root
     }
 
-    // Метод для форматирования зарплаты
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initClickListeners()
+    }
+
+    private fun initClickListeners() {
+        binding.ivDetailsBackArrow.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.ivDetailsShareButton.setOnClickListener {
+            viewModel.shareVacancy(vacancyId)
+        }
+    }
+
+    // Метод для форматирования уровня зарплаты
     private fun formatSalary(salaryFrom: Int?, salaryTo: Int?, currency: String?): String {
+        val fromText = getString(R.string.from)
+        val toText = getString(R.string.to)
         return when {
             salaryFrom != null && salaryTo != null -> "$salaryFrom - $salaryTo $currency"
-            salaryFrom != null -> "от $salaryFrom $currency"
-            salaryTo != null -> "до $salaryTo $currency"
-            else -> "Зарплата не указана"
+            salaryFrom != null -> "$fromText $salaryFrom $currency"
+            salaryTo != null -> "$toText $salaryTo $currency"
+            else -> getString(R.string.salary_not_specified)
         }
     }
 
@@ -78,14 +101,14 @@ class VacancyFragment : Fragment() {
 
     companion object {
         fun createArgs(vacancyId: String?) = bundleOf(VACANCY_ID to vacancyId)
-        private const val VACANCY_ID = "VACANCY_ID"
+        internal const val VACANCY_ID = "VACANCY_ID"
 
         // Фиктивная функция для получения вакансии по ID
         private fun getVacancyById(vacancyId: String?): Vacancy? {
             // Код ниже нужно заменить на реальную логику загрузки вакансии из БД
             return if (vacancyId != null) {
                 Vacancy(
-                    id = "91287835",
+                    id = vacancyId,
                     name = "Android-разработчик (удаленно)",
                     city = "Москва",
                     employer = "Hu:be",
@@ -94,7 +117,7 @@ class VacancyFragment : Fragment() {
                     salaryCurrency = "RUR",
                     salaryFrom = null,
                     salaryTo = 200000,
-//                    address = null,
+                    address = "Москва, Пресненская набережная, 10",
                     contactEmail = null,
                     contactName = null,
                     contactPhones = emptyList(),

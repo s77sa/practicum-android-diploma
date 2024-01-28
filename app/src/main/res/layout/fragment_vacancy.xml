@@ -70,7 +70,7 @@
             android:src="@drawable/ic_sharing" />
 
         <ImageView
-            android:id="@+id/detailsFavouriteButton"
+            android:id="@+id/iv_details_favourite_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/spacing_20dp"
