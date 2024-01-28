@@ -26,9 +26,18 @@ class SearchViewModel(
     private val placeholderStatusMutable = MutableLiveData<PlaceholdersEnum>()
     val placeholderStatusData get() = placeholderStatusMutable
     private var latestSearchText: String? = null
+    private var page: Int = 0
+    private var pages = 1
 
     fun setPlaceholder(placeholdersEnum: PlaceholdersEnum) {
         placeholderStatusMutable.value = placeholdersEnum
+    }
+
+    fun searchDebounce(changedText: String) {
+        if (latestSearchText != changedText) {
+            latestSearchText = changedText
+            vacancySearchDebounce(changedText)
+        }
     }
 
     private val vacancySearchDebounce = debounce<String>(
@@ -37,13 +46,6 @@ class SearchViewModel(
         true
     ) { changedText ->
         searchVacancy(changedText)
-    }
-
-    fun searchDebounce(changedText: String) {
-        if (latestSearchText != changedText) {
-            latestSearchText = changedText
-            vacancySearchDebounce(changedText)
-        }
     }
 
     private fun searchVacancy(changedText: String) {
@@ -75,6 +77,9 @@ class SearchViewModel(
             vacancyList.clear()
             vacancyList.addAll(foundVacancies)
             stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
+            if (foundItems != null) {
+                pages = foundItems
+            }
         }
 
         when {
@@ -92,6 +97,18 @@ class SearchViewModel(
             else -> {
                 setPlaceholder(PlaceholdersEnum.SHOW_RESULT)
                 stateLiveData.postValue(SearchState.Content(vacancyList, foundItems = foundItems))
+            }
+        }
+    }
+
+    fun onNextPage() {
+        if (page == pages) {
+            stateLiveData.postValue(SearchState.Loading)
+        }
+        if (page < pages) {
+            if (!latestSearchText.isNullOrEmpty()) {
+                page += 1
+                searchVacancy(latestSearchText!!)
             }
         }
     }
