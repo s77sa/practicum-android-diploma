@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="8dp">
+    android:padding="8dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/vacancy_imageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:scaleType="centerInside"
+        android:layout_marginTop="@dimen/size_4"
         app:srcCompat="@drawable/placeholder_vacancy"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:strokeWidth="2dp"
+        app:strokeWidth="1dp"
         app:cornerRadius="12dp"
         app:strokeColor="@color/yp_lightGray" />
 

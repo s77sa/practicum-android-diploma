@@ -1,11 +1,13 @@
 package ru.practicum.android.diploma.presentation.search
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,6 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.presentation.search.models.SearchState
 import ru.practicum.android.diploma.presentation.search.recyclerview.VacanciesAdapter
 import ru.practicum.android.diploma.presentation.search.viewmodel.SearchViewModel
 import ru.practicum.android.diploma.presentation.util.debounce
@@ -62,6 +65,7 @@ class SearchFragment : Fragment() {
         viewModel.placeholderStatusData.observe(viewLifecycleOwner) {
             setPlaceholder(it)
         }
+        viewModel.observeState().observe(viewLifecycleOwner) { updateScreen(it) }
     }
 
     private fun initListeners() {
@@ -125,6 +129,20 @@ class SearchFragment : Fragment() {
         binding.recyclerView.adapter = vacancyAdapter
     }
 
+    private fun updateScreen(state: SearchState) {
+        when (state) {
+            is SearchState.Content -> {
+                vacancies.clear()
+                vacancies.addAll(state.vacancies)
+                vacancyAdapter.notifyDataSetChanged()
+                binding.foundResults.text = "Найдено ${state.foundItems} вакансий"
+                binding.foundResults.isVisible = true
+                hideKeyBoard()
+            }
+            else -> {}
+        }
+    }
+
     private fun initClickListener() {
         onVacancyClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY,
@@ -138,6 +156,13 @@ class SearchFragment : Fragment() {
                 bundle
             )
         }
+    }
+
+    private fun hideKeyBoard() {
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(binding.searchInput.windowToken, 0)
+        binding.searchInput.clearFocus()
     }
 
     companion object {

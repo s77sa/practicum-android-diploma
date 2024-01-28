@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.presentation.search.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,7 +20,7 @@ class SearchViewModel(
     private val context: Context
 ) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<SearchState>()
+    val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
     private val placeholderStatusMutable = MutableLiveData<PlaceholdersEnum>()
@@ -52,7 +51,6 @@ class SearchViewModel(
             stateLiveData.postValue(SearchState.Loading)
             setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_CENTER)
             viewModelScope.launch {
-                Log.i("Diploma", "searchVacancy. ToDo: Передача запроса в интерактор с текстом $changedText")
                 searchInteractor
                     .searchVacancies(
                         VacancyRequest(
@@ -76,6 +74,7 @@ class SearchViewModel(
         if (foundVacancies != null) {
             vacancyList.clear()
             vacancyList.addAll(foundVacancies)
+            stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
         }
 
         when {
