@@ -55,9 +55,9 @@ class SearchViewModel(
                     .searchVacancies(
                         VacancyRequest(
                             changedText,
-                            area = null,
+                            area = "113",
                             showSalary = true,
-                            industry = null,
+                            industry = "49",
                             salary = 100_000,
                             page = 0
                         ).map()

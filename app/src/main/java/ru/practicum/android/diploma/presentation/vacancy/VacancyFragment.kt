@@ -1,11 +1,13 @@
 package ru.practicum.android.diploma.presentation.vacancy
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.core.os.bundleOf
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -27,49 +29,95 @@ class VacancyFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentVacancyBinding.inflate(inflater, container, false)
-//        vacancyId = arguments?.getString(VACANCY_ID)
-        vacancyId = "91287835"
-        val vacancy = getVacancyById(vacancyId)
-
-        // Заполняем макет данными из вакансии
-        binding.tvJobTitle.text = vacancy?.name ?: ""
-        Log.d("Проверка", "$vacancy")
-        binding.tvSalaryLevel.text = formatSalary(vacancy?.salaryFrom, vacancy?.salaryTo, vacancy?.salaryCurrency)
-
-        // Заполнение блока с работодателем
-        vacancy?.employer?.let {
-            binding.tvEmployerTitle.text = it
-        }
-
-        val addressText = if (!vacancy?.address.isNullOrEmpty()) {
-            vacancy?.address
-        } else {
-            vacancy?.area ?: ""
-        }
-        binding.tvEmployerCity.text = addressText
-
-        binding.tvEmployerCity.text = vacancy?.city ?: ""
-
-        // Загрузка логотипа работодателя в ImageView с обработкой плейсхолдера
-        if (!vacancy?.employerLogoUrl.isNullOrEmpty()) {
-            Glide.with(requireContext())
-                .load(vacancy?.employerLogoUrl)
-                .placeholder(R.drawable.ic_company_logo)
-                .into(binding.ivEmployerLogo)
-        } else {
-            binding.ivEmployerLogo.setImageResource(R.drawable.ic_company_logo)
-        }
-        vacancy?.description?.let {
-            binding.wvJobDescription.loadDataWithBaseURL(null, it, "text/html", "utf-8", null)
-        }
-        // Заполнение остальных элементов макета ...
-
+        vacancyId = arguments?.getString(VACANCY_ID)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val progressBar: ProgressBar = view.findViewById(R.id.progress_bar)
+        val errorPlaceholder: LinearLayout = view.findViewById(R.id.ll_error_pole)
+        val vacancyDescriptionView: NestedScrollView = view.findViewById(R.id.nsv_vacancy_description)
+
+        viewModel.vacancyScreenState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is VacancyScreenState.Success -> {
+                    val vacancy = state.vacancy
+                    updateUIWithVacancyDetails(vacancy)
+                    showLoadingIndicator(false, progressBar)
+                    showErrorPlaceholder(false, errorPlaceholder)
+                    vacancyDescriptionView.visibility = View.VISIBLE
+                }
+
+                is VacancyScreenState.Error -> {
+                    showLoadingIndicator(false, progressBar)
+                    showErrorPlaceholder(true, errorPlaceholder)
+                    vacancyDescriptionView.visibility = View.GONE
+                }
+
+                is VacancyScreenState.Loading -> {
+                    showLoadingIndicator(true, progressBar)
+                    showErrorPlaceholder(false, errorPlaceholder)
+                    vacancyDescriptionView.visibility = View.GONE
+                }
+            }
+        }
+
+        vacancyId?.let { viewModel.getVacancyDetailsById(it) }
+
         initClickListeners()
+    }
+
+    private fun showErrorPlaceholder(show: Boolean, errorPlaceholder: LinearLayout) {
+        errorPlaceholder.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    private fun showLoadingIndicator(show: Boolean, progressBar: ProgressBar) {
+        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    private fun updateUIWithVacancyDetails(vacancy: Vacancy?) {
+        if (vacancy != null) {
+            // Заполняем макет данными из вакансии
+            binding.tvJobTitle.text = vacancy.name
+            binding.tvSalaryLevel.text = formatSalary(vacancy.salaryFrom, vacancy.salaryTo, vacancy.salaryCurrency)
+
+            // Заполнение блока с работодателем
+            vacancy.employer?.let {
+                binding.tvEmployerTitle.text = it
+            }
+
+            // Загрузка логотипа работодателя в ImageView с обработкой плейсхолдера
+            if (!vacancy.employerLogoUrl.isNullOrEmpty()) {
+                Glide.with(requireContext())
+                    .load(vacancy.employerLogoUrl)
+                    .placeholder(R.drawable.ic_company_logo)
+                    .into(binding.ivEmployerLogo)
+            } else {
+                binding.ivEmployerLogo.setImageResource(R.drawable.ic_company_logo)
+            }
+
+            // Заполнение карточки работодателя
+            binding.tvEmployerTitle.text = vacancy.employer ?: ""
+
+            // Используем адрес, если он есть, в противном случае area
+            val employerCityText = if (!vacancy.address.isNullOrEmpty()) {
+                vacancy.address
+            } else {
+                vacancy.area
+            }
+            binding.tvEmployerCity.text = employerCityText
+
+            // Заполнение опыта работы и условий труда
+            binding.tvActualExperience.text = vacancy.experience ?: ""
+            binding.tvEmploymentAndRemote.text = vacancy.schedule ?: ""
+
+            // Загрузка описания вакансии в WebView
+            vacancy.description.let {
+                binding.wvJobDescription.loadDataWithBaseURL(null, it, "text/html", "utf-8", null)
+            }
+        }
     }
 
     private fun initClickListeners() {
@@ -103,37 +151,5 @@ class VacancyFragment : Fragment() {
         fun createArgs(vacancyId: String?) = bundleOf(VACANCY_ID to vacancyId)
         internal const val VACANCY_ID = "VACANCY_ID"
 
-        // Фиктивная функция для получения вакансии по ID
-        private fun getVacancyById(vacancyId: String?): Vacancy? {
-            // Код ниже нужно заменить на реальную логику загрузки вакансии из БД
-            return if (vacancyId != null) {
-                Vacancy(
-                    id = vacancyId,
-                    name = "Android-разработчик (удаленно)",
-                    city = "Москва",
-                    employer = "Hu:be",
-                    employerLogoUrl = "https://hhcdn.ru/employer-logo/6076970.png",
-                    department = null,
-                    salaryCurrency = "RUR",
-                    salaryFrom = null,
-                    salaryTo = 200000,
-                    address = "Москва, Пресненская набережная, 10",
-                    contactEmail = null,
-                    contactName = null,
-                    contactPhones = emptyList(),
-                    contactComment = null,
-                    description = "https://api.hh.ru/vacancies/92139172?host=hh.ru",
-                    url = "https://hh.ru/vacancy/91287835",
-                    area = "Москва",
-                    logo = "https://hhcdn.ru/employer-logo/6289043.jpeg",
-                    experience = "От 1 года до 3 лет",
-                    skills = null,
-                    schedule = "Полный день",
-                    isFavourite = false
-                )
-            } else {
-                null
-            }
-        }
     }
 }
