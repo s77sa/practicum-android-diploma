@@ -105,11 +105,9 @@ class SearchViewModel(
         if (page == pages) {
             stateLiveData.postValue(SearchState.Loading)
         }
-        if (page < pages) {
-            if (!latestSearchText.isNullOrEmpty()) {
+        if (page < pages && !latestSearchText.isNullOrEmpty()) {
                 page += 1
                 searchVacancy(latestSearchText!!)
-            }
         }
     }
 
