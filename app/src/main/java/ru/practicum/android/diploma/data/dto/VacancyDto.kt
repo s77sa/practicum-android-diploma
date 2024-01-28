@@ -17,5 +17,6 @@ data class VacancyDto(
     @SerializedName("professional_roles")
     val professionalRoles: List<ProfessionalRoleDto>?,
     val salary: SalaryDto?,
-    val schedule: ScheduleDto?
+    val schedule: ScheduleDto?,
+    val address: AddressDto?
 )

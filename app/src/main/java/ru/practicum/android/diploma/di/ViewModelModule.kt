@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.presentation.viewmodel.VacancyViewModel
 val viewModelModule = module {
 
     viewModel<SearchViewModel> {
-        SearchViewModel()
+        SearchViewModel(searchInteractor = get(), context = get())
     }
 
     viewModel<FavouriteFragmentViewModel> {

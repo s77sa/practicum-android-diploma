@@ -21,8 +21,8 @@ class SearchRepositoryImpl(
     private val context: Context,
     private val converter: VacancyMapper
 ) : SearchRepository {
-    private var vacancyCurrentPage: Int? = null
-
+    override var vacancyCurrentPage: Int? = null
+    override var foundItems: Int? = null
     override fun searchVacancies(request: Map<String, String>): Flow<Resource<List<Vacancy>>> = flow {
         val response = networkClient.doRequest(request)
         when (response.resultCode) {
@@ -33,6 +33,7 @@ class SearchRepositoryImpl(
             SUCCESS -> {
                 with(response as VacancyResponse) {
                     vacancyCurrentPage = response.page
+                    foundItems = response.found
                     val data = converter.mapList(response)
 
                     emit(Resource.Success(data))

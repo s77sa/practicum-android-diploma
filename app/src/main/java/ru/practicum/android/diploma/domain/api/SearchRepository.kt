@@ -5,6 +5,9 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.Resource
 
 interface SearchRepository {
+    var vacancyCurrentPage: Int?
+    var foundItems: Int?
     fun searchVacancies(request: Map<String, String>): Flow<Resource<List<Vacancy>>>
     suspend fun getDetails(id: String): Resource<Vacancy>
+
 }
