@@ -79,6 +79,7 @@
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsv_vacancy_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/spacing_24dp"
@@ -203,7 +204,8 @@
                 android:id="@+id/similar_vacancies_button"
                 style="@style/big_blue_button"
                 android:layout_marginTop="@dimen/spacing_24dp"
-                android:text="@string/similar_vacancies" />
+                android:text="@string/similar_vacancies"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
