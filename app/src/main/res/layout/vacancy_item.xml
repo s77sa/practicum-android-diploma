@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="@dimen/dp_8"
+    android:paddingStart="@dimen/dp_16"
+    android:paddingEnd="@dimen/dp_16">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/vacancy_imageView"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:scaleType="centerInside"
-        android:layout_marginTop="@dimen/size_4"
-        app:srcCompat="@drawable/placeholder_vacancy"
-        app:layout_constraintTop_toTopOf="parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/vacancy_imageCard"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:strokeWidth="1dp"
-        app:cornerRadius="12dp"
-        app:strokeColor="@color/yp_lightGray" />
+        app:layout_constraintTop_toTopOf="parent"
+        card_view:cardCornerRadius="@dimen/dp_12">
+
+
+        <ImageView
+            android:id="@+id/vacancy_imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/placeholder_vacancy"
+            app:strokeColor="@color/yp_lightGray"
+            app:strokeWidth="@dimen/dp_1" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/vacancy_textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:textSize="22sp"
         android:fontFamily="@font/ys_display_medium"
         android:textColor="@color/blackDayWhiteNight"
+        android:textSize="@dimen/sp_22"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/vacancy_imageView"
+        app:layout_constraintStart_toEndOf="@+id/vacancy_imageCard"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Разработчик на С++ в команду внутренних сервисов, Москва" />
+        tools:text="@string/item_vacancy_name_placeholder" />
 
     <TextView
         android:id="@+id/employer_textView"
@@ -38,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="@+id/vacancy_textView"
         app:layout_constraintStart_toStartOf="@+id/vacancy_textView"
         app:layout_constraintTop_toBottomOf="@+id/vacancy_textView"
-        tools:text="Авто.ру" />
+        tools:text="@string/item_company_placeholder" />
 
     <TextView
         android:id="@+id/salary_textView"
@@ -46,5 +58,5 @@
         app:layout_constraintEnd_toEndOf="@+id/vacancy_textView"
         app:layout_constraintStart_toStartOf="@+id/employer_textView"
         app:layout_constraintTop_toBottomOf="@+id/employer_textView"
-        tools:text="от 40 000 до 80 000 ₽" />
+        tools:text="@string/item_salary_placeholder" />
 </androidx.constraintlayout.widget.ConstraintLayout>
