@@ -20,12 +20,13 @@ class SearchViewModel(
     private val context: Context
 ) : ViewModel() {
 
-    val stateLiveData = MutableLiveData<SearchState>()
+    private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
     private val placeholderStatusMutable = MutableLiveData<PlaceholdersEnum>()
     val placeholderStatusData get() = placeholderStatusMutable
     private var latestSearchText: String? = null
+    private var isNextPageLoading = true
     private var page: Int = 0
     private var pages = 1
 
@@ -57,10 +58,10 @@ class SearchViewModel(
                     .searchVacancies(
                         VacancyRequest(
                             changedText,
-                            area = null,
+                            area = "113",
                             showSalary = true,
                             industry = null,
-                            salary = 100_000,
+                            salary = 500_000,
                             page = page
                         ).map()
                     )
@@ -78,8 +79,9 @@ class SearchViewModel(
             vacancyList.addAll(foundVacancies)
             stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
             if (foundItems != null) {
-                pages = foundItems
+                pages = (foundItems / ITEMS_PER_PAGE)
             }
+            isNextPageLoading = false
         }
 
         when {
@@ -101,18 +103,31 @@ class SearchViewModel(
         }
     }
 
+    fun clearSearchResult() {
+        val vacancyList = mutableListOf<Vacancy>()
+        vacancyList.clear()
+        stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
+        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
+    }
+
     fun onNextPage() {
-        if (page == (pages/itemsPerPage + 1)) {
-            stateLiveData.postValue(SearchState.Loading)
-        }
-        if (page < pages && !latestSearchText.isNullOrEmpty()) {
+        if (page < pages && isNextPageLoading == false && !latestSearchText.isNullOrEmpty()) {
             page += 1
-            searchVacancy(latestSearchText!!, page)
+            vacancyReloadDebounce(latestSearchText!!)
         }
+    }
+
+    private val vacancyReloadDebounce = debounce<String>(
+        RELOAD_DEBOUNCE_DELAY,
+        viewModelScope,
+        true
+    ) { latestSearchText ->
+        searchVacancy(latestSearchText, page)
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        const val itemsPerPage: Int = 20
+        private const val RELOAD_DEBOUNCE_DELAY = 300L
+        const val ITEMS_PER_PAGE: Int = 20
     }
 }
