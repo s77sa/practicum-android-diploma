@@ -60,8 +60,8 @@ class SearchViewModel(
                             changedText,
                             area = "113",
                             showSalary = true,
-                            industry = null,
-                            salary = 500_000,
+                            industry = "49",
+                            salary = 100_000,
                             page = page
                         ).map()
                     )

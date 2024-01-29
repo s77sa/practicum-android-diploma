@@ -17,6 +17,11 @@
     <string name="no_vacancy">Не удалось получить \nсписок вакансий</string>
     <string name="vacancy_search">Поиск Вакансий</string>
     <string name="search_placeholder">Найдено 1000 вакансий</string>
+    <string name="item_company_placeholder">Авто.ру</string>
+    <string name="item_salary_placeholder">от 40 000 до 80 000 ₽</string>
+    <string name="item_vacancy_name_placeholder">Разработчик на С++ в команду внутренних сервисов, Москва</string>
+
+
     // Team
     <string name="team">Команда</string>
     <string name="done_by">Над приложением работали</string>
@@ -45,5 +50,7 @@
     <string name="salary_not_specified">Зарплата не указана</string>
     <string name="from">от</string>
     <string name="to">до</string>
+    <string name="status_no_results">Таких вакансий нет</string>
+    <string name="status_results">Найдено [found] вакансий</string>
 
 </resources>

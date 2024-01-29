@@ -12,4 +12,5 @@
     <dimen name="spacing_288dp">288dp</dimen>
     <dimen name="spacing_271dp">271dp</dimen>
     <dimen name="spacing_223dp">223dp</dimen>
+    <dimen name="spacing_28dp">28dp</dimen>
 </resources>

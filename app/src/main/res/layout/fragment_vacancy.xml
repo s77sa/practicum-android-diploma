@@ -66,11 +66,11 @@
             android:id="@+id/iv_details_share_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/spacing_16dp"
+            android:layout_marginEnd="@dimen/spacing_28dp"
             android:src="@drawable/ic_sharing" />
 
         <ImageView
-            android:id="@+id/detailsFavouriteButton"
+            android:id="@+id/iv_details_favourite_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/spacing_20dp"
@@ -79,6 +79,7 @@
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsv_vacancy_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/spacing_24dp"
@@ -203,7 +204,8 @@
                 android:id="@+id/similar_vacancies_button"
                 style="@style/big_blue_button"
                 android:layout_marginTop="@dimen/spacing_24dp"
-                android:text="@string/similar_vacancies" />
+                android:text="@string/similar_vacancies"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
