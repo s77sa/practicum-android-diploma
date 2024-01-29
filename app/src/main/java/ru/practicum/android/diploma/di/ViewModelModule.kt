@@ -17,7 +17,7 @@ val viewModelModule = module {
     }
 
     viewModel<FavouriteFragmentViewModel> {
-        FavouriteFragmentViewModel()
+        FavouriteFragmentViewModel(get())
     }
     single<ExternalNavigatorRepository> { ExternalNavigatorRepositoryImpl(get()) }
     single<VacancyInteractor> { VacancyInteractorImpl(get(), get()) }

@@ -1,33 +1,29 @@
 package ru.practicum.android.diploma.presentation.favourite.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.feature.favourite.domain.usecase.GetAllVacancyUseCase
-import ru.practicum.android.diploma.presentation.favourite.FavouriteVacancyState
+import ru.practicum.android.diploma.domain.api.FavouriteInteractor
+import ru.practicum.android.diploma.domain.models.FavoriteVacancyState
+import ru.practicum.android.diploma.domain.models.FavouriteStates
+import ru.practicum.android.diploma.domain.models.Vacancy
 
 class FavouriteFragmentViewModel(
-    private val getAllVacancyUseCase: GetAllVacancyUseCase
-) :
-    ViewModel() {
+    private val favouriteInteractor: FavouriteInteractor
+) : ViewModel() {
 
-    private val _state = MutableStateFlow<FavouriteVacancyState>(FavouriteVacancyState.Empty)
-    val state: StateFlow<FavouriteVacancyState> = _state
+    private val stateLiveData = MutableLiveData < Pair <FavouriteStates, MutableList<Vacancy>>>()
 
-    init {
-        getAllVacancies()
-    }
+    fun getState(): LiveData<Pair<FavouriteStates, MutableList<Vacancy>>> = stateLiveData
 
-    fun getAllVacancies() {
+    fun loadFavourites() {
         viewModelScope.launch {
-            getAllVacancyUseCase().collect { vacancy ->
-                if (vacancy.isNotEmpty()) {
-                    _state.value = FavouriteVacancyState.VacancyLoaded(vacancy)
-                } else {
-                    _state.value = FavouriteVacancyState.Empty
-                }
+            favouriteInteractor.getFavourites().collect {
+                stateLiveData.value = it
             }
         }
     }
