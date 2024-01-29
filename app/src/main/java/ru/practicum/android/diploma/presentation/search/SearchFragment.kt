@@ -80,7 +80,7 @@ class SearchFragment : Fragment() {
     private fun initListeners() {
         searchInput?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                bottomNavigationView?.isVisible = false
+                // Empty
             }
         }
 
@@ -88,7 +88,6 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 setIconToTextView()
-                bottomNavigationView?.isVisible = s.isNullOrEmpty()
                 viewModel.searchDebounce(s.toString())
             }
 
@@ -182,7 +181,6 @@ class SearchFragment : Fragment() {
                 vacancies.addAll(state.vacancies)
                 vacancyAdapter.notifyDataSetChanged()
                 showFoundResultBar(state.foundItems)
-                hideKeyBoard()
             }
 
             is SearchState.Empty -> {
@@ -191,6 +189,7 @@ class SearchFragment : Fragment() {
 
             else -> {}
         }
+        hideKeyBoard()
     }
 
     private fun showFoundResultBar(foundItems: Int? = null) {
