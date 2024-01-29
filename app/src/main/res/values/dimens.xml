@@ -13,4 +13,5 @@
     <dimen name="spacing_271dp">271dp</dimen>
     <dimen name="spacing_223dp">223dp</dimen>
     <dimen name="spacing_28dp">28dp</dimen>
+    <dimen name="hack_margin">-7dp</dimen>
 </resources>

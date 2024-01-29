@@ -118,7 +118,7 @@
                 android:id="@+id/cv_employer"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_80dp"
-                android:layout_marginTop="@dimen/spacing_16dp"
+                android:layout_marginTop="@dimen/spacing_24dp"
                 android:backgroundTint="@color/yp_lightGray"
                 app:cardCornerRadius="@dimen/radius_12dp">
 
@@ -166,8 +166,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_24dp"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="@string/required_experience" />
+                android:text="@string/required_experience"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tv_actual_experience"
@@ -188,16 +188,26 @@
                 tools:text="@string/working_condition" />
 
             <!-- Описание вакансии -->
+            <TextView
+                android:id="@+id/tv_job_description_title"
+                style="@style/medium_font_22px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_32dp"
+                android:text="@string/job_description"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <WebView
                 android:id="@+id/wv_job_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_32dp"
+                android:layout_marginStart="@dimen/hack_margin"
+                android:layout_marginTop="@dimen/spacing_16dp"
                 android:autoLink="all"
                 android:clickable="true"
                 android:focusable="true"
                 android:scrollbars="vertical"
+                android:textAlignment="viewStart"
                 tools:ignore="WebViewLayout" />
 
             <Button
@@ -205,7 +215,7 @@
                 style="@style/big_blue_button"
                 android:layout_marginTop="@dimen/spacing_24dp"
                 android:text="@string/similar_vacancies"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

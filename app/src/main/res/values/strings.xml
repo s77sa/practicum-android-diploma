@@ -47,5 +47,6 @@
     <string name="to">до</string>
     <string name="status_no_results">Таких вакансий нет</string>
     <string name="status_results">Найдено [found] вакансий</string>
+    <string name="job_description">Описание вакансии</string>
 
 </resources>

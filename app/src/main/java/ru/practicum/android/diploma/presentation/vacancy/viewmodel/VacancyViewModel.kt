@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.viewmodel
+package ru.practicum.android.diploma.presentation.vacancy.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.VacancyInteractor
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.Resource
-import ru.practicum.android.diploma.presentation.vacancy.VacancyScreenState
+import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 
 class VacancyViewModel(private val interactor: VacancyInteractor) : ViewModel() {
 

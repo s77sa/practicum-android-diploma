@@ -11,11 +11,13 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
+import ru.practicum.android.diploma.presentation.vacancy.viewmodel.VacancyViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
-import ru.practicum.android.diploma.presentation.viewmodel.VacancyViewModel
+import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
@@ -93,13 +95,13 @@ class VacancyFragment : Fragment() {
                 Glide.with(requireContext())
                     .load(vacancy.employerLogoUrl)
                     .placeholder(R.drawable.ic_company_logo)
+                    .transform(
+                        RoundedCorners(resources.getDimensionPixelSize(R.dimen.radius_12dp))
+                    )
                     .into(binding.ivEmployerLogo)
             } else {
                 binding.ivEmployerLogo.setImageResource(R.drawable.ic_company_logo)
             }
-
-            // Заполнение карточки работодателя
-            binding.tvEmployerTitle.text = vacancy.employer ?: ""
 
             // Используем адрес, если он есть, в противном случае area
             val employerCityText = if (!vacancy.address.isNullOrEmpty()) {
