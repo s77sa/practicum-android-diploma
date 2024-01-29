@@ -45,10 +45,10 @@ class SearchViewModel(
         viewModelScope,
         true
     ) { changedText ->
-        searchVacancy(changedText)
+        searchVacancy(changedText, 0)
     }
 
-    private fun searchVacancy(changedText: String) {
+    private fun searchVacancy(changedText: String, page: Int) {
         if (changedText.isNotEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
             setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_CENTER)
@@ -61,7 +61,7 @@ class SearchViewModel(
                             showSalary = true,
                             industry = "49",
                             salary = 100_000,
-                            page = 0
+                            page = page
                         ).map()
                     )
                     .collect { pair ->
@@ -109,16 +109,17 @@ class SearchViewModel(
     }
 
     fun onNextPage() {
-        if (page == pages) {
+        if (page == (pages/itemsPerPage + 1)) {
             stateLiveData.postValue(SearchState.Loading)
         }
         if (page < pages && !latestSearchText.isNullOrEmpty()) {
             page += 1
-            searchVacancy(latestSearchText!!)
+            searchVacancy(latestSearchText!!, page)
         }
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val itemsPerPage: Int = 20
     }
 }
