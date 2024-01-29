@@ -18,7 +18,7 @@ class VacancyViewHolder(private val binding: VacancyItemBinding) : RecyclerView.
 
         Glide.with(itemView).load(vacancy.employerLogoUrl)
             .placeholder(R.drawable.placeholder_vacancy) // DONE заменить на плэйсхолдер работодателя
-            .centerCrop().into(binding.vacancyImageView)
+            .fitCenter().into(binding.vacancyImageView)
     }
 
     private fun formatSalary(salaryFrom: Int?, salaryTo: Int?, salaryCurrency: String?, context: Context): String {
