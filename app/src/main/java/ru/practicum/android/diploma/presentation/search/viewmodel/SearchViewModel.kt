@@ -27,7 +27,7 @@ class SearchViewModel(
     val placeholderStatusData get() = placeholderStatusMutable
     private var latestSearchText: String? = null
     private var page: Int = 0
-    private var pages = 1
+    private var pages = 100
 
     fun setPlaceholder(placeholdersEnum: PlaceholdersEnum) {
         placeholderStatusMutable.value = placeholdersEnum
@@ -45,10 +45,10 @@ class SearchViewModel(
         viewModelScope,
         true
     ) { changedText ->
-        searchVacancy(changedText)
+        searchVacancy(changedText, 0)
     }
 
-    private fun searchVacancy(changedText: String) {
+    private fun searchVacancy(changedText: String, page : Int) {
         if (changedText.isNotEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
             setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_CENTER)
@@ -61,7 +61,7 @@ class SearchViewModel(
                             showSalary = true,
                             industry = "49",
                             salary = 100_000,
-                            page = 0
+                            page = page
                         ).map()
                     )
                     .collect { pair ->
@@ -109,12 +109,12 @@ class SearchViewModel(
     }
 
     fun onNextPage() {
-        if (page == pages) {
+        if (page == (pages/20 + 1)) {
             stateLiveData.postValue(SearchState.Loading)
         }
         if (page < pages && !latestSearchText.isNullOrEmpty()) {
             page += 1
-            searchVacancy(latestSearchText!!)
+            searchVacancy(latestSearchText!!, page)
         }
     }
 
