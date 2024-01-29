@@ -20,7 +20,7 @@ class SearchViewModel(
     private val context: Context
 ) : ViewModel() {
 
-    val stateLiveData = MutableLiveData<SearchState>()
+    private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
     private val placeholderStatusMutable = MutableLiveData<PlaceholdersEnum>()
@@ -99,6 +99,13 @@ class SearchViewModel(
                 stateLiveData.postValue(SearchState.Content(vacancyList, foundItems = foundItems))
             }
         }
+    }
+
+    fun clearSearchResult() {
+        val vacancyList = mutableListOf<Vacancy>()
+        vacancyList.clear()
+        stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
+        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
     }
 
     fun onNextPage() {
