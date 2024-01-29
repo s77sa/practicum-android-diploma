@@ -48,7 +48,7 @@ class SearchViewModel(
         searchVacancy(changedText, 0)
     }
 
-    private fun searchVacancy(changedText: String, page : Int) {
+    private fun searchVacancy(changedText: String, page: Int) {
         if (changedText.isNotEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
             setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_CENTER)
