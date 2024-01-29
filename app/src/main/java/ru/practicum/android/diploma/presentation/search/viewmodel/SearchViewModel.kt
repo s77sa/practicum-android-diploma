@@ -27,7 +27,7 @@ class SearchViewModel(
     val placeholderStatusData get() = placeholderStatusMutable
     private var latestSearchText: String? = null
     private var page: Int = 0
-    private var pages = 100
+    private var pages = 1
 
     fun setPlaceholder(placeholdersEnum: PlaceholdersEnum) {
         placeholderStatusMutable.value = placeholdersEnum
