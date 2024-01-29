@@ -79,7 +79,7 @@ class SearchViewModel(
             vacancyList.addAll(foundVacancies)
             stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
             if (foundItems != null) {
-                pages = (foundItems / ITEMS_PER_PAGE)
+                pages = foundItems / ITEMS_PER_PAGE
             }
             isNextPageLoading = false
         }
