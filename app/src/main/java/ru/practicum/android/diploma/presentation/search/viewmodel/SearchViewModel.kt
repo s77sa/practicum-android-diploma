@@ -109,7 +109,7 @@ class SearchViewModel(
     }
 
     fun onNextPage() {
-        if (page == (pages/20 + 1)) {
+        if (page == (pages/itemsPerPage + 1)) {
             stateLiveData.postValue(SearchState.Loading)
         }
         if (page < pages && !latestSearchText.isNullOrEmpty()) {
@@ -120,5 +120,6 @@ class SearchViewModel(
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val itemsPerPage: Int = 20
     }
 }
