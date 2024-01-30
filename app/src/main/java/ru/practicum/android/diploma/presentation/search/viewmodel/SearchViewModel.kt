@@ -112,6 +112,7 @@ class SearchViewModel(
 
     fun onNextPage() {
         if (page < pages && isNextPageLoading == false && !latestSearchText.isNullOrEmpty()) {
+            stateLiveData.postValue(SearchState.Loading)
             page += 1
             vacancyReloadDebounce(latestSearchText!!)
         }

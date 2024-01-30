@@ -54,5 +54,32 @@
             android:textColor="@color/blackDayWhiteNight"
             android:textSize="22sp" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/placeholder_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="223dp"
+            android:src="@drawable/image_error_favorite"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_8"
+            android:fontFamily="@font/ys_display_medium"
+            android:textColor="@color/blackDayWhiteNight"
+            android:textSize="22sp"
+            android:textFontWeight="500"
+            android:text="@string/no_vacancy"
+            android:gravity="center"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
