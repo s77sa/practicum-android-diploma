@@ -5,8 +5,8 @@ import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.domain.models.Vacancy
 
-class VacancyMapper() {
-    fun map(response: VacancyDetailResponse,isFavourite:Boolean): Vacancy {
+class VacancyMapper {
+    fun map(response: VacancyDetailResponse, isFavourite: Boolean): Vacancy {
         return Vacancy(
             id = response.id,
             name = response.name,
