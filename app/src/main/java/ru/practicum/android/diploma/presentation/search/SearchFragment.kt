@@ -50,7 +50,6 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val view = binding.root
         bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        viewModel.setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
         searchInput = binding.searchInput
         iconSearch = binding.ivClear
         initListeners()
@@ -74,7 +73,9 @@ class SearchFragment : Fragment() {
         viewModel.placeholderStatusData.observe(viewLifecycleOwner) {
             setPlaceholder(it)
         }
-        viewModel.observeState().observe(viewLifecycleOwner) { updateScreen(it) }
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            updateScreen(it)
+        }
     }
 
     private fun initListeners() {
