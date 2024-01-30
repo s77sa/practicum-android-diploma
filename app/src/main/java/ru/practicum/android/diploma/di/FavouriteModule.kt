@@ -4,7 +4,6 @@ import androidx.room.Room
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import ru.practicum.android.diploma.data.conventers.VacancyMapper
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.repository.FavouriteRepositoryImpl
 import ru.practicum.android.diploma.domain.api.FavouriteInteractor
@@ -19,8 +18,6 @@ val favouriteModule = module {
             .fallbackToDestructiveMigration()
             .build()
     }
-
-    factory { VacancyMapper(get())}
 
     single<FavouriteRepository> {
         FavouriteRepositoryImpl(get(), get())
