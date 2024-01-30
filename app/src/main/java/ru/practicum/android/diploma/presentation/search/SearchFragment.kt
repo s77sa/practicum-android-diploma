@@ -216,29 +216,6 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun showFoundResultBar(foundItems: Int? = null) {
-        when (foundItems) {
-            null -> {
-                binding.foundResults.isVisible = false
-                Log.d(TAG, "showFoundResultBar null")
-            }
-
-            0 -> {
-                binding.foundResults.text = getString(R.string.status_no_results)
-                binding.foundResults.isVisible = true
-                Log.d(TAG, "showFoundResultBar 0")
-            }
-
-            else -> {
-                var value = getString(R.string.status_results)
-                value = value.replace(FOUND_REPLACE_PATTERN, foundItems.toString())
-                binding.foundResults.text = value
-                binding.foundResults.isVisible = true
-                Log.d(TAG, "showFoundResultBar else")
-            }
-        }
-    }
-
     private fun initClickListener() {
         onVacancyClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY,
