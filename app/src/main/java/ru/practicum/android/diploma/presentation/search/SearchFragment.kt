@@ -88,7 +88,7 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 setIconToTextView()
-
+                vacancies.clear()
                 viewModel.searchDebounce(s.toString())
             }
 
@@ -177,7 +177,6 @@ class SearchFragment : Fragment() {
     private fun updateScreen(state: SearchState) {
         when (state) {
             is SearchState.Content -> {
-                vacancies.clear()
                 vacancies.addAll(state.vacancies)
                 vacancyAdapter.notifyDataSetChanged()
                 showFoundResultBar(state.foundItems)

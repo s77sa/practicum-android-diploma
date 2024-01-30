@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.presentation.search.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -38,6 +39,7 @@ class SearchViewModel(
         if (latestSearchText != changedText) {
             latestSearchText = changedText
             vacancySearchDebounce(changedText)
+            page = 0
         }
     }
 
@@ -111,9 +113,10 @@ class SearchViewModel(
     }
 
     fun onNextPage() {
-        if (page < pages && isNextPageLoading == false && !latestSearchText.isNullOrEmpty()) {
+        if (page < pages && !isNextPageLoading && !latestSearchText.isNullOrEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
             page += 1
+            isNextPageLoading = true
             vacancyReloadDebounce(latestSearchText!!)
         }
     }
