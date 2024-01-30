@@ -23,14 +23,14 @@ class SearchViewModel(
     private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
-    private val placeholderStatusMutable = MutableLiveData<PlaceholdersEnum>()
+    private val placeholderStatusMutable = MutableLiveData<PlaceholdersEnum>(PlaceholdersEnum.SHOW_BLANK)
     val placeholderStatusData get() = placeholderStatusMutable
     private var latestSearchText: String? = null
     private var isNextPageLoading = true
     private var page: Int = 0
     private var pages = 1
 
-    fun setPlaceholder(placeholdersEnum: PlaceholdersEnum) {
+    private fun setPlaceholder(placeholdersEnum: PlaceholdersEnum) {
         placeholderStatusMutable.value = placeholdersEnum
     }
 
@@ -65,7 +65,7 @@ class SearchViewModel(
                             changedText,
                             area = "113",
                             showSalary = true,
-                            industry = "49",
+                            industry = null,
                             salary = 100_000,
                             page = page
                         ).map()
