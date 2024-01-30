@@ -116,6 +116,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun clearSearch() {
+        // viewModel.clearSearchResult()
         showFoundResultBar()
         searchInput?.text?.clear()
     }
@@ -175,8 +176,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun updateScreen(state: SearchState) {
+
         when (state) {
             is SearchState.Content -> {
+                Log.d(TAG, state.vacancies.size.toString())
                 vacancies.clear()
                 vacancies.addAll(state.vacancies)
                 vacancyAdapter.notifyDataSetChanged()
@@ -195,7 +198,8 @@ class SearchFragment : Fragment() {
     private fun showFoundResultBar(foundItems: Int? = null) {
         when (foundItems) {
             null -> {
-                binding.foundResults.isVisible = false
+                binding.foundResults.visibility = View.GONE
+                binding.recyclerView.visibility = View.GONE
                 Log.d(TAG, "showFoundResultBar null")
             }
 

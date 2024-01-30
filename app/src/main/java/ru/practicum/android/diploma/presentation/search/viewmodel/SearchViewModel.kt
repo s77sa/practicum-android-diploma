@@ -107,7 +107,7 @@ class SearchViewModel(
         val vacancyList = mutableListOf<Vacancy>()
         vacancyList.clear()
         stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
-        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
+        setPlaceholder(PlaceholdersEnum.HIDE_ALL)
     }
 
     fun onNextPage() {
