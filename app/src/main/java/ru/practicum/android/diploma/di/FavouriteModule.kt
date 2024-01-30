@@ -20,7 +20,7 @@ val favouriteModule = module {
             .build()
     }
 
-    factory { VacancyMapper() }
+    factory { VacancyMapper(appDatabase = get()) }
 
     single<FavouriteRepository> {
         FavouriteRepositoryImpl(get(), get())

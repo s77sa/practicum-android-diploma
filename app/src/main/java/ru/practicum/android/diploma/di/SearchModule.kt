@@ -29,12 +29,12 @@ val searchModule = module {
     }
 
     single<SearchRepository> {
-        SearchRepositoryImpl(networkClient = get(), context = get(), converter = get(), appDatabase = get())
+        SearchRepositoryImpl(networkClient = get(), context = get(), converter = get())
     }
 
     single<SearchInteractor> {
         SearchInteractorImpl(repository = get())
     }
 
-    factory { VacancyMapper() }
+    factory { VacancyMapper(appDatabase = get()) }
 }

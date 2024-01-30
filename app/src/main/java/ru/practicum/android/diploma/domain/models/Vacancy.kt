@@ -21,6 +21,6 @@ data class Vacancy(
     val experience: String?,
     val skills: List<String>?,
     val schedule: String?,
-    var isFavourite: Boolean?=false,
+    val isFavourite: Boolean?,
     val address: String?
 )
