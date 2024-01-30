@@ -100,7 +100,6 @@ class SearchFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
 
                 if (dy > 0) {
-                    // binding.progressBar.visibility = View.VISIBLE
                     val pos =
                         (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacancyAdapter.itemCount

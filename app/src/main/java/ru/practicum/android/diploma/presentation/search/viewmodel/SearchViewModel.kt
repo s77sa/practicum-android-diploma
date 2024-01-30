@@ -26,6 +26,7 @@ class SearchViewModel(
     private val placeholderStatusMutable = MutableLiveData<PlaceholdersEnum>()
     val placeholderStatusData get() = placeholderStatusMutable
     private var latestSearchText: String? = null
+    private var isNextPageLoading = true
     private var page: Int = 0
     private var pages = 1
 
@@ -78,8 +79,9 @@ class SearchViewModel(
             vacancyList.addAll(foundVacancies)
             stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
             if (foundItems != null) {
-                pages = foundItems
+                pages = foundItems / ITEMS_PER_PAGE
             }
+            isNextPageLoading = false
         }
 
         when {
@@ -109,17 +111,24 @@ class SearchViewModel(
     }
 
     fun onNextPage() {
-        if (page == pages / itemsPerPage + 1) {
+        if (page < pages && isNextPageLoading == false && !latestSearchText.isNullOrEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
-        }
-        if (page < pages && !latestSearchText.isNullOrEmpty()) {
             page += 1
-            searchVacancy(latestSearchText!!, page)
+            vacancyReloadDebounce(latestSearchText!!)
         }
+    }
+
+    private val vacancyReloadDebounce = debounce<String>(
+        RELOAD_DEBOUNCE_DELAY,
+        viewModelScope,
+        true
+    ) { latestSearchText ->
+        searchVacancy(latestSearchText, page)
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        const val itemsPerPage: Int = 20
+        private const val RELOAD_DEBOUNCE_DELAY = 300L
+        const val ITEMS_PER_PAGE: Int = 20
     }
 }
