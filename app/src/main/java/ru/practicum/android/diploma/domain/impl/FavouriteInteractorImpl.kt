@@ -25,4 +25,3 @@ class FavouriteInteractorImpl(
         return favouriteRepository.getFavourite(vacancyId)
     }
 }
-

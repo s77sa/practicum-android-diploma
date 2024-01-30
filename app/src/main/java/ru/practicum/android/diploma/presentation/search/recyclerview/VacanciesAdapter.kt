@@ -28,4 +28,3 @@ class VacanciesAdapter(
         fun onClick(vacancy: Vacancy)
     }
 }
-

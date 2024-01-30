@@ -10,4 +10,3 @@ interface FavouriteInteractor {
     fun getFavourites(): Flow<Pair<FavouriteStates, MutableList<Vacancy>>>
     fun getFavourite(vacancyId: String): Flow<List<Vacancy>>
 }
-

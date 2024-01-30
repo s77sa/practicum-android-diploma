@@ -5,4 +5,3 @@ sealed interface FavouriteStates {
     object Error : FavouriteStates
     object Success : FavouriteStates
 }
-

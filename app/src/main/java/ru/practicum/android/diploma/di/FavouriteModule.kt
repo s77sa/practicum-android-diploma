@@ -22,7 +22,6 @@ val favouriteModule = module {
 
     factory { VacancyMapper() }
 
-
     single<FavouriteRepository> {
         FavouriteRepositoryImpl(get(), get())
     }
@@ -35,4 +34,3 @@ val favouriteModule = module {
         FavouriteFragmentViewModel(get())
     }
 }
-

@@ -21,20 +21,20 @@ class FavouriteRepositoryImpl(
     }
 
     override fun getFavourites(): Flow<Pair<FavouriteStates, MutableList<Vacancy>>> = flow {
-        try {
-            val vacancy = appDatabase.favouriteDao().getFavourites()
-            if (vacancy.isEmpty()) {
-                emit(Pair(FavouriteStates.Empty, mutableListOf()))
-            } else {
-                val mappedFavourites = ArrayList<Vacancy>()
-                vacancy.forEach {
-                    mappedFavourites.add(favouriteConverter.map(it))
-                }
-                emit(Pair(FavouriteStates.Success, mappedFavourites.toMutableList()))
+        // try {
+        val vacancy = appDatabase.favouriteDao().getFavourites()
+        if (vacancy.isEmpty()) {
+            emit(Pair(FavouriteStates.Empty, mutableListOf()))
+        } else {
+            val mappedFavourites = ArrayList<Vacancy>()
+            vacancy.forEach {
+                mappedFavourites.add(favouriteConverter.map(it))
             }
-        } catch (e: Exception) {
-            emit(Pair(FavouriteStates.Error, mutableListOf()))
+            emit(Pair(FavouriteStates.Success, mappedFavourites.toMutableList()))
         }
+        // } catch (e: Exception) {
+        //     emit(Pair(FavouriteStates.Error, mutableListOf()))
+        // }
     }
 
     override fun getFavourite(vacancyId: String): Flow<List<Vacancy>> = flow {

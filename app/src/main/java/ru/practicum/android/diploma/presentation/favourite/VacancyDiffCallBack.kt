@@ -24,4 +24,3 @@ class VacancyDiffCallBack(
         return oldList == newList
     }
 }
-
