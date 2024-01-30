@@ -13,11 +13,11 @@ import ru.practicum.android.diploma.presentation.viewmodel.VacancyViewModel
 val viewModelModule = module {
 
     viewModel<SearchViewModel> {
-        SearchViewModel(searchInteractor = get(), context = get())
+        SearchViewModel(get(), get())
     }
 
     viewModel<FavouriteFragmentViewModel> {
-        FavouriteFragmentViewModel()
+        FavouriteFragmentViewModel(get())
     }
     single<ExternalNavigatorRepository> { ExternalNavigatorRepositoryImpl(get()) }
     single<VacancyInteractor> { VacancyInteractorImpl(get(), get()) }

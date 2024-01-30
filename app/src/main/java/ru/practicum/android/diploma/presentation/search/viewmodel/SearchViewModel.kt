@@ -109,7 +109,7 @@ class SearchViewModel(
     }
 
     fun onNextPage() {
-        if (page == (pages/itemsPerPage + 1)) {
+        if (page == pages / itemsPerPage + 1) {
             stateLiveData.postValue(SearchState.Loading)
         }
         if (page < pages && !latestSearchText.isNullOrEmpty()) {
