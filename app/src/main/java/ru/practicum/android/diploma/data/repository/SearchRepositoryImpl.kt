@@ -59,32 +59,9 @@ class SearchRepositoryImpl(
 
             SUCCESS -> {
                 val favList = appDatabase.favouriteDao().getFavId()
-                val vacancy = converter.map(response as VacancyDetailResponse)
-                val vacancyChecked = Vacancy(
-                    id = vacancy.id,
-                    name = vacancy.name,
-                    city = vacancy.city,
-                    employer = vacancy.employer,
-                    employerLogoUrl = vacancy.employerLogoUrl,
-                    department = vacancy.department,
-                    salaryCurrency = vacancy.salaryCurrency,
-                    salaryFrom = vacancy.salaryFrom,
-                    salaryTo = vacancy.salaryTo,
-                    contactEmail = vacancy.contactEmail,
-                    contactName = vacancy.contactName,
-                    contactPhones = vacancy.contactPhones,
-                    contactComment = vacancy.contactComment,
-                    description = vacancy.description,
-                    url = vacancy.url,
-                    area = vacancy.area,
-                    logo = vacancy.logo,
-                    experience = vacancy.experience,
-                    skills = vacancy.skills,
-                    schedule = vacancy.schedule,
-                    isFavourite = vacancy.id in favList,
-                    address = vacancy.address
-                )
-                Resource.Success(vacancyChecked)
+                val vacancyResponse = response as VacancyDetailResponse
+                val vacancy = converter.map(vacancyResponse, vacancyResponse.id in favList)
+                Resource.Success(vacancy)
             }
 
             else -> {
