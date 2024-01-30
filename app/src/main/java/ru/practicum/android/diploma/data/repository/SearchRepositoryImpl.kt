@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -23,6 +24,7 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
     override var vacancyCurrentPage: Int? = null
     override var foundItems: Int? = null
+    override var pages: Int? = null
     override fun searchVacancies(request: Map<String, String>): Flow<Resource<List<Vacancy>>> = flow {
         val response = networkClient.doRequest(request)
         when (response.resultCode) {
@@ -35,6 +37,8 @@ class SearchRepositoryImpl(
                     vacancyCurrentPage = response.page
                     foundItems = response.found
                     val data = converter.mapList(response)
+                    this@SearchRepositoryImpl.pages = response.pages
+                    Log.i("processResult", "SearchRepositoryImpl current page $vacancyCurrentPage")
 
                     emit(Resource.Success(data))
                 }
