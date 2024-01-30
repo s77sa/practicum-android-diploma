@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.presentation.search.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
