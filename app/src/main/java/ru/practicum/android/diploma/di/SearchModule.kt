@@ -29,7 +29,7 @@ val searchModule = module {
     }
 
     single<SearchRepository> {
-        SearchRepositoryImpl(networkClient = get(), context = get(), converter = get())
+        SearchRepositoryImpl(networkClient = get(), context = get(), converter = get(), appDatabase = get())
     }
 
     single<SearchInteractor> {
