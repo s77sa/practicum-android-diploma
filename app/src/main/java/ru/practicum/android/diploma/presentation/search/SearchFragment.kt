@@ -116,6 +116,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun clearSearch() {
+        //viewModel.clearSearchResult()
         showFoundResultBar()
         searchInput?.text?.clear()
     }

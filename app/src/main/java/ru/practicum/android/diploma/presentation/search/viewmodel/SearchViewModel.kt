@@ -53,7 +53,11 @@ class SearchViewModel(
     private fun searchVacancy(changedText: String, page: Int) {
         if (changedText.isNotEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
-            setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_CENTER)
+            if (page == 0) {
+                setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_CENTER)
+            } else {
+                setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_BOTTOM)
+            }
             viewModelScope.launch {
                 searchInteractor
                     .searchVacancies(
@@ -131,6 +135,7 @@ class SearchViewModel(
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val RELOAD_DEBOUNCE_DELAY = 300L
-        const val ITEMS_PER_PAGE: Int = 20
+        private const val ITEMS_PER_PAGE: Int = 20
+        private val TAG = SearchViewModel::class.java.simpleName
     }
 }
