@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.data.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -40,7 +39,6 @@ class SearchRepositoryImpl(
                     foundItems = response.found
                     val data = converter.mapList(response)
                     this@SearchRepositoryImpl.pages = response.pages
-                    Log.i("processResult", "SearchRepositoryImpl current page $vacancyCurrentPage")
 
                     emit(Resource.Success(data))
                 }
@@ -62,7 +60,6 @@ class SearchRepositoryImpl(
             SUCCESS -> {
                 val favList = appDatabase.favouriteDao().getFavId()
                 val vacancy = converter.map(response as VacancyDetailResponse)
-                Log.i("getDetails", "Details isFavourite ${vacancy.isFavourite}")
                 val vacancyChecked = Vacancy(
                     id = vacancy.id,
                     name = vacancy.name,
