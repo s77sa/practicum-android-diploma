@@ -38,6 +38,7 @@ class SearchViewModel(
         if (latestSearchText != changedText) {
             latestSearchText = changedText
             vacancySearchDebounce(changedText)
+            page = 0
         }
     }
 
@@ -111,9 +112,10 @@ class SearchViewModel(
     }
 
     fun onNextPage() {
-        if (page < pages && isNextPageLoading == false && !latestSearchText.isNullOrEmpty()) {
+        if (page < pages && !isNextPageLoading && !latestSearchText.isNullOrEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
             page += 1
+            isNextPageLoading = true
             vacancyReloadDebounce(latestSearchText!!)
         }
     }
