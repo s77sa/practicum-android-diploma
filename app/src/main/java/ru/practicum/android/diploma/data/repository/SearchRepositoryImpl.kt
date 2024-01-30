@@ -62,7 +62,6 @@ class SearchRepositoryImpl(
             SUCCESS -> {
                 val favList = appDatabase.favouriteDao().getFavId()
                 val vacancy = converter.map(response as VacancyDetailResponse)
-                vacancy.isFavourite = vacancy.id in favList
                 Log.i("getDetails", "Details isFavourite ${vacancy.isFavourite}")
                 Resource.Success(vacancy)
             }

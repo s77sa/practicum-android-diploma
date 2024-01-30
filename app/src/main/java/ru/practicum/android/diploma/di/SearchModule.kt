@@ -36,5 +36,5 @@ val searchModule = module {
         SearchInteractorImpl(repository = get())
     }
 
-    factory { VacancyMapper() }
+    factory { VacancyMapper(get()) }
 }
