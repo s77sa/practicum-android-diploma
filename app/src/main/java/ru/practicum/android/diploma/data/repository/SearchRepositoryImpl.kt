@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.conventers.VacancyMapper
+import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.data.network.NetworkClient
@@ -21,6 +22,7 @@ class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
     private val context: Context,
     private val converter: VacancyMapper,
+    private val appDatabase: AppDatabase
 ) : SearchRepository {
     override var vacancyCurrentPage: Int? = null
     override var foundItems: Int? = null
@@ -58,7 +60,9 @@ class SearchRepositoryImpl(
             }
 
             SUCCESS -> {
+                val favList = appDatabase.favouriteDao().getFavId()
                 val vacancy = converter.map(response as VacancyDetailResponse)
+                vacancy.isFavourite = vacancy.id in favList
                 Log.i("getDetails", "Details isFavourite ${vacancy.isFavourite}")
                 Resource.Success(vacancy)
             }
