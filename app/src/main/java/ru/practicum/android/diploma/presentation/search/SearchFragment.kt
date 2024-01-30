@@ -194,7 +194,8 @@ class SearchFragment : Fragment() {
     private fun showFoundResultBar(foundItems: Int? = null) {
         when (foundItems) {
             null -> {
-                binding.foundResults.isVisible = false
+                binding.foundResults.visibility = View.GONE
+                binding.recyclerView.visibility = View.GONE
                 Log.d(TAG, "showFoundResultBar null")
             }
 
