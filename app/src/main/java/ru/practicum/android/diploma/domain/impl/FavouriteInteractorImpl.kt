@@ -24,5 +24,9 @@ class FavouriteInteractorImpl(
     override fun getFavourite(vacancyId: String): Flow<List<Vacancy>> {
         return favouriteRepository.getFavourite(vacancyId)
     }
+
+    override suspend fun getFavId(): List<String> {
+        return favouriteRepository.getFavId()
+    }
 }
 

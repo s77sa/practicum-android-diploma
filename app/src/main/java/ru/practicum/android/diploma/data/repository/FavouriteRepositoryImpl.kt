@@ -43,5 +43,8 @@ class FavouriteRepositoryImpl(
             favouriteConverter.map(vacancy)
         })
     }
+    override suspend fun getFavId(): List<String> {
+        return appDatabase.favouriteDao().getFavId()
+    }
 }
 

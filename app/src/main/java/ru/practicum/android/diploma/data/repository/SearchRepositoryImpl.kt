@@ -1,12 +1,12 @@
 package ru.practicum.android.diploma.data.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.conventers.VacancyMapper
+import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.data.network.NetworkClient
@@ -20,7 +20,8 @@ const val NO_CONNECTION = -1
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
     private val context: Context,
-    private val converter: VacancyMapper
+    private val converter: VacancyMapper,
+    private val appDatabase: AppDatabase
 ) : SearchRepository {
     override var vacancyCurrentPage: Int? = null
     override var foundItems: Int? = null
@@ -38,7 +39,6 @@ class SearchRepositoryImpl(
                     foundItems = response.found
                     val data = converter.mapList(response)
                     this@SearchRepositoryImpl.pages = response.pages
-                    Log.i("processResult", "SearchRepositoryImpl current page $vacancyCurrentPage")
 
                     emit(Resource.Success(data))
                 }
@@ -58,7 +58,9 @@ class SearchRepositoryImpl(
             }
 
             SUCCESS -> {
-                val vacancy = converter.map(response as VacancyDetailResponse)
+                val favList = appDatabase.favouriteDao().getFavId()
+                val vacancyResponse = response as VacancyDetailResponse
+                val vacancy = converter.map(vacancyResponse, vacancyResponse.id in favList)
                 Resource.Success(vacancy)
             }
 

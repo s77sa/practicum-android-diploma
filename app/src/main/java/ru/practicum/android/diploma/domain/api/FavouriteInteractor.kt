@@ -9,5 +9,6 @@ interface FavouriteInteractor {
     suspend fun deleteFavourite(vacancy: Vacancy)
     fun getFavourites(): Flow<Pair<FavouriteStates, MutableList<Vacancy>>>
     fun getFavourite(vacancyId: String): Flow<List<Vacancy>>
+    suspend fun getFavId(): List<String>
 }
 
