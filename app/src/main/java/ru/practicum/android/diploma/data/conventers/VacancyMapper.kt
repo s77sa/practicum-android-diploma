@@ -67,7 +67,7 @@ class VacancyMapper {
         val phonesList = mutableListOf<String>()
         if (phones != null) {
             for (i in phones) {
-                phonesList.add(i.number)
+                phonesList.add(i.formatted)
             }
         }
         return phonesList

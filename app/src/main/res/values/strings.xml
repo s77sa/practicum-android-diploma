@@ -53,5 +53,11 @@
     <string name="status_no_results">Таких вакансий нет</string>
     <string name="status_results">Найдено [found] вакансий</string>
     <string name="job_description">Описание вакансии</string>
+    <string name="key_skills">Ключевые навыки</string>
+    <string name="contacts">Контакты</string>
+    <string name="contact_name">Контактное лицо</string>
+    <string name="email">E-mail</string>
+    <string name="telephone">Телефон</string>
+    <string name="comment">Комментарий</string>
 
 </resources>

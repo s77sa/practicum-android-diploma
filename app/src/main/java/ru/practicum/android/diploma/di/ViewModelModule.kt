@@ -22,6 +22,6 @@ val viewModelModule = module {
     single<ExternalNavigatorRepository> { ExternalNavigatorRepositoryImpl(get()) }
     single<VacancyInteractor> { VacancyInteractorImpl(get(), get()) }
     viewModel<VacancyViewModel> {
-        VacancyViewModel(interactor = get())
+        VacancyViewModel(vacancyInteractor = get(), favouriteInteractor = get())
     }
 }
