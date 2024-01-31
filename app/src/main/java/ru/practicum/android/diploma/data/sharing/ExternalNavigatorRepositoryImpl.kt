@@ -40,6 +40,7 @@ class ExternalNavigatorRepositoryImpl(private val context: Context) : ExternalNa
         return try {
             val shareIntent = Intent(Intent.ACTION_DIAL)
             shareIntent.data = Uri.parse("tel:$number")
+            shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(shareIntent)
             null
         } catch (e: ActivityNotFoundException) {

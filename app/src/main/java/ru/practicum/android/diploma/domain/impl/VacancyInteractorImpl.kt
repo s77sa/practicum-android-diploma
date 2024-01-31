@@ -14,6 +14,14 @@ class VacancyInteractorImpl(
         return repository.getDetails(id)
     }
 
+    override suspend fun sendEmail(address: String, subject: String, text: String): String? {
+        return externalNavigator.intentEmail(address, subject, text)
+    }
+
+    override suspend fun makeCall(number: String): String? {
+        return externalNavigator.intentDial(number)
+    }
+
     override fun shareVacancy(url: String) {
         externalNavigator.intentShare(url)
     }

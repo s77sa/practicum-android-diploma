@@ -6,22 +6,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
+import ru.practicum.android.diploma.presentation.vacancy.viewmodel.VacancyViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
-import ru.practicum.android.diploma.presentation.viewmodel.VacancyViewModel
+import ru.practicum.android.diploma.presentation.util.SalaryUtils
+import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VacancyViewModel by viewModel()
     private var vacancyId: String? = null
+    private var isFavourite: Boolean = false
+    private var currentVacancy: Vacancy? = null
     override fun onCreateView(
 
         inflater: LayoutInflater,
@@ -37,7 +44,7 @@ class VacancyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val progressBar: ProgressBar = view.findViewById(R.id.progress_bar)
-        val errorPlaceholder: LinearLayout = view.findViewById(R.id.ll_error_pole)
+        val errorPlaceholder: LinearLayout = view.findViewById(R.id.ll_error_field)
         val vacancyDescriptionView: NestedScrollView = view.findViewById(R.id.nsv_vacancy_description)
 
         viewModel.vacancyScreenState.observe(viewLifecycleOwner) { state ->
@@ -47,77 +54,188 @@ class VacancyFragment : Fragment() {
                     updateUIWithVacancyDetails(vacancy)
                     showLoadingIndicator(false, progressBar)
                     showErrorPlaceholder(false, errorPlaceholder)
-                    vacancyDescriptionView.visibility = View.VISIBLE
+                    vacancyDescriptionView.isVisible = true
                 }
 
                 is VacancyScreenState.Error -> {
                     showLoadingIndicator(false, progressBar)
                     showErrorPlaceholder(true, errorPlaceholder)
-                    vacancyDescriptionView.visibility = View.GONE
+                    vacancyDescriptionView.isVisible = false
                 }
 
                 is VacancyScreenState.Loading -> {
                     showLoadingIndicator(true, progressBar)
                     showErrorPlaceholder(false, errorPlaceholder)
-                    vacancyDescriptionView.visibility = View.GONE
+                    vacancyDescriptionView.isVisible = false
                 }
             }
         }
 
         vacancyId?.let { viewModel.getVacancyDetailsById(it) }
 
+        // Обновление значка избранного
+        viewModel.isFavourite.observe(viewLifecycleOwner) { isFavourite ->
+            this.isFavourite = isFavourite
+            updateFavouriteIcon()
+        }
         initClickListeners()
     }
 
+    private fun updateFavouriteIcon() {
+        if (isFavourite) {
+            binding.ivDetailsFavouriteButton.setImageResource(R.drawable.ic_favorites_checked)
+        } else {
+            binding.ivDetailsFavouriteButton.setImageResource(R.drawable.ic_favorites_unchecked)
+        }
+    }
+
     private fun showErrorPlaceholder(show: Boolean, errorPlaceholder: LinearLayout) {
-        errorPlaceholder.visibility = if (show) View.VISIBLE else View.GONE
+        errorPlaceholder.isVisible = show
     }
 
     private fun showLoadingIndicator(show: Boolean, progressBar: ProgressBar) {
-        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        progressBar.isVisible = show
     }
 
     private fun updateUIWithVacancyDetails(vacancy: Vacancy?) {
         if (vacancy != null) {
-            // Заполняем макет данными из вакансии
-            binding.tvJobTitle.text = vacancy.name
-            binding.tvSalaryLevel.text = formatSalary(vacancy.salaryFrom, vacancy.salaryTo, vacancy.salaryCurrency)
+            currentVacancy = vacancy
 
-            // Заполнение блока с работодателем
-            vacancy.employer?.let {
-                binding.tvEmployerTitle.text = it
-            }
+            fillJobDetails(vacancy)
+            fillEmployerDetails(vacancy)
+            loadEmployerLogo(vacancy)
+            fillLocationDetails(vacancy)
+            fillExperienceAndEmploymentDetails(vacancy)
+            loadJobDescription(vacancy)
+            fillKeySkillsDetails(vacancy)
+            showContactsIfRequired(vacancy)
 
-            // Загрузка логотипа работодателя в ImageView с обработкой плейсхолдера
-            if (!vacancy.employerLogoUrl.isNullOrEmpty()) {
-                Glide.with(requireContext())
-                    .load(vacancy.employerLogoUrl)
-                    .placeholder(R.drawable.ic_company_logo)
-                    .into(binding.ivEmployerLogo)
-            } else {
-                binding.ivEmployerLogo.setImageResource(R.drawable.ic_company_logo)
-            }
-
-            // Заполнение карточки работодателя
-            binding.tvEmployerTitle.text = vacancy.employer ?: ""
-
-            // Используем адрес, если он есть, в противном случае area
-            val employerCityText = if (!vacancy.address.isNullOrEmpty()) {
-                vacancy.address
-            } else {
-                vacancy.area
-            }
-            binding.tvEmployerCity.text = employerCityText
-
-            // Заполнение опыта работы и условий труда
-            binding.tvActualExperience.text = vacancy.experience ?: ""
-            binding.tvEmploymentAndRemote.text = vacancy.schedule ?: ""
-
-            // Загрузка описания вакансии в WebView
-            vacancy.description.let {
-                binding.wvJobDescription.loadDataWithBaseURL(null, it, "text/html", "utf-8", null)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.checkFavouriteStatus(vacancy.id)
             }
         }
+    }
+
+    private fun fillJobDetails(vacancy: Vacancy) {
+        binding.tvJobTitle.text = vacancy.name
+        binding.tvSalaryLevel.text = SalaryUtils.formatSalary(
+            requireContext(),
+            vacancy.salaryFrom,
+            vacancy.salaryTo,
+            vacancy.salaryCurrency
+        )
+    }
+
+    private fun fillEmployerDetails(vacancy: Vacancy) {
+        vacancy.employer?.let {
+            binding.tvEmployerTitle.text = it
+        }
+    }
+
+    private fun loadEmployerLogo(vacancy: Vacancy) {
+        if (!vacancy.employerLogoUrl.isNullOrEmpty()) {
+            Glide.with(requireContext())
+                .load(vacancy.employerLogoUrl)
+                .placeholder(R.drawable.ic_company_logo)
+                .transform(
+                    RoundedCorners(resources.getDimensionPixelSize(R.dimen.radius_12dp))
+                )
+                .into(binding.ivEmployerLogo)
+        } else {
+            binding.ivEmployerLogo.setImageResource(R.drawable.ic_company_logo)
+        }
+    }
+
+    private fun fillLocationDetails(vacancy: Vacancy) {
+        val employerCityText = if (!vacancy.address.isNullOrEmpty()) {
+            vacancy.address
+        } else {
+            vacancy.area
+        }
+        binding.tvEmployerCity.text = employerCityText
+    }
+
+    private fun fillExperienceAndEmploymentDetails(vacancy: Vacancy) {
+        binding.tvActualExperience.text = vacancy.experience ?: ""
+        binding.tvEmploymentAndRemote.text = vacancy.schedule ?: ""
+    }
+
+    private fun loadJobDescription(vacancy: Vacancy) {
+        vacancy.description.let {
+            binding.wvJobDescription.loadDataWithBaseURL(null, it, "text/html", "utf-8", null)
+        }
+    }
+
+    private fun fillKeySkillsDetails(vacancy: Vacancy) {
+        if (!vacancy.skills.isNullOrEmpty()) {
+            binding.tvKeySkillsTitle.text = getString(R.string.key_skills)
+            binding.wvKeySkills.loadDataWithBaseURL(
+                null,
+                formatSkillsList(vacancy.skills),
+                "text/html",
+                "utf-8",
+                null
+            )
+        } else {
+            binding.tvKeySkillsTitle.isVisible = false
+            binding.wvKeySkills.isVisible = false
+        }
+    }
+
+    private fun showContactsIfRequired(vacancy: Vacancy) {
+        if (shouldShowContacts(vacancy)) {
+            binding.clContactsContainer.isVisible = true
+            fillContactDetails(vacancy)
+        } else {
+            binding.clContactsContainer.isVisible = false
+        }
+    }
+
+    private fun fillContactDetails(vacancy: Vacancy) {
+        binding.tvContactNameField.text = vacancy.contactName ?: ""
+
+        binding.tvEmailField.text = vacancy.contactEmail ?: ""
+        binding.tvEmailTitle.isVisible = !vacancy.contactEmail.isNullOrEmpty()
+
+        binding.tvCommentField.text = formatContactsComments(vacancy.contactComment)
+        binding.tvCommentTitle.isVisible = !vacancy.contactComment.isNullOrEmpty()
+
+        binding.tvTelephoneField.isVisible = vacancy.contactPhones.isNotEmpty()
+        if (vacancy.contactPhones.isNotEmpty()) {
+            binding.tvTelephoneField.text = vacancy.contactPhones[0]
+        }
+
+        setOnClickListenersForContacts()
+    }
+
+    private fun setOnClickListenersForContacts() {
+        binding.tvEmailField.setOnClickListener {
+            viewModel.sendEmail(
+                binding.tvEmailField.text.toString(),
+                "",
+                ""
+            )
+        }
+
+        binding.tvTelephoneField.setOnClickListener {
+            viewModel.makeCall(binding.tvTelephoneField.text.toString())
+        }
+    }
+
+    private fun shouldShowContacts(vacancy: Vacancy): Boolean {
+        return vacancy.contactPhones.isNotEmpty() ||
+            !vacancy.contactEmail.isNullOrEmpty() ||
+            !vacancy.contactComment.isNullOrEmpty() ||
+            !vacancy.contactName.isNullOrEmpty()
+    }
+
+    private fun formatContactsComments(contacts: List<String?>?): String {
+        return contacts?.joinToString("\n") ?: ""
+    }
+
+    private fun formatSkillsList(skills: List<String>): String {
+        val bulletPoint = "&#8226; " // HTML-код для чёрного кружочка
+        return skills.joinToString("<br/>") { "$bulletPoint$it" }
     }
 
     private fun initClickListeners() {
@@ -128,17 +246,10 @@ class VacancyFragment : Fragment() {
         binding.ivDetailsShareButton.setOnClickListener {
             viewModel.shareVacancy(vacancyId)
         }
-    }
-
-    // Метод для форматирования уровня зарплаты
-    private fun formatSalary(salaryFrom: Int?, salaryTo: Int?, currency: String?): String {
-        val fromText = getString(R.string.from)
-        val toText = getString(R.string.to)
-        return when {
-            salaryFrom != null && salaryTo != null -> "$salaryFrom - $salaryTo $currency"
-            salaryFrom != null -> "$fromText $salaryFrom $currency"
-            salaryTo != null -> "$toText $salaryTo $currency"
-            else -> getString(R.string.salary_not_specified)
+        binding.ivDetailsFavouriteButton.setOnClickListener {
+            currentVacancy?.let {
+                viewModel.toggleFavouriteStatus(it)
+            }
         }
     }
 
@@ -148,8 +259,6 @@ class VacancyFragment : Fragment() {
     }
 
     companion object {
-        fun createArgs(vacancyId: String?) = bundleOf(VACANCY_ID to vacancyId)
         internal const val VACANCY_ID = "VACANCY_ID"
-
     }
 }
