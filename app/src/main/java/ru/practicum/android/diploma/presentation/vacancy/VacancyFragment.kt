@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.presentation.vacancy
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -103,7 +102,6 @@ class VacancyFragment : Fragment() {
 
     private fun updateUIWithVacancyDetails(vacancy: Vacancy?) {
         if (vacancy != null) {
-
             currentVacancy = vacancy
             // Заполняем макет данными из вакансии
             binding.tvJobTitle.text = vacancy.name
@@ -160,7 +158,7 @@ class VacancyFragment : Fragment() {
                 binding.tvKeySkillsTitle.isVisible = false
                 binding.wvKeySkills.isVisible = false
             }
-            if (vacancy.contactPhones.isNotEmpty() || !vacancy.contactEmail.isNullOrEmpty() || !vacancy.contactComment.isNullOrEmpty() || !vacancy.contactName.isNullOrEmpty()) {
+            if (shouldShowContacts(vacancy)) {
                 // Отображение контактов
                 binding.clContactsContainer.isVisible = true
 
@@ -172,7 +170,6 @@ class VacancyFragment : Fragment() {
 
                 binding.tvCommentField.text = formatContactsComments(vacancy.contactComment)
                 binding.tvCommentTitle.isVisible = !vacancy.contactComment.isNullOrEmpty()
-                Log.d("BugCatcher", "${vacancy.contactComment}")
 
                 // Обработка нажатия на адрес электронной почты
                 binding.tvEmailField.setOnClickListener {
@@ -201,6 +198,13 @@ class VacancyFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             vacancy?.let { viewModel.checkFavouriteStatus(it.id) }
         }
+    }
+
+    private fun shouldShowContacts(vacancy: Vacancy): Boolean {
+        return vacancy.contactPhones.isNotEmpty() ||
+            !vacancy.contactEmail.isNullOrEmpty() ||
+            !vacancy.contactComment.isNullOrEmpty() ||
+            !vacancy.contactName.isNullOrEmpty()
     }
 
     private fun formatContactsComments(contacts: List<String?>?): String {
