@@ -123,7 +123,6 @@ class SearchFragment : Fragment() {
         binding.foundResults.visibility = View.GONE
     }
 
-
     private fun setIconToTextView() {
         val len = searchInput?.text?.length
         if (len != null) {
@@ -145,7 +144,7 @@ class SearchFragment : Fragment() {
         when (placeholder) {
             PlaceholdersEnum.SHOW_BLANK -> {
                 binding.recyclerView.visibility = View.GONE
-                binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).visibility = if (placeholder == PlaceholdersEnum.SHOW_BLANK) View.VISIBLE else View.GONE
+                binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).visibility = View.VISIBLE
             }
 
             PlaceholdersEnum.SHOW_NO_INTERNET -> {

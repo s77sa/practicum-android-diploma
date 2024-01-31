@@ -11,4 +11,3 @@ interface FavouriteRepository {
     fun getFavourite(vacancyId: String): Flow<List<Vacancy>>
     suspend fun getFavId(): List<String>
 }
-

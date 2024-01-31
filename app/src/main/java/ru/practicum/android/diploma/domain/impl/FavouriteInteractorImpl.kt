@@ -29,4 +29,3 @@ class FavouriteInteractorImpl(
         return favouriteRepository.getFavId()
     }
 }
-
