@@ -21,12 +21,13 @@ data class FavouriteVacancyEntity(
     val contactPhones: String?,
     val contactComment: String?,
     val description: String,
-    val url: String,
+    val url: String?,
     val area: String,
     val logo: String?,
     val experience: String?,
     val skills: String,
     val schedule: String?,
     val isFavourite: Boolean = false,
+    val address: String?,
     val inDbDate: Long = Calendar.getInstance().time.time
 )
