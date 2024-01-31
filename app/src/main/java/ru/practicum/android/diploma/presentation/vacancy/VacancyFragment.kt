@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.vacancy
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,10 +41,16 @@ class VacancyFragment : Fragment() {
     ): View {
         _binding = FragmentVacancyBinding.inflate(inflater, container, false)
         vacancyId = arguments?.getString(VACANCY_ID)
-        binding.wvJobDescription.setBackgroundColor(Color.TRANSPARENT)
-        binding.wvKeySkills.setBackgroundColor(Color.TRANSPARENT)
+        val backgroundColorRes = R.color.whiteDayBlackNight
+        val backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorRes)
+        binding.wvJobDescription.setBackgroundColor(backgroundColor)
+        binding.wvKeySkills.setBackgroundColor(backgroundColor)
         colorRes = R.color.blackDayWhiteNight
-        colorHexString = String.format(Locale.getDefault(), "#%06X", 0xFFFFFF and ContextCompat.getColor(requireContext(), colorRes))
+        colorHexString = String.format(
+            Locale.getDefault(),
+            "#%06X",
+            WHITE_COLOR and ContextCompat.getColor(requireContext(), colorRes)
+        )
         return binding.root
     }
 
@@ -89,6 +94,7 @@ class VacancyFragment : Fragment() {
         }
         initClickListeners()
     }
+
     private fun updateFavouriteIcon() {
         if (isFavourite) {
             binding.ivDetailsFavouriteButton.setImageResource(R.drawable.ic_favorites_checked)
@@ -171,7 +177,16 @@ class VacancyFragment : Fragment() {
     private fun loadJobDescription(vacancy: Vacancy) {
         vacancy.description.let {
             val jobDescriptionHtml =
-                "<html><head><style type='text/css'>body { color: $colorHexString; }</style></head><body>${currentVacancy?.description}</body></html>"
+                "<html>\n" +
+                    "        <head>\n" +
+                    "            <style type='text/css'>\n" +
+                    "                body { color: $colorHexString; }\n" +
+                    "            </style>\n" +
+                    "        </head>\n" +
+                    "        <body>\n" +
+                    "            ${currentVacancy?.description}\n" +
+                    "        </body>\n" +
+                    "    </html>"
             binding.wvJobDescription.loadDataWithBaseURL(null, jobDescriptionHtml, "text/html", "utf-8", null)
         }
     }
@@ -271,6 +286,7 @@ class VacancyFragment : Fragment() {
     }
 
     companion object {
+        private const val WHITE_COLOR = 0xFDFDFD
         internal const val VACANCY_ID = "VACANCY_ID"
     }
 }
