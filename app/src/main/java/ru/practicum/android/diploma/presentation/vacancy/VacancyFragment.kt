@@ -24,7 +24,6 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.SalaryUtils
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 
-
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
