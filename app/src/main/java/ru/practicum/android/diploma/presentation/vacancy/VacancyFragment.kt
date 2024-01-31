@@ -210,15 +210,15 @@ class VacancyFragment : Fragment() {
 
     private fun setOnClickListenersForContacts() {
         binding.tvEmailField.setOnClickListener {
-            requireActivity().startActivity(Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:" + binding.tvEmailField.text)
-            })
+            viewModel.sendEmail(
+                binding.tvEmailField.text.toString(),
+                "",
+                ""
+            )
         }
 
         binding.tvTelephoneField.setOnClickListener {
-            requireActivity().startActivity(Intent(Intent.ACTION_DIAL).apply {
-                data = Uri.parse("tel:" + binding.tvTelephoneField.text)
-            })
+            viewModel.makeCall(binding.tvTelephoneField.text.toString())
         }
     }
 

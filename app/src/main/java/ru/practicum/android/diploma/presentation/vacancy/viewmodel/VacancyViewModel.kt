@@ -40,7 +40,21 @@ class VacancyViewModel(
     }
 
     fun shareVacancy(id: String?) {
-        vacancyInteractor.shareVacancy(HH_URL + id)
+        viewModelScope.launch {
+            vacancyInteractor.shareVacancy(HH_URL + id)
+        }
+    }
+
+    fun sendEmail(address: String, subject: String, text: String) {
+        viewModelScope.launch {
+            vacancyInteractor.sendEmail(address, subject, text)
+        }
+    }
+
+    fun makeCall(number: String) {
+        viewModelScope.launch {
+            vacancyInteractor.makeCall(number)
+        }
     }
 
     fun checkFavouriteStatus(vacancyId: String) {
