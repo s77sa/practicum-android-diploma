@@ -100,100 +100,125 @@ class VacancyFragment : Fragment() {
     private fun updateUIWithVacancyDetails(vacancy: Vacancy?) {
         if (vacancy != null) {
             currentVacancy = vacancy
-            // Заполняем макет данными из вакансии
-            binding.tvJobTitle.text = vacancy.name
-            binding.tvSalaryLevel.text =
-                SalaryUtils.formatSalary(requireContext(), vacancy.salaryFrom, vacancy.salaryTo, vacancy.salaryCurrency)
 
-            // Заполнение блока с работодателем
-            vacancy.employer?.let {
-                binding.tvEmployerTitle.text = it
-            }
+            fillJobDetails(vacancy)
+            fillEmployerDetails(vacancy)
+            loadEmployerLogo(vacancy)
+            fillLocationDetails(vacancy)
+            fillExperienceAndEmploymentDetails(vacancy)
+            loadJobDescription(vacancy)
+            fillKeySkillsDetails(vacancy)
+            showContactsIfRequired(vacancy)
 
-            // Загрузка логотипа работодателя в ImageView с обработкой плейсхолдера
-            if (!vacancy.employerLogoUrl.isNullOrEmpty()) {
-                Glide.with(requireContext())
-                    .load(vacancy.employerLogoUrl)
-                    .placeholder(R.drawable.ic_company_logo)
-                    .transform(
-                        RoundedCorners(resources.getDimensionPixelSize(R.dimen.radius_12dp))
-                    )
-                    .into(binding.ivEmployerLogo)
-            } else {
-                binding.ivEmployerLogo.setImageResource(R.drawable.ic_company_logo)
-            }
-
-            // Используем адрес, если он есть, в противном случае area
-            val employerCityText = if (!vacancy.address.isNullOrEmpty()) {
-                vacancy.address
-            } else {
-                vacancy.area
-            }
-            binding.tvEmployerCity.text = employerCityText
-
-            // Заполнение опыта работы и условий труда
-            binding.tvActualExperience.text = vacancy.experience ?: ""
-            binding.tvEmploymentAndRemote.text = vacancy.schedule ?: ""
-
-            // Загрузка описания вакансии в WebView
-            vacancy.description.let {
-                binding.wvJobDescription.loadDataWithBaseURL(null, it, "text/html", "utf-8", null)
-            }
-
-            // Заполнение ключевых навыков, если они есть
-            if (!vacancy.skills.isNullOrEmpty()) {
-                binding.tvKeySkillsTitle.text = getString(R.string.key_skills)
-                binding.wvKeySkills.loadDataWithBaseURL(
-                    null,
-                    formatSkillsList(vacancy.skills),
-                    "text/html",
-                    "utf-8",
-                    null
-                )
-            } else {
-                // Скрываем раздел "Ключевые навыки", если данных нет
-                binding.tvKeySkillsTitle.isVisible = false
-                binding.wvKeySkills.isVisible = false
-            }
-            if (shouldShowContacts(vacancy)) {
-                // Отображение контактов
-                binding.clContactsContainer.isVisible = true
-
-                // Заполнение данных о контактах
-                binding.tvContactNameField.text = vacancy.contactName ?: ""
-
-                binding.tvEmailField.text = vacancy.contactEmail ?: ""
-                binding.tvEmailTitle.isVisible = !vacancy.contactEmail.isNullOrEmpty()
-
-                binding.tvCommentField.text = formatContactsComments(vacancy.contactComment)
-                binding.tvCommentTitle.isVisible = !vacancy.contactComment.isNullOrEmpty()
-
-                // Обработка нажатия на адрес электронной почты
-                binding.tvEmailField.setOnClickListener {
-                    requireActivity().startActivity(Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:" + binding.tvEmailField.text)
-                    })
-                }
-
-                if (vacancy.contactPhones.isNotEmpty()) {
-                    binding.tvTelephoneField.text =
-                        vacancy.contactPhones[0]
-                } else {
-                    binding.tvTelephoneTitle.isVisible = false
-                    binding.tvTelephoneField.isVisible = false
-                }
-                // Обработка нажатия на номер телефона
-                binding.tvTelephoneField.setOnClickListener {
-                    requireActivity().startActivity(Intent(Intent.ACTION_DIAL).apply {
-                        data = Uri.parse("tel:" + binding.tvTelephoneField.text)
-                    })
-                }
-            } else {
-                binding.clContactsContainer.isVisible = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.checkFavouriteStatus(vacancy.id)
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            vacancy?.let { viewModel.checkFavouriteStatus(it.id) }
+    }
+
+    private fun fillJobDetails(vacancy: Vacancy) {
+        binding.tvJobTitle.text = vacancy.name
+        binding.tvSalaryLevel.text = SalaryUtils.formatSalary(
+            requireContext(),
+            vacancy.salaryFrom,
+            vacancy.salaryTo,
+            vacancy.salaryCurrency
+        )
+    }
+
+    private fun fillEmployerDetails(vacancy: Vacancy) {
+        vacancy.employer?.let {
+            binding.tvEmployerTitle.text = it
+        }
+    }
+
+    private fun loadEmployerLogo(vacancy: Vacancy) {
+        if (!vacancy.employerLogoUrl.isNullOrEmpty()) {
+            Glide.with(requireContext())
+                .load(vacancy.employerLogoUrl)
+                .placeholder(R.drawable.ic_company_logo)
+                .transform(
+                    RoundedCorners(resources.getDimensionPixelSize(R.dimen.radius_12dp))
+                )
+                .into(binding.ivEmployerLogo)
+        } else {
+            binding.ivEmployerLogo.setImageResource(R.drawable.ic_company_logo)
+        }
+    }
+
+    private fun fillLocationDetails(vacancy: Vacancy) {
+        val employerCityText = if (!vacancy.address.isNullOrEmpty()) {
+            vacancy.address
+        } else {
+            vacancy.area
+        }
+        binding.tvEmployerCity.text = employerCityText
+    }
+
+    private fun fillExperienceAndEmploymentDetails(vacancy: Vacancy) {
+        binding.tvActualExperience.text = vacancy.experience ?: ""
+        binding.tvEmploymentAndRemote.text = vacancy.schedule ?: ""
+    }
+
+    private fun loadJobDescription(vacancy: Vacancy) {
+        vacancy.description.let {
+            binding.wvJobDescription.loadDataWithBaseURL(null, it, "text/html", "utf-8", null)
+        }
+    }
+
+    private fun fillKeySkillsDetails(vacancy: Vacancy) {
+        if (!vacancy.skills.isNullOrEmpty()) {
+            binding.tvKeySkillsTitle.text = getString(R.string.key_skills)
+            binding.wvKeySkills.loadDataWithBaseURL(
+                null,
+                formatSkillsList(vacancy.skills),
+                "text/html",
+                "utf-8",
+                null
+            )
+        } else {
+            binding.tvKeySkillsTitle.isVisible = false
+            binding.wvKeySkills.isVisible = false
+        }
+    }
+
+    private fun showContactsIfRequired(vacancy: Vacancy) {
+        if (shouldShowContacts(vacancy)) {
+            binding.clContactsContainer.isVisible = true
+            fillContactDetails(vacancy)
+        } else {
+            binding.clContactsContainer.isVisible = false
+        }
+    }
+
+    private fun fillContactDetails(vacancy: Vacancy) {
+        binding.tvContactNameField.text = vacancy.contactName ?: ""
+
+        binding.tvEmailField.text = vacancy.contactEmail ?: ""
+        binding.tvEmailTitle.isVisible = !vacancy.contactEmail.isNullOrEmpty()
+
+        binding.tvCommentField.text = formatContactsComments(vacancy.contactComment)
+        binding.tvCommentTitle.isVisible = !vacancy.contactComment.isNullOrEmpty()
+
+        binding.tvTelephoneField.isVisible = vacancy.contactPhones.isNotEmpty()
+        if (vacancy.contactPhones.isNotEmpty()) {
+            binding.tvTelephoneField.text = vacancy.contactPhones[0]
+        }
+
+        setOnClickListenersForContacts()
+    }
+
+    private fun setOnClickListenersForContacts() {
+        binding.tvEmailField.setOnClickListener {
+            requireActivity().startActivity(Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:" + binding.tvEmailField.text)
+            })
+        }
+
+        binding.tvTelephoneField.setOnClickListener {
+            requireActivity().startActivity(Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:" + binding.tvTelephoneField.text)
+            })
         }
     }
 
