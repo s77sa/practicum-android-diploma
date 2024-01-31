@@ -1,6 +1,4 @@
 package ru.practicum.android.diploma.presentation.vacancy
-import android.content.Intent
-import android.net.Uri
 
 import android.os.Bundle
 import android.view.LayoutInflater
