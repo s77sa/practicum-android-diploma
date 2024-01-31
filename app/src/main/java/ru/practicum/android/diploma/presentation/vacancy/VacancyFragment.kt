@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -21,6 +22,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.SalaryUtils
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
+import java.util.Locale
 
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
@@ -29,6 +31,8 @@ class VacancyFragment : Fragment() {
     private var vacancyId: String? = null
     private var isFavourite: Boolean = false
     private var currentVacancy: Vacancy? = null
+    private var colorRes: Int = 0
+    private var colorHexString: String = ""
     override fun onCreateView(
 
         inflater: LayoutInflater,
@@ -37,6 +41,16 @@ class VacancyFragment : Fragment() {
     ): View {
         _binding = FragmentVacancyBinding.inflate(inflater, container, false)
         vacancyId = arguments?.getString(VACANCY_ID)
+        val backgroundColorRes = R.color.whiteDayBlackNight
+        val backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorRes)
+        binding.wvJobDescription.setBackgroundColor(backgroundColor)
+        binding.wvKeySkills.setBackgroundColor(backgroundColor)
+        colorRes = R.color.blackDayWhiteNight
+        colorHexString = String.format(
+            Locale.getDefault(),
+            "#%06X",
+            WHITE_COLOR and ContextCompat.getColor(requireContext(), colorRes)
+        )
         return binding.root
     }
 
@@ -162,7 +176,18 @@ class VacancyFragment : Fragment() {
 
     private fun loadJobDescription(vacancy: Vacancy) {
         vacancy.description.let {
-            binding.wvJobDescription.loadDataWithBaseURL(null, it, "text/html", "utf-8", null)
+            val jobDescriptionHtml =
+                "<html>\n" +
+                    "        <head>\n" +
+                    "            <style type='text/css'>\n" +
+                    "                body { color: $colorHexString; }\n" +
+                    "            </style>\n" +
+                    "        </head>\n" +
+                    "        <body>\n" +
+                    "            ${currentVacancy?.description}\n" +
+                    "        </body>\n" +
+                    "    </html>"
+            binding.wvJobDescription.loadDataWithBaseURL(null, jobDescriptionHtml, "text/html", "utf-8", null)
         }
     }
 
@@ -234,8 +259,10 @@ class VacancyFragment : Fragment() {
     }
 
     private fun formatSkillsList(skills: List<String>): String {
-        val bulletPoint = "&#8226; " // HTML-код для чёрного кружочка
-        return skills.joinToString("<br/>") { "$bulletPoint$it" }
+        val bulletPoint = "&#8226; " // HTML-код для кружочка
+        return skills.joinToString("<br/>") {
+            "<span style=\"color: $colorHexString;\">$bulletPoint$it</span>"
+        }
     }
 
     private fun initClickListeners() {
@@ -259,6 +286,7 @@ class VacancyFragment : Fragment() {
     }
 
     companion object {
+        private const val WHITE_COLOR = 0xFDFDFD
         internal const val VACANCY_ID = "VACANCY_ID"
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorOnPrimary"
+    android:background="@color/whiteDayBlackNight"
     android:orientation="vertical"
     tools:context="ru.practicum.android.diploma.presentation.vacancy.VacancyFragment">
 
@@ -143,7 +143,7 @@
                         android:layout_marginStart="@dimen/spacing_8dp"
                         android:layout_toEndOf="@id/iv_employer_logo"
                         android:maxLines="1"
-                        android:textColor="@color/blackDayWhiteNight"
+                        android:textColor="@color/yp_black"
                         tools:text="@string/food" />
 
                     <TextView
@@ -154,7 +154,7 @@
                         android:layout_below="@id/tv_employer_title"
                         android:layout_marginStart="@dimen/spacing_8dp"
                         android:layout_toEndOf="@id/iv_employer_logo"
-                        android:textColor="@color/blackDayWhiteNight"
+                        android:textColor="@color/yp_black"
                         tools:text="@string/moscow" />
                 </RelativeLayout>
 
@@ -204,10 +204,12 @@
                 android:layout_marginStart="@dimen/hack_margin"
                 android:layout_marginTop="@dimen/spacing_16dp"
                 android:autoLink="all"
+                android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
                 android:scrollbars="vertical"
                 android:textAlignment="viewStart"
+                android:textColor="#0000FF"
                 tools:ignore="WebViewLayout" />
 
             <TextView
