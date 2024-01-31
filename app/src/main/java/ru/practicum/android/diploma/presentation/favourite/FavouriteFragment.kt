@@ -42,7 +42,6 @@ class FavouriteFragment : Fragment() {
 
         binding.recyclerViewFavorite.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewFavorite.adapter = vacancyAdapter
-
         initClickListener()
 
         viewModel.getState().observe(viewLifecycleOwner) { state ->
@@ -68,7 +67,8 @@ class FavouriteFragment : Fragment() {
                         placeHolderFavorite.visibility = View.GONE
                         placeholderError.visibility = View.GONE
                         recyclerViewFavorite.visibility = View.VISIBLE
-                        // vacancyAdapter.vacancies = state.second
+                        vacancies.clear()
+                        vacancies.addAll(state.second)
                         vacancyAdapter.notifyDataSetChanged()
                     }
                 }
