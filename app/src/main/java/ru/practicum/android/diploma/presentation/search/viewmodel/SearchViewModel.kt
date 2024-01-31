@@ -23,13 +23,14 @@ class SearchViewModel(
     private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
-    private val placeholderStatusMutable = MutableLiveData<PlaceholdersEnum>()
+    private val placeholderStatusMutable = MutableLiveData<PlaceholdersEnum>(PlaceholdersEnum.SHOW_BLANK)
     val placeholderStatusData get() = placeholderStatusMutable
     private var latestSearchText: String? = null
+    private var isNextPageLoading = true
     private var page: Int = 0
     private var pages = 1
 
-    fun setPlaceholder(placeholdersEnum: PlaceholdersEnum) {
+    private fun setPlaceholder(placeholdersEnum: PlaceholdersEnum) {
         placeholderStatusMutable.value = placeholdersEnum
     }
 
@@ -37,6 +38,7 @@ class SearchViewModel(
         if (latestSearchText != changedText) {
             latestSearchText = changedText
             vacancySearchDebounce(changedText)
+            page = 0
         }
     }
 
@@ -45,13 +47,17 @@ class SearchViewModel(
         viewModelScope,
         true
     ) { changedText ->
-        searchVacancy(changedText)
+        searchVacancy(changedText, 0)
     }
 
-    private fun searchVacancy(changedText: String) {
+    private fun searchVacancy(changedText: String, page: Int) {
         if (changedText.isNotEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
-            setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_CENTER)
+            if (page == 0) {
+                setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_CENTER)
+            } else {
+                setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_BOTTOM)
+            }
             viewModelScope.launch {
                 searchInteractor
                     .searchVacancies(
@@ -59,9 +65,9 @@ class SearchViewModel(
                             changedText,
                             area = "113",
                             showSalary = true,
-                            industry = "49",
+                            industry = null,
                             salary = 100_000,
-                            page = 0
+                            page = page
                         ).map()
                     )
                     .collect { pair ->
@@ -78,8 +84,9 @@ class SearchViewModel(
             vacancyList.addAll(foundVacancies)
             stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
             if (foundItems != null) {
-                pages = foundItems
+                pages = foundItems / ITEMS_PER_PAGE
             }
+            isNextPageLoading = false
         }
 
         when {
@@ -105,20 +112,30 @@ class SearchViewModel(
         val vacancyList = mutableListOf<Vacancy>()
         vacancyList.clear()
         stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
-        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
+        setPlaceholder(PlaceholdersEnum.HIDE_ALL)
     }
 
     fun onNextPage() {
-        if (page == pages) {
+        if (page < pages && !isNextPageLoading && !latestSearchText.isNullOrEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
-        }
-        if (page < pages && !latestSearchText.isNullOrEmpty()) {
             page += 1
-            searchVacancy(latestSearchText!!)
+            isNextPageLoading = true
+            vacancyReloadDebounce(latestSearchText!!)
         }
+    }
+
+    private val vacancyReloadDebounce = debounce<String>(
+        RELOAD_DEBOUNCE_DELAY,
+        viewModelScope,
+        true
+    ) { latestSearchText ->
+        searchVacancy(latestSearchText, page)
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val RELOAD_DEBOUNCE_DELAY = 300L
+        private const val ITEMS_PER_PAGE: Int = 20
+        private val TAG = SearchViewModel::class.java.simpleName
     }
 }

@@ -50,7 +50,6 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val view = binding.root
         bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        viewModel.setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
         searchInput = binding.searchInput
         iconSearch = binding.ivClear
         initListeners()
@@ -74,13 +73,15 @@ class SearchFragment : Fragment() {
         viewModel.placeholderStatusData.observe(viewLifecycleOwner) {
             setPlaceholder(it)
         }
-        viewModel.observeState().observe(viewLifecycleOwner) { updateScreen(it) }
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            updateScreen(it)
+        }
     }
 
     private fun initListeners() {
         searchInput?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                bottomNavigationView?.isVisible = false
+                // Empty
             }
         }
 
@@ -88,7 +89,7 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 setIconToTextView()
-                bottomNavigationView?.isVisible = s.isNullOrEmpty()
+                vacancies.clear()
                 viewModel.searchDebounce(s.toString())
             }
 
@@ -100,7 +101,6 @@ class SearchFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
 
                 if (dy > 0) {
-                    // binding.progressBar.visibility = View.VISIBLE
                     val pos =
                         (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacancyAdapter.itemCount
@@ -178,11 +178,9 @@ class SearchFragment : Fragment() {
     private fun updateScreen(state: SearchState) {
         when (state) {
             is SearchState.Content -> {
-                vacancies.clear()
                 vacancies.addAll(state.vacancies)
                 vacancyAdapter.notifyDataSetChanged()
                 showFoundResultBar(state.foundItems)
-                hideKeyBoard()
             }
 
             is SearchState.Empty -> {
@@ -191,12 +189,14 @@ class SearchFragment : Fragment() {
 
             else -> {}
         }
+        hideKeyBoard()
     }
 
     private fun showFoundResultBar(foundItems: Int? = null) {
         when (foundItems) {
             null -> {
-                binding.foundResults.isVisible = false
+                binding.foundResults.visibility = View.GONE
+                binding.recyclerView.visibility = View.GONE
                 Log.d(TAG, "showFoundResultBar null")
             }
 

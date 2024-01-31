@@ -1,23 +1,27 @@
 package ru.practicum.android.diploma.presentation.favourite.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.models.FavoriteVacancyState
+import ru.practicum.android.diploma.domain.api.FavouriteInteractor
+import ru.practicum.android.diploma.domain.models.FavouriteStates
+import ru.practicum.android.diploma.domain.models.Vacancy
 
-class FavouriteFragmentViewModel :
-    ViewModel() {
-    private val _state = MutableStateFlow<FavoriteVacancyState>(FavoriteVacancyState.Empty)
-    val state: StateFlow<FavoriteVacancyState> = _state
+class FavouriteFragmentViewModel(
+    private val favouriteInteractor: FavouriteInteractor
+) : ViewModel() {
 
-    init {
-        getAllVacancies()
-    }
+    private val stateLiveData = MutableLiveData<Pair<FavouriteStates, MutableList<Vacancy>>>()
 
-    fun getAllVacancies() {
+    fun getState(): LiveData<Pair<FavouriteStates, MutableList<Vacancy>>> = stateLiveData
+
+    fun loadFavourites() {
         viewModelScope.launch {
+            favouriteInteractor.getFavourites().collect {
+                stateLiveData.value = it
+            }
         }
     }
 }

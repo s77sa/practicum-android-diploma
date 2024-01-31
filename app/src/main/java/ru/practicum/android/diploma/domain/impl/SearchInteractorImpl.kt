@@ -10,12 +10,14 @@ import ru.practicum.android.diploma.presentation.util.Resource
 class SearchInteractorImpl(private val repository: SearchRepository) : SearchInteractor {
     override var vacancyCurrentPage: Int? = null
     override var foundItems: Int? = null
+    override var pages: Int? = null
     override fun searchVacancies(request: Map<String, String>): Flow<Pair<List<Vacancy>?, String?>> {
         return repository.searchVacancies(request).map { result ->
             when (result) {
                 is Resource.Success -> {
                     vacancyCurrentPage = repository.vacancyCurrentPage
                     foundItems = repository.foundItems
+                    pages = repository.pages
                     Pair(result.data, null)
                 }
 
