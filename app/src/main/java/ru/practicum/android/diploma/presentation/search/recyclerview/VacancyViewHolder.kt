@@ -14,7 +14,7 @@ class VacancyViewHolder(private val binding: VacancyItemBinding) : RecyclerView.
     fun bind(vacancy: Vacancy) {
         binding.vacancyTextView.text = vacancy.name + ", " + vacancy.city
         binding.employerTextView.text = vacancy.employer
-        salary.text =  SalaryUtils.formatSalary(
+        salary.text = SalaryUtils.formatSalary(
             salary.context,
             vacancy.salaryFrom,
             vacancy.salaryTo,
