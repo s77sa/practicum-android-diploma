@@ -23,6 +23,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.SalaryUtils
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
+import java.util.Locale
 
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
@@ -44,7 +45,7 @@ class VacancyFragment : Fragment() {
         binding.wvJobDescription.setBackgroundColor(Color.TRANSPARENT)
         binding.wvKeySkills.setBackgroundColor(Color.TRANSPARENT)
         colorRes = R.color.blackDayWhiteNight
-        colorHexString = String.format("#%06X", 0xFFFFFF and ContextCompat.getColor(requireContext(), colorRes))
+        colorHexString = String.format(Locale.getDefault(), "#%06X", 0xFFFFFF and ContextCompat.getColor(requireContext(), colorRes))
         return binding.root
     }
 
