@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.vacancy
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,7 +24,6 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.SalaryUtils
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 
-
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
@@ -45,6 +43,8 @@ class VacancyFragment : Fragment() {
         vacancyId = arguments?.getString(VACANCY_ID)
         binding.wvJobDescription.setBackgroundColor(Color.TRANSPARENT)
         binding.wvKeySkills.setBackgroundColor(Color.TRANSPARENT)
+        colorRes = R.color.blackDayWhiteNight
+        colorHexString = String.format("#%06X", 0xFFFFFF and ContextCompat.getColor(requireContext(), colorRes))
         return binding.root
     }
 
@@ -88,14 +88,6 @@ class VacancyFragment : Fragment() {
         }
         initClickListeners()
     }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        // Используйте requireContext() после прикрепления фрагмента к активности
-        colorRes = R.color.blackDayWhiteNight
-        colorHexString = String.format("#%06X", 0xFFFFFF and ContextCompat.getColor(requireContext(), colorRes))
-    }
-
     private fun updateFavouriteIcon() {
         if (isFavourite) {
             binding.ivDetailsFavouriteButton.setImageResource(R.drawable.ic_favorites_checked)
