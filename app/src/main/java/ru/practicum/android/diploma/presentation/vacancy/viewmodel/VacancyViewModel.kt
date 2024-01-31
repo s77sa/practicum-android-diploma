@@ -23,6 +23,8 @@ class VacancyViewModel(
     private val _vacancyScreenState = MutableLiveData<VacancyScreenState>()
     val vacancyScreenState: LiveData<VacancyScreenState> get() = _vacancyScreenState
 
+    private val _jobDescriptionHtml = MutableLiveData<String>()
+    val jobDescriptionHtml: LiveData<String> get() = _jobDescriptionHtml
     fun getVacancyDetailsById(id: String) {
         _vacancyScreenState.value = VacancyScreenState.Loading
 
@@ -75,7 +77,22 @@ class VacancyViewModel(
             _isFavourite.value = !_isFavourite.value!!
         }
     }
-
+    fun loadJobDescription(vacancy: Vacancy, colorHexString: String) {
+        viewModelScope.launch {
+            val jobDescriptionHtml =
+                "<html>\n" +
+                    "        <head>\n" +
+                    "            <style type='text/css'>\n" +
+                    "                body { color: $colorHexString; }\n" +
+                    "            </style>\n" +
+                    "        </head>\n" +
+                    "        <body>\n" +
+                    "            ${vacancy.description}\n" +
+                    "        </body>\n" +
+                    "    </html>"
+            _jobDescriptionHtml.value = jobDescriptionHtml
+        }
+    }
     companion object {
         const val HH_URL = "https://hh.ru/vacancy/"
     }

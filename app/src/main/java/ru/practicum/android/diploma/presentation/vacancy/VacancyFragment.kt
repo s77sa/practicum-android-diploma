@@ -84,7 +84,6 @@ class VacancyFragment : Fragment() {
                 }
             }
         }
-
         vacancyId?.let { viewModel.getVacancyDetailsById(it) }
 
         // Обновление значка избранного
@@ -114,7 +113,6 @@ class VacancyFragment : Fragment() {
     private fun updateUIWithVacancyDetails(vacancy: Vacancy?) {
         if (vacancy != null) {
             currentVacancy = vacancy
-
             fillJobDetails(vacancy)
             fillEmployerDetails(vacancy)
             loadEmployerLogo(vacancy)
@@ -123,7 +121,6 @@ class VacancyFragment : Fragment() {
             loadJobDescription(vacancy)
             fillKeySkillsDetails(vacancy)
             showContactsIfRequired(vacancy)
-
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.checkFavouriteStatus(vacancy.id)
             }
@@ -175,20 +172,7 @@ class VacancyFragment : Fragment() {
     }
 
     private fun loadJobDescription(vacancy: Vacancy) {
-        vacancy.description.let {
-            val jobDescriptionHtml =
-                "<html>\n" +
-                    "        <head>\n" +
-                    "            <style type='text/css'>\n" +
-                    "                body { color: $colorHexString; }\n" +
-                    "            </style>\n" +
-                    "        </head>\n" +
-                    "        <body>\n" +
-                    "            ${currentVacancy?.description}\n" +
-                    "        </body>\n" +
-                    "    </html>"
-            binding.wvJobDescription.loadDataWithBaseURL(null, jobDescriptionHtml, "text/html", "utf-8", null)
-        }
+        viewModel.loadJobDescription(vacancy, colorHexString)
     }
 
     private fun fillKeySkillsDetails(vacancy: Vacancy) {
@@ -241,7 +225,6 @@ class VacancyFragment : Fragment() {
                 ""
             )
         }
-
         binding.tvTelephoneField.setOnClickListener {
             viewModel.makeCall(binding.tvTelephoneField.text.toString())
         }
@@ -266,17 +249,10 @@ class VacancyFragment : Fragment() {
     }
 
     private fun initClickListeners() {
-        binding.ivDetailsBackArrow.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.ivDetailsShareButton.setOnClickListener {
-            viewModel.shareVacancy(vacancyId)
-        }
-        binding.ivDetailsFavouriteButton.setOnClickListener {
-            currentVacancy?.let {
-                viewModel.toggleFavouriteStatus(it)
-            }
+        with(binding) {
+            ivDetailsBackArrow.setOnClickListener { findNavController().popBackStack() }
+            ivDetailsShareButton.setOnClickListener { viewModel.shareVacancy(vacancyId) }
+            ivDetailsFavouriteButton.setOnClickListener { currentVacancy?.let { viewModel.toggleFavouriteStatus(it) } }
         }
     }
 
