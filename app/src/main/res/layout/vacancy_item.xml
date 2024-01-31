@@ -9,13 +9,15 @@
     android:paddingStart="@dimen/dp_16"
     android:paddingEnd="@dimen/dp_16">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/vacancy_imageCard"
         android:layout_width="@dimen/dp_48"
         android:layout_height="@dimen/dp_48"
         app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/yp_lightGray"
+        app:strokeWidth="1dp"
         card_view:cardCornerRadius="@dimen/dp_12">
 
 
@@ -29,7 +31,7 @@
             app:srcCompat="@drawable/placeholder_vacancy"
             app:strokeColor="@color/yp_lightGray"
             app:strokeWidth="@dimen/dp_1" />
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/vacancy_textView"
