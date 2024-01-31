@@ -1,14 +1,14 @@
 package ru.practicum.android.diploma.presentation.vacancy
 
-
-import android.content.Intent
-import android.net.Uri
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -25,6 +25,7 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.SalaryUtils
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 
+
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
     private val binding get() = _binding!!
@@ -32,6 +33,8 @@ class VacancyFragment : Fragment() {
     private var vacancyId: String? = null
     private var isFavourite: Boolean = false
     private var currentVacancy: Vacancy? = null
+    private var colorRes: Int = 0
+    private var colorHexString: String = ""
     override fun onCreateView(
 
         inflater: LayoutInflater,
@@ -40,6 +43,8 @@ class VacancyFragment : Fragment() {
     ): View {
         _binding = FragmentVacancyBinding.inflate(inflater, container, false)
         vacancyId = arguments?.getString(VACANCY_ID)
+        binding.wvJobDescription.setBackgroundColor(Color.TRANSPARENT)
+        binding.wvKeySkills.setBackgroundColor(Color.TRANSPARENT)
         return binding.root
     }
 
@@ -82,6 +87,13 @@ class VacancyFragment : Fragment() {
             updateFavouriteIcon()
         }
         initClickListeners()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Используйте requireContext() после прикрепления фрагмента к активности
+        colorRes = R.color.blackDayWhiteNight
+        colorHexString = String.format("#%06X", 0xFFFFFF and ContextCompat.getColor(requireContext(), colorRes))
     }
 
     private fun updateFavouriteIcon() {
@@ -165,7 +177,9 @@ class VacancyFragment : Fragment() {
 
     private fun loadJobDescription(vacancy: Vacancy) {
         vacancy.description.let {
-            binding.wvJobDescription.loadDataWithBaseURL(null, it, "text/html", "utf-8", null)
+            val jobDescriptionHtml =
+                "<html><head><style type='text/css'>body { color: $colorHexString; }</style></head><body>${currentVacancy?.description}</body></html>"
+            binding.wvJobDescription.loadDataWithBaseURL(null, jobDescriptionHtml, "text/html", "utf-8", null)
         }
     }
 
@@ -237,8 +251,10 @@ class VacancyFragment : Fragment() {
     }
 
     private fun formatSkillsList(skills: List<String>): String {
-        val bulletPoint = "&#8226; " // HTML-код для чёрного кружочка
-        return skills.joinToString("<br/>") { "$bulletPoint$it" }
+        val bulletPoint = "&#8226; " // HTML-код для кружочка
+        return skills.joinToString("<br/>") {
+            "<span style=\"color: $colorHexString;\">$bulletPoint$it</span>"
+        }
     }
 
     private fun initClickListeners() {
