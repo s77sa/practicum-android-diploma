@@ -15,14 +15,15 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
-import ru.practicum.android.diploma.presentation.vacancy.viewmodel.VacancyViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.SalaryUtils
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
-import java.util.Locale
+import ru.practicum.android.diploma.presentation.vacancy.viewmodel.VacancyViewModel
+import ru.practicum.android.diploma.presentation.vacancy.viewmodel.getColorHexString
+import ru.practicum.android.diploma.presentation.vacancy.viewmodel.getHMLDescription
 
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
@@ -31,8 +32,7 @@ class VacancyFragment : Fragment() {
     private var vacancyId: String? = null
     private var isFavourite: Boolean = false
     private var currentVacancy: Vacancy? = null
-    private var colorRes: Int = 0
-    private var colorHexString: String = ""
+
     override fun onCreateView(
 
         inflater: LayoutInflater,
@@ -45,12 +45,7 @@ class VacancyFragment : Fragment() {
         val backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorRes)
         binding.wvJobDescription.setBackgroundColor(backgroundColor)
         binding.wvKeySkills.setBackgroundColor(backgroundColor)
-        colorRes = R.color.blackDayWhiteNight
-        colorHexString = String.format(
-            Locale.getDefault(),
-            "#%06X",
-            WHITE_COLOR and ContextCompat.getColor(requireContext(), colorRes)
-        )
+
         return binding.root
     }
 
@@ -86,8 +81,6 @@ class VacancyFragment : Fragment() {
         }
 
         vacancyId?.let { viewModel.getVacancyDetailsById(it) }
-
-        // Обновление значка избранного
         viewModel.isFavourite.observe(viewLifecycleOwner) { isFavourite ->
             this.isFavourite = isFavourite
             updateFavouriteIcon()
@@ -175,18 +168,8 @@ class VacancyFragment : Fragment() {
     }
 
     private fun loadJobDescription(vacancy: Vacancy) {
-        vacancy.description.let {
-            val jobDescriptionHtml =
-                "<html>\n" +
-                    "        <head>\n" +
-                    "            <style type='text/css'>\n" +
-                    "                body { color: $colorHexString; }\n" +
-                    "            </style>\n" +
-                    "        </head>\n" +
-                    "        <body>\n" +
-                    "            ${currentVacancy?.description}\n" +
-                    "        </body>\n" +
-                    "    </html>"
+        val jobDescriptionHtml = currentVacancy?.description?.let { getHMLDescription(vacancy, it, requireContext()) }
+        if (jobDescriptionHtml != null) {
             binding.wvJobDescription.loadDataWithBaseURL(null, jobDescriptionHtml, "text/html", "utf-8", null)
         }
     }
@@ -261,7 +244,7 @@ class VacancyFragment : Fragment() {
     private fun formatSkillsList(skills: List<String>): String {
         val bulletPoint = "&#8226; " // HTML-код для кружочка
         return skills.joinToString("<br/>") {
-            "<span style=\"color: $colorHexString;\">$bulletPoint$it</span>"
+            "<span style=\"color: ${getColorHexString(requireContext())};\">$bulletPoint$it</span>"
         }
     }
 
@@ -286,7 +269,6 @@ class VacancyFragment : Fragment() {
     }
 
     companion object {
-        private const val WHITE_COLOR = 0xFDFDFD
         internal const val VACANCY_ID = "VACANCY_ID"
     }
 }
