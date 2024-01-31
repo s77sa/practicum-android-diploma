@@ -28,3 +28,10 @@ fun getHMLDescription(vacancy: Vacancy, currentDescription: String, context: Con
         "        </body>\n" +
         "    </html>"
 }
+
+fun formatSkillsList(skills: List<String>, context: Context): String {
+    val bulletPoint = "&#8226; " // HTML-код для кружочка
+    return skills.joinToString("<br/>") {
+        "<span style=\"color: ${getColorHexString(context)};\">$bulletPoint$it</span>"
+    }
+}

@@ -22,7 +22,7 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.SalaryUtils
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 import ru.practicum.android.diploma.presentation.vacancy.viewmodel.VacancyViewModel
-import ru.practicum.android.diploma.presentation.vacancy.viewmodel.getColorHexString
+import ru.practicum.android.diploma.presentation.vacancy.viewmodel.formatSkillsList
 import ru.practicum.android.diploma.presentation.vacancy.viewmodel.getHMLDescription
 
 class VacancyFragment : Fragment() {
@@ -34,7 +34,6 @@ class VacancyFragment : Fragment() {
     private var currentVacancy: Vacancy? = null
 
     override fun onCreateView(
-
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -51,7 +50,6 @@ class VacancyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val progressBar: ProgressBar = view.findViewById(R.id.progress_bar)
         val errorPlaceholder: LinearLayout = view.findViewById(R.id.ll_error_field)
         val vacancyDescriptionView: NestedScrollView = view.findViewById(R.id.nsv_vacancy_description)
@@ -109,13 +107,15 @@ class VacancyFragment : Fragment() {
             currentVacancy = vacancy
 
             fillJobDetails(vacancy)
-            fillEmployerDetails(vacancy)
             loadEmployerLogo(vacancy)
             fillLocationDetails(vacancy)
             fillExperienceAndEmploymentDetails(vacancy)
             loadJobDescription(vacancy)
             fillKeySkillsDetails(vacancy)
             showContactsIfRequired(vacancy)
+            vacancy.employer?.let {
+                binding.tvEmployerTitle.text = it
+            }
 
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.checkFavouriteStatus(vacancy.id)
@@ -131,12 +131,6 @@ class VacancyFragment : Fragment() {
             vacancy.salaryTo,
             vacancy.salaryCurrency
         )
-    }
-
-    private fun fillEmployerDetails(vacancy: Vacancy) {
-        vacancy.employer?.let {
-            binding.tvEmployerTitle.text = it
-        }
     }
 
     private fun loadEmployerLogo(vacancy: Vacancy) {
@@ -179,7 +173,7 @@ class VacancyFragment : Fragment() {
             binding.tvKeySkillsTitle.text = getString(R.string.key_skills)
             binding.wvKeySkills.loadDataWithBaseURL(
                 null,
-                formatSkillsList(vacancy.skills),
+                formatSkillsList(vacancy.skills, requireContext()),
                 "text/html",
                 "utf-8",
                 null
@@ -239,13 +233,6 @@ class VacancyFragment : Fragment() {
 
     private fun formatContactsComments(contacts: List<String?>?): String {
         return contacts?.joinToString("\n") ?: ""
-    }
-
-    private fun formatSkillsList(skills: List<String>): String {
-        val bulletPoint = "&#8226; " // HTML-код для кружочка
-        return skills.joinToString("<br/>") {
-            "<span style=\"color: ${getColorHexString(requireContext())};\">$bulletPoint$it</span>"
-        }
     }
 
     private fun initClickListeners() {
