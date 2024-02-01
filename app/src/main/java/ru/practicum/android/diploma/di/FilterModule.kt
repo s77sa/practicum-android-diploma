@@ -7,7 +7,6 @@ import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.api.IndustryRepository
 import ru.practicum.android.diploma.domain.impl.IndustryInteractorImpl
 
-
 val filterModule = module {
 
     single<IndustryInteractor> {
