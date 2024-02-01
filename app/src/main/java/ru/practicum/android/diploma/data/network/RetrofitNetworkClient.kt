@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.AreaResponse
+import ru.practicum.android.diploma.data.dto.IndustryResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
@@ -91,6 +92,28 @@ class RetrofitNetworkClient(
                     AreaResponse().apply {
                         resultCode = response.code()
                         items = response.body()?.areas!!
+                    }
+                }
+
+                else -> {
+                    Response().apply { resultCode = response.code() }
+                }
+            }
+        }
+    }
+
+    override suspend fun getIndustries(): Response {
+        if (!isConnected()) {
+            return Response().apply { resultCode = -1 }
+        }
+        return withContext(Dispatchers.IO) {
+            val response = hhApi.getIndustries()
+
+            when (response.isSuccessful) {
+                true -> {
+                    IndustryResponse().apply {
+                        resultCode = response.code()
+                        items = response.body()!!
                     }
                 }
 
