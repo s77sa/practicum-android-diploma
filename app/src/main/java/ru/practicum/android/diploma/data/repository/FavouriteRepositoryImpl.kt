@@ -47,4 +47,3 @@ class FavouriteRepositoryImpl(
         return appDatabase.favouriteDao().getFavId()
     }
 }
-

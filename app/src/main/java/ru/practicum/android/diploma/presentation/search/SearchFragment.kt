@@ -119,6 +119,8 @@ class SearchFragment : Fragment() {
     private fun clearSearch() {
         showFoundResultBar()
         searchInput?.text?.clear()
+        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
+        binding.foundResults.visibility = View.GONE
     }
 
     private fun setIconToTextView() {
@@ -141,6 +143,7 @@ class SearchFragment : Fragment() {
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility = View.GONE
         when (placeholder) {
             PlaceholdersEnum.SHOW_BLANK -> {
+                binding.recyclerView.visibility = View.GONE
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).visibility = View.VISIBLE
             }
 
@@ -236,6 +239,12 @@ class SearchFragment : Fragment() {
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(binding.searchInput.windowToken, 0)
         binding.searchInput.clearFocus()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
+        binding.foundResults.visibility = View.GONE
     }
 
     companion object {
