@@ -37,8 +37,8 @@ class RetrofitNetworkClient(
                         Response().apply { resultCode = response.code() }
                     }
                 }
-            } catch (e: Error) {
-                Log.i(TAG, "$e")
+            } catch (throwable: Throwable) {
+                Log.i(TAG, "$throwable")
                 Response().apply { resultCode = -1 }
             }
         }
