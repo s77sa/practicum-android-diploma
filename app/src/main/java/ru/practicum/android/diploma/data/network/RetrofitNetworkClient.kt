@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.AreaResponse
@@ -16,8 +17,8 @@ class RetrofitNetworkClient(
     private val hhApi: HHApi,
 ) : NetworkClient {
     override suspend fun doRequest(request: Map<String, String>): Response {
-        if (! isConnected()) {
-            return Response().apply { resultCode = - 1 }
+        if (!isConnected()) {
+            return Response().apply { resultCode = -1 }
         }
 
         return withContext(Dispatchers.IO) {
@@ -37,14 +38,15 @@ class RetrofitNetworkClient(
                     }
                 }
             } catch (e: Error) {
-                Response().apply { resultCode = - 1 }
+                Log.i (TAG, "$e")
+                Response().apply { resultCode = -1 }
             }
         }
     }
 
     override suspend fun getVacancy(id: String): Response {
-        if (! isConnected()) {
-            return Response().apply { resultCode = - 1 }
+        if (!isConnected()) {
+            return Response().apply { resultCode = -1 }
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getVacancy(id)
@@ -63,8 +65,8 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun getAreas(): Response {
-        if (! isConnected()) {
-            return Response().apply { resultCode = - 1 }
+        if (!isConnected()) {
+            return Response().apply { resultCode = -1 }
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getArea()
@@ -73,7 +75,7 @@ class RetrofitNetworkClient(
                 true -> {
                     AreaResponse().apply {
                         resultCode = response.code()
-                        items = response.body() !!
+                        items = response.body()!!
                     }
                 }
 
@@ -85,8 +87,8 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun getNestedAreas(id: String): Response {
-        if (! isConnected()) {
-            return Response().apply { resultCode = - 1 }
+        if (!isConnected()) {
+            return Response().apply { resultCode = -1 }
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getNestedArea(id)
@@ -96,7 +98,7 @@ class RetrofitNetworkClient(
                 true -> {
                     AreaResponse().apply {
                         resultCode = response.code()
-                        items = response.body()?.areas !!
+                        items = response.body()?.areas!!
                     }
                 }
 
@@ -108,8 +110,8 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun getIndustries(): Response {
-        if (! isConnected()) {
-            return Response().apply { resultCode = - 1 }
+        if (!isConnected()) {
+            return Response().apply { resultCode = -1 }
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getIndustries()
@@ -118,7 +120,7 @@ class RetrofitNetworkClient(
                 true -> {
                     IndustryResponse().apply {
                         resultCode = response.code()
-                        items = response.body() !!
+                        items = response.body()!!
                     }
                 }
 
@@ -142,5 +144,8 @@ class RetrofitNetworkClient(
             }
         }
         return false
+    }
+    companion object{
+        const val TAG = "_TAG"
     }
 }
