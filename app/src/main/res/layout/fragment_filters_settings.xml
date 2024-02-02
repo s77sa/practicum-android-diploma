@@ -142,31 +142,47 @@
         app:layout_constraintTop_toBottomOf="@+id/workplaceLayout" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/salary_editText"
+        android:id="@+id/salaryLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_24"
         android:hint="@string/hint_exp_salary"
-        android:textColorHint="@color/yp_gray"
+        android:textColorHint="@color/grayDayWhiteNight"
         app:boxCollapsedPaddingTop="@dimen/dp_8"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:expandedHintEnabled="false"
         app:hintEnabled="true"
         app:hintTextColor="@color/yp_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/industryLayout"
         app:placeholderTextColor="@color/yp_gray">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/filter_settings_expected_salary_edit_text"
+            android:id="@+id/salaryEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/salary_exp_rounded"
             android:fontFamily="@font/ys_display_regular"
             android:hint="@string/hint_enter_salary"
             android:inputType="number"
             android:textColor="@color/yp_black"
-            android:textColorHint="@color/yp_gray"
+            android:textColorHint="@color/grayDayWhiteNight"
             android:textSize="@dimen/sp_16" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/salaryClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:contentDescription="@string/description"
+        android:src="@drawable/ic_close"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/salaryLayout"
+        app:layout_constraintEnd_toEndOf="@+id/salaryLayout"
+        app:layout_constraintTop_toTopOf="@+id/salaryLayout"
+        app:tint="@color/yp_black" />
 </androidx.constraintlayout.widget.ConstraintLayout>
