@@ -12,7 +12,6 @@ import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 import java.net.UnknownHostException
-import java.util.concurrent.ExecutionException
 
 class RetrofitNetworkClient(
     private val context: Context,
