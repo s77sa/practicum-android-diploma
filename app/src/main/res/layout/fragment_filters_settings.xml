@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.practicum.android.diploma.presentation.FiltersSettingsFragment">
+    tools:context="ru.practicum.android.diploma.presentation.filters.FiltersSettingsFragment">
 
     <TextView
         android:id="@+id/textView"
         style="@style/HeaderStyle"
-        android:text="Настройки фильтрации"
+        android:text="@string/filters_header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
     </TextView>
