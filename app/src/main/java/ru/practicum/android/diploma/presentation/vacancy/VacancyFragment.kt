@@ -15,14 +15,13 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
-import ru.practicum.android.diploma.presentation.vacancy.viewmodel.VacancyViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.SalaryUtils
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
-import java.util.Locale
+import ru.practicum.android.diploma.presentation.vacancy.viewmodel.VacancyViewModel
 
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
@@ -31,10 +30,9 @@ class VacancyFragment : Fragment() {
     private var vacancyId: String? = null
     private var isFavourite: Boolean = false
     private var currentVacancy: Vacancy? = null
-    private var colorRes: Int = 0
-    private var colorHexString: String = ""
-    override fun onCreateView(
+    private val formatVacancyHTML get() = FormatVacancyHTML(requireContext())
 
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -45,18 +43,12 @@ class VacancyFragment : Fragment() {
         val backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorRes)
         binding.wvJobDescription.setBackgroundColor(backgroundColor)
         binding.wvKeySkills.setBackgroundColor(backgroundColor)
-        colorRes = R.color.blackDayWhiteNight
-        colorHexString = String.format(
-            Locale.getDefault(),
-            "#%06X",
-            WHITE_COLOR and ContextCompat.getColor(requireContext(), colorRes)
-        )
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val progressBar: ProgressBar = view.findViewById(R.id.progress_bar)
         val errorPlaceholder: LinearLayout = view.findViewById(R.id.ll_error_field)
         val vacancyDescriptionView: NestedScrollView = view.findViewById(R.id.nsv_vacancy_description)
@@ -84,9 +76,8 @@ class VacancyFragment : Fragment() {
                 }
             }
         }
-        vacancyId?.let { viewModel.getVacancyDetailsById(it) }
 
-        // Обновление значка избранного
+        vacancyId?.let { viewModel.getVacancyDetailsById(it) }
         viewModel.isFavourite.observe(viewLifecycleOwner) { isFavourite ->
             this.isFavourite = isFavourite
             updateFavouriteIcon()
@@ -113,14 +104,18 @@ class VacancyFragment : Fragment() {
     private fun updateUIWithVacancyDetails(vacancy: Vacancy?) {
         if (vacancy != null) {
             currentVacancy = vacancy
+
             fillJobDetails(vacancy)
-            fillEmployerDetails(vacancy)
             loadEmployerLogo(vacancy)
             fillLocationDetails(vacancy)
             fillExperienceAndEmploymentDetails(vacancy)
             loadJobDescription(vacancy)
             fillKeySkillsDetails(vacancy)
             showContactsIfRequired(vacancy)
+            vacancy.employer?.let {
+                binding.tvEmployerTitle.text = it
+            }
+
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.checkFavouriteStatus(vacancy.id)
             }
@@ -135,12 +130,6 @@ class VacancyFragment : Fragment() {
             vacancy.salaryTo,
             vacancy.salaryCurrency
         )
-    }
-
-    private fun fillEmployerDetails(vacancy: Vacancy) {
-        vacancy.employer?.let {
-            binding.tvEmployerTitle.text = it
-        }
     }
 
     private fun loadEmployerLogo(vacancy: Vacancy) {
@@ -172,7 +161,10 @@ class VacancyFragment : Fragment() {
     }
 
     private fun loadJobDescription(vacancy: Vacancy) {
-        viewModel.loadJobDescription(vacancy, colorHexString)
+        val jobDescriptionHtml = currentVacancy?.description?.let { formatVacancyHTML.getHMLDescription(vacancy, it) }
+        if (jobDescriptionHtml != null) {
+            binding.wvJobDescription.loadDataWithBaseURL(null, jobDescriptionHtml, "text/html", "utf-8", null)
+        }
     }
 
     private fun fillKeySkillsDetails(vacancy: Vacancy) {
@@ -180,7 +172,7 @@ class VacancyFragment : Fragment() {
             binding.tvKeySkillsTitle.text = getString(R.string.key_skills)
             binding.wvKeySkills.loadDataWithBaseURL(
                 null,
-                formatSkillsList(vacancy.skills),
+                formatVacancyHTML.formatSkillsList(vacancy.skills),
                 "text/html",
                 "utf-8",
                 null
@@ -225,6 +217,7 @@ class VacancyFragment : Fragment() {
                 ""
             )
         }
+
         binding.tvTelephoneField.setOnClickListener {
             viewModel.makeCall(binding.tvTelephoneField.text.toString())
         }
@@ -241,18 +234,18 @@ class VacancyFragment : Fragment() {
         return contacts?.joinToString("\n") ?: ""
     }
 
-    private fun formatSkillsList(skills: List<String>): String {
-        val bulletPoint = "&#8226; " // HTML-код для кружочка
-        return skills.joinToString("<br/>") {
-            "<span style=\"color: $colorHexString;\">$bulletPoint$it</span>"
-        }
-    }
-
     private fun initClickListeners() {
-        with(binding) {
-            ivDetailsBackArrow.setOnClickListener { findNavController().popBackStack() }
-            ivDetailsShareButton.setOnClickListener { viewModel.shareVacancy(vacancyId) }
-            ivDetailsFavouriteButton.setOnClickListener { currentVacancy?.let { viewModel.toggleFavouriteStatus(it) } }
+        binding.ivDetailsBackArrow.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.ivDetailsShareButton.setOnClickListener {
+            viewModel.shareVacancy(vacancyId)
+        }
+        binding.ivDetailsFavouriteButton.setOnClickListener {
+            currentVacancy?.let {
+                viewModel.toggleFavouriteStatus(it)
+            }
         }
     }
 
@@ -262,7 +255,6 @@ class VacancyFragment : Fragment() {
     }
 
     companion object {
-        private const val WHITE_COLOR = 0xFDFDFD
         internal const val VACANCY_ID = "VACANCY_ID"
     }
 }
