@@ -71,6 +71,7 @@ class SearchFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.placeholderStatusData.observe(viewLifecycleOwner) {
+            Log.d(TAG, "placeholderStatusData: ${it.name}")
             setPlaceholder(it)
         }
         viewModel.observeState().observe(viewLifecycleOwner) {
@@ -117,10 +118,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun clearSearch() {
+        viewModel.clearSearchResult()
         showFoundResultBar()
         searchInput?.text?.clear()
-        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
-        binding.foundResults.visibility = View.GONE
     }
 
     private fun setIconToTextView() {
@@ -135,6 +135,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setPlaceholder(placeholder: PlaceholdersEnum) {
+        Log.d(TAG, "setPlaceholder: ${placeholder.name}")
         binding.recyclerView.visibility = View.GONE
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).visibility = View.GONE
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.GONE
@@ -183,7 +184,9 @@ class SearchFragment : Fragment() {
             is SearchState.Content -> {
                 vacancies.addAll(state.vacancies)
                 vacancyAdapter.notifyDataSetChanged()
-                showFoundResultBar(state.foundItems)
+                Log.d(TAG, "updateScreen ${state.foundItems}")
+                if (binding.searchInput.text.isNotEmpty()) showFoundResultBar(state.foundItems)
+
             }
 
             is SearchState.Empty -> {
@@ -243,12 +246,6 @@ class SearchFragment : Fragment() {
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(binding.searchInput.windowToken, 0)
         binding.searchInput.clearFocus()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
-        binding.foundResults.visibility = View.GONE
     }
 
     companion object {
