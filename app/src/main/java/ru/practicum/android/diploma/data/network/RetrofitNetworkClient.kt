@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.AreaResponse
@@ -16,23 +17,33 @@ class RetrofitNetworkClient(
     private val hhApi: HHApi,
 ) : NetworkClient {
     override suspend fun doRequest(request: Map<String, String>): Response {
+        Log.i("_TAG0", "doRequest isConnected=${isConnected()}")
         if (!isConnected()) {
+            Log.i("_TAG1", "doRequest isConnected=${isConnected()}")
             return Response().apply { resultCode = -1 }
         }
         return withContext(Dispatchers.IO) {
-            val response = hhApi.search(request)
+            try {
+                val response = hhApi.search(request)
 
-            when (response.isSuccessful) {
-                true -> VacancyResponse(
-                    items = response.body()?.items,
-                    found = response.body()?.found,
-                    page = response.body()?.page,
-                    pages = response.body()?.pages
-                ).apply { resultCode = response.code() }
+                Log.i("_TAG2", "doRequest isConnected=${isConnected()}")
 
-                else -> {
-                    Response().apply { resultCode = response.code() }
+                when (response.isSuccessful) {
+                    true -> VacancyResponse(
+                        items = response.body()?.items,
+                        found = response.body()?.found,
+                        page = response.body()?.page,
+                        pages = response.body()?.pages
+                    ).apply { if (isConnected()) resultCode = response.code() }
+
+                    else -> {
+                        Log.i("_TAG3", "doRequest isConnected=${isConnected()}")
+                        Response().apply { if (isConnected()) resultCode = response.code() }
+                    }
                 }
+            } catch (e: Exception) {
+                Log.i("_TAG4", "doRequest isConnected=$e")
+                Response().apply { resultCode = -1 }
             }
         }
     }
