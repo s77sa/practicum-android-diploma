@@ -38,7 +38,7 @@ class RetrofitNetworkClient(
                     }
                 }
             } catch (e: Error) {
-                Log.i (TAG, "$e")
+                Log.i(TAG, "$e")
                 Response().apply { resultCode = -1 }
             }
         }
@@ -145,7 +145,7 @@ class RetrofitNetworkClient(
         }
         return false
     }
-    companion object{
+    companion object {
         const val TAG = "_TAG"
     }
 }
