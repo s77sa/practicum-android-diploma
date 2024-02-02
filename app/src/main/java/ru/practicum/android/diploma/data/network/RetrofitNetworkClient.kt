@@ -11,6 +11,8 @@ import ru.practicum.android.diploma.data.dto.IndustryResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
+import java.net.UnknownHostException
+import java.util.concurrent.ExecutionException
 
 class RetrofitNetworkClient(
     private val context: Context,
@@ -37,8 +39,8 @@ class RetrofitNetworkClient(
                         Response().apply { resultCode = response.code() }
                     }
                 }
-            } catch (throwable: Throwable) {
-                Log.i(TAG, "$throwable")
+            } catch (e: UnknownHostException) {
+                Log.i(TAG, "$e")
                 Response().apply { resultCode = -1 }
             }
         }
