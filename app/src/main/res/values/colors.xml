@@ -12,4 +12,5 @@
 
     <color name="blackDayWhiteNight">@color/yp_black</color>
     <color name="whiteDayBlackNight">@color/yp_white</color>
+    <color name="lightGrayWhiteNight">@color/yp_lightGray</color>
 </resources>

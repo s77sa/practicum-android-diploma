@@ -59,5 +59,8 @@
     <string name="email">E-mail</string>
     <string name="telephone">Телефон</string>
     <string name="comment">Комментарий</string>
-
+    <string name="hint_workplace">Место работы</string>
+    <string name="hint_industry">Отрасль</string>
+    <string name="hint_exp_salary">Ожидаемая зарплата</string>
+    <string name="hint_enter_salary">Введите сумму</string>
 </resources>

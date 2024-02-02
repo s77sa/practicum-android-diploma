@@ -232,6 +232,10 @@ class SearchFragment : Fragment() {
                 bundle
             )
         }
+
+        binding.filterButton.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filtersSettingsFragment)
+        }
     }
 
     private fun hideKeyBoard() {
