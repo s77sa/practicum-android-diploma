@@ -23,7 +23,7 @@ class FiltersSettingsFragment : Fragment() {
         return binding.root
     }
 
-    private fun initClickListeners(){
+    private fun initClickListeners() {
         binding.filterSettingsHeaderBack.setOnClickListener {
             findNavController().popBackStack()
         }
