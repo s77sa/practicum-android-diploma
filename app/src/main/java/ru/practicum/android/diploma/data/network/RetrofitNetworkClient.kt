@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.AreaResponse
@@ -17,16 +16,13 @@ class RetrofitNetworkClient(
     private val hhApi: HHApi,
 ) : NetworkClient {
     override suspend fun doRequest(request: Map<String, String>): Response {
-        Log.i("_TAG0", "doRequest isConnected=${isConnected()}")
-        if (!isConnected()) {
-            Log.i("_TAG1", "doRequest isConnected=${isConnected()}")
-            return Response().apply { resultCode = -1 }
+        if (! isConnected()) {
+            return Response().apply { resultCode = - 1 }
         }
+
         return withContext(Dispatchers.IO) {
             try {
                 val response = hhApi.search(request)
-
-                Log.i("_TAG2", "doRequest isConnected=${isConnected()}")
 
                 when (response.isSuccessful) {
                     true -> VacancyResponse(
@@ -37,20 +33,18 @@ class RetrofitNetworkClient(
                     ).apply { if (isConnected()) resultCode = response.code() }
 
                     else -> {
-                        Log.i("_TAG3", "doRequest isConnected=${isConnected()}")
-                        Response().apply { if (isConnected()) resultCode = response.code() }
+                        Response().apply { resultCode = response.code() }
                     }
                 }
-            } catch (e: Exception) {
-                Log.i("_TAG4", "doRequest isConnected=$e")
-                Response().apply { resultCode = -1 }
+            } catch (e: Error) {
+                Response().apply { resultCode = - 1 }
             }
         }
     }
 
     override suspend fun getVacancy(id: String): Response {
-        if (!isConnected()) {
-            return Response().apply { resultCode = -1 }
+        if (! isConnected()) {
+            return Response().apply { resultCode = - 1 }
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getVacancy(id)
@@ -69,8 +63,8 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun getAreas(): Response {
-        if (!isConnected()) {
-            return Response().apply { resultCode = -1 }
+        if (! isConnected()) {
+            return Response().apply { resultCode = - 1 }
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getArea()
@@ -79,7 +73,7 @@ class RetrofitNetworkClient(
                 true -> {
                     AreaResponse().apply {
                         resultCode = response.code()
-                        items = response.body()!!
+                        items = response.body() !!
                     }
                 }
 
@@ -91,8 +85,8 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun getNestedAreas(id: String): Response {
-        if (!isConnected()) {
-            return Response().apply { resultCode = -1 }
+        if (! isConnected()) {
+            return Response().apply { resultCode = - 1 }
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getNestedArea(id)
@@ -102,7 +96,7 @@ class RetrofitNetworkClient(
                 true -> {
                     AreaResponse().apply {
                         resultCode = response.code()
-                        items = response.body()?.areas!!
+                        items = response.body()?.areas !!
                     }
                 }
 
@@ -114,8 +108,8 @@ class RetrofitNetworkClient(
     }
 
     override suspend fun getIndustries(): Response {
-        if (!isConnected()) {
-            return Response().apply { resultCode = -1 }
+        if (! isConnected()) {
+            return Response().apply { resultCode = - 1 }
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getIndustries()
@@ -124,7 +118,7 @@ class RetrofitNetworkClient(
                 true -> {
                     IndustryResponse().apply {
                         resultCode = response.code()
-                        items = response.body()!!
+                        items = response.body() !!
                     }
                 }
 
