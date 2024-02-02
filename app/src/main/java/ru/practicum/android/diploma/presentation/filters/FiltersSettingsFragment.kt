@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.databinding.FragmentFiltersSettingsBinding
 
 class FiltersSettingsFragment : Fragment() {
@@ -18,6 +19,13 @@ class FiltersSettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFiltersSettingsBinding.inflate(inflater, container, false)
+        initClickListeners()
         return binding.root
+    }
+
+    private fun initClickListeners() {
+        binding.filterSettingsHeaderBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }
