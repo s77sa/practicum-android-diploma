@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.ItemCountryBinding
 import ru.practicum.android.diploma.domain.models.Region
-import ru.practicum.android.diploma.filter.presentation.viewholder.FilterRegionViewHolder
+import ru.practicum.android.diploma.presentation.filters.viewholder.FilterRegionViewHolder
 
 class FilterRegionAdapter(val onRegionClickedCB: (Region) -> Unit) : RecyclerView.Adapter<FilterRegionViewHolder>() {
 

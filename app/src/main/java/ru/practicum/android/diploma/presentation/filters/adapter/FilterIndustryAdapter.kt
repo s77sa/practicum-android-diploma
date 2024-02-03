@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.ItemIndustryBinding
 import ru.practicum.android.diploma.domain.models.Industry
-import ru.practicum.android.diploma.filter.presentation.viewholder.FilterIndustryViewHolder
+import ru.practicum.android.diploma.presentation.filters.viewholder.FilterIndustryViewHolder
 
 class FilterIndustryAdapter(val onIndustryClickedCB: (Industry) -> Unit) :
     RecyclerView.Adapter<FilterIndustryViewHolder>() {
@@ -26,19 +26,17 @@ class FilterIndustryAdapter(val onIndustryClickedCB: (Industry) -> Unit) :
     override fun getItemCount() = industries.size
 
     override fun onBindViewHolder(holder: FilterIndustryViewHolder, position: Int) {
-        val clickListener = View.OnClickListener() {
+        val clickListener = View.OnClickListener {
             industries[position].isChecked = !industries[position].isChecked
             selectedIndustry = industries[position]
             industries.forEach {
-                it.isChecked = (it == industries[position])
+                it.isChecked = it == industries[position]
             }
             notifyDataSetChanged()
             onIndustryClickedCB(industries[position])
         }
-        if (selectedIndustry != null) {
-            if (industries[position].id == selectedIndustry!!.id) {
-                industries[position].isChecked = true
-            }
+        if (selectedIndustry != null && industries[position].id == selectedIndustry!!.id) {
+            industries[position].isChecked = true
         }
         holder.bind(industries[position])
         holder.rbIndustry.setOnClickListener(clickListener)
