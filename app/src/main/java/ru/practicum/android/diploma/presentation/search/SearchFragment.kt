@@ -261,11 +261,11 @@ class SearchFragment : Fragment() {
         super.onResume()
         setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
         binding.foundResults.visibility = View.GONE
-        Log.d(TAG, "onResume ${foundVacancies}")
-        if (vacancies.size>0) {
+
+        if (vacancies.size > 0) {
             setPlaceholder(PlaceholdersEnum.SHOW_RESULT)
-            updateScreen(SearchState.Content(vacancies,foundVacancies))
-            binding.foundResults.isVisible=true
+            updateScreen(SearchState.Content(vacancies, foundVacancies))
+            binding.foundResults.isVisible = true
         }
     }
 
