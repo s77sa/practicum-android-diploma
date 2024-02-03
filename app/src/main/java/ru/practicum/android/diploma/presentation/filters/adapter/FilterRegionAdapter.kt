@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.presentation.adapter
+package ru.practicum.android.diploma.presentation.filters.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

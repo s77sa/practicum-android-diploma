@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.presentation.adapter
+package ru.practicum.android.diploma.presentation.filters.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +8,8 @@ import ru.practicum.android.diploma.databinding.ItemIndustryBinding
 import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.viewholder.FilterIndustryViewHolder
 
-class FilterIndustryAdapter (val onIndustryClickedCB: (Industry) -> Unit) : RecyclerView.Adapter<FilterIndustryViewHolder>() {
-
+class FilterIndustryAdapter(val onIndustryClickedCB: (Industry) -> Unit) :
+    RecyclerView.Adapter<FilterIndustryViewHolder>() {
     var industries = mutableListOf<Industry>()
     var selectedIndustry: Industry? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterIndustryViewHolder {
@@ -26,20 +26,15 @@ class FilterIndustryAdapter (val onIndustryClickedCB: (Industry) -> Unit) : Recy
     override fun getItemCount() = industries.size
 
     override fun onBindViewHolder(holder: FilterIndustryViewHolder, position: Int) {
-
         val clickListener = View.OnClickListener() {
-
             industries[position].isChecked = !industries[position].isChecked
             selectedIndustry = industries[position]
             industries.forEach {
                 it.isChecked = (it == industries[position])
             }
-
             notifyDataSetChanged()
-
             onIndustryClickedCB(industries[position])
         }
-
         if (selectedIndustry != null) {
             if (industries[position].id == selectedIndustry!!.id) {
                 industries[position].isChecked = true
