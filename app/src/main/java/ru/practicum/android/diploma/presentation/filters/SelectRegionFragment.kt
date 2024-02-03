@@ -20,6 +20,7 @@ class SelectRegionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSelectRegionBinding.inflate(inflater, container, false)
+        setPlaceholder(PlaceholdersRegionEnum.HIDE_ALL)
         return binding.root
     }
 
