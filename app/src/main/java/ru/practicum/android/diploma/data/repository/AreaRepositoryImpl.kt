@@ -10,8 +10,6 @@ import ru.practicum.android.diploma.domain.api.AreaRepository
 import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.presentation.util.Resource
 
-const val ERROR_RESPONSE = "Ошибка"
-
 class AreaRepositoryImpl(
     private val networkClient: NetworkClient,
     private val context: Context,
@@ -28,7 +26,7 @@ class AreaRepositoryImpl(
             val areas = response as AreaResponse
             Resource.Success(converter.map(areas))
         } else {
-            Resource.Error("$ERROR_RESPONSE ${response.resultCode}")
+            Resource.Error(getString(context, R.string.net_error))
         }
     }
 
@@ -42,7 +40,7 @@ class AreaRepositoryImpl(
             Resource.Success(converter.mapCity(areas))
 
         } else {
-            Resource.Error("$ERROR_RESPONSE ${response.resultCode}")
+            Resource.Error(getString(context, R.string.net_error))
         }
     }
 
@@ -55,7 +53,7 @@ class AreaRepositoryImpl(
             val areas = response as AreaResponse
             Resource.Success(converter.mapCityAll(areas))
         } else {
-            Resource.Error("$ERROR_RESPONSE ${response.resultCode}")
+            Resource.Error(getString(context, R.string.net_error))
         }
     }
 
