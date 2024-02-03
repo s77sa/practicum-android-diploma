@@ -35,12 +35,20 @@
     <string name="fav_empty">Список пуст</string>
     // Filters
     <string name="filters_header">Настройки фильтрации</string>
+    <string name="select">Выбрать</string>
     // Select Country
     <string name="country_header">Выбор страны</string>
+    <string name="country">Страна</string>
+    <string name="no_such_country">Такой страны нет</string>
     // Select Industry
     <string name="industry_header">Выбор отрасли</string>
+    <string name="enter_industry">Введите отрасль</string>
+    <string name="no_such_industry">Такой отрасли нет</string>
     // Select Region
     <string name="region_header">Выбор региона</string>
+    <string name="region">Регион</string>
+    <string name="enter_region">Введите регион</string>
+    <string name="no_such_region">Такого региона нет</string>
     // Select Workplace
     <string name="workplace_header">Выбор места работы</string>
     // Bottom Navigation

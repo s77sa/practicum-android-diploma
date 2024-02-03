@@ -9,7 +9,8 @@ class IndustryMapper {
         val categories = industries.map {
             Industry(
                 id = it.id,
-                name = it.name
+                name = it.name,
+                isChecked = false
             )
         }
         val subCategoriesList = mutableListOf<IndustryDto>()
@@ -21,7 +22,8 @@ class IndustryMapper {
         val subCategories = subCategoriesList.map {
             Industry(
                 id = it.id,
-                name = it.name
+                name = it.name,
+                isChecked = false
             )
         }
         allCategories.addAll(categories)
