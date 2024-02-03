@@ -6,7 +6,6 @@ import ru.practicum.android.diploma.data.dto.FilterDTO
 import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.models.Filter
 
-
 const val FILTER_STORAGE = "filter_storage"
 const val FILTER_KEY = "filter_key"
 
