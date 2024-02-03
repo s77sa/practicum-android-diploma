@@ -147,7 +147,7 @@ class SearchFragment : Fragment() {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.SHOW_NO_INTERNET -> {
+            PlaceholdersSearchEnum.SHOW_NO_INTERNET -> {
                 if (vacancies.size > 0) {
                     showAnackBar()
                     binding.recyclerView.visibility = View.VISIBLE
@@ -265,9 +265,9 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (vacancies.size > 0) {
-            setPlaceholder(PlaceholdersEnum.SHOW_RESULT)
+            setPlaceholder(PlaceholdersSearchEnum.SHOW_RESULT)
         } else {
-            setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
+            setPlaceholder(PlaceholdersSearchEnum.SHOW_BLANK)
             binding.foundResults.visibility = View.GONE
         }
     }
