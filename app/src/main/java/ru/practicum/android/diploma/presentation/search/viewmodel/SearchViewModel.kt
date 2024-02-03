@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.dto.VacancyRequest
 import ru.practicum.android.diploma.domain.api.SearchInteractor
 import ru.practicum.android.diploma.domain.models.Vacancy
-import ru.practicum.android.diploma.presentation.search.PlaceholdersEnum
+import ru.practicum.android.diploma.presentation.search.PlaceholdersSearchEnum
 import ru.practicum.android.diploma.presentation.search.models.SearchState
 import ru.practicum.android.diploma.presentation.util.debounce
 
@@ -23,15 +23,15 @@ class SearchViewModel(
     private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
-    private val placeholderStatusMutable = MutableLiveData<PlaceholdersEnum>(PlaceholdersEnum.SHOW_BLANK)
+    private val placeholderStatusMutable = MutableLiveData<PlaceholdersSearchEnum>(PlaceholdersSearchEnum.SHOW_BLANK)
     val placeholderStatusData get() = placeholderStatusMutable
     private var latestSearchText: String? = null
     private var isNextPageLoading = true
     private var page: Int = 0
     private var pages = 1
 
-    private fun setPlaceholder(placeholdersEnum: PlaceholdersEnum) {
-        placeholderStatusMutable.value = placeholdersEnum
+    private fun setPlaceholder(placeholdersSearchEnum: PlaceholdersSearchEnum) {
+        placeholderStatusMutable.value = placeholdersSearchEnum
     }
 
     fun searchDebounce(changedText: String) {
@@ -54,9 +54,9 @@ class SearchViewModel(
         if (changedText.isNotEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
             if (page == 0) {
-                setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_CENTER)
+                setPlaceholder(PlaceholdersSearchEnum.SHOW_PROGRESS_CENTER)
             } else {
-                setPlaceholder(PlaceholdersEnum.SHOW_PROGRESS_BOTTOM)
+                setPlaceholder(PlaceholdersSearchEnum.SHOW_PROGRESS_BOTTOM)
             }
             viewModelScope.launch {
                 searchInteractor
@@ -92,17 +92,17 @@ class SearchViewModel(
         when {
             errorMessage != null -> {
                 stateLiveData.postValue(SearchState.Error(errorMessage))
-                setPlaceholder(PlaceholdersEnum.SHOW_NO_INTERNET)
+                setPlaceholder(PlaceholdersSearchEnum.SHOW_NO_INTERNET)
             }
 
             vacancyList.isEmpty() -> {
                 stateLiveData.postValue(SearchState.Empty(getString(context, R.string.no_vacancy)))
-                setPlaceholder(PlaceholdersEnum.SHOW_NO_VACANCY)
+                setPlaceholder(PlaceholdersSearchEnum.SHOW_NO_VACANCY)
 
             }
 
             else -> {
-                setPlaceholder(PlaceholdersEnum.SHOW_RESULT)
+                setPlaceholder(PlaceholdersSearchEnum.SHOW_RESULT)
                 stateLiveData.postValue(SearchState.Content(vacancyList, foundItems = foundItems))
             }
         }
@@ -112,7 +112,7 @@ class SearchViewModel(
         val vacancyList = mutableListOf<Vacancy>()
         vacancyList.clear()
         stateLiveData.postValue(SearchState.Content(vacancyList, vacancyList.size))
-        setPlaceholder(PlaceholdersEnum.HIDE_ALL)
+        setPlaceholder(PlaceholdersSearchEnum.SHOW_BLANK)
     }
 
     fun onNextPage() {

@@ -76,6 +76,7 @@ class SearchFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.placeholderStatusData.observe(viewLifecycleOwner) {
+            Log.d(TAG, "placeholderStatusData: ${it.name}")
             setPlaceholder(it)
         }
         viewModel.observeState().observe(viewLifecycleOwner) {
@@ -116,10 +117,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun clearSearch() {
+        viewModel.clearSearchResult()
         showFoundResultBar()
         searchInput?.text?.clear()
-        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
-        binding.foundResults.visibility = View.GONE
     }
 
     private fun setIconToTextView() {
@@ -133,7 +133,8 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun setPlaceholder(placeholder: PlaceholdersEnum) {
+    private fun setPlaceholder(placeholder: PlaceholdersSearchEnum) {
+        Log.d(TAG, "setPlaceholder: ${placeholder.name}")
         binding.recyclerView.visibility = View.GONE
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).visibility = View.GONE
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.GONE
@@ -141,7 +142,7 @@ class SearchFragment : Fragment() {
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility = View.GONE
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility = View.GONE
         when (placeholder) {
-            PlaceholdersEnum.SHOW_BLANK -> {
+            PlaceholdersSearchEnum.SHOW_BLANK -> {
                 binding.recyclerView.visibility = View.GONE
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).visibility = View.VISIBLE
             }
@@ -155,26 +156,24 @@ class SearchFragment : Fragment() {
                 }
             }
 
-            PlaceholdersEnum.SHOW_NO_VACANCY -> {
+            PlaceholdersSearchEnum.SHOW_NO_VACANCY -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoVacancy).visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.SHOW_PROGRESS_CENTER -> {
-                binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility =
-                    View.VISIBLE
+            PlaceholdersSearchEnum.SHOW_PROGRESS_CENTER -> {
+                binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.SHOW_PROGRESS_BOTTOM -> {
-                binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility =
-                    View.VISIBLE
+            PlaceholdersSearchEnum.SHOW_PROGRESS_BOTTOM -> {
+                binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.SHOW_RESULT -> {
+            PlaceholdersSearchEnum.SHOW_RESULT -> {
                 binding.recyclerView.visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.HIDE_ALL -> {}
+            PlaceholdersSearchEnum.HIDE_ALL -> {}
         }
     }
 
