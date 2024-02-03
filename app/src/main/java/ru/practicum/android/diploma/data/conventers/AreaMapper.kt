@@ -52,20 +52,21 @@ class AreaMapper {
                         id = region.id,
                         name = region.name,
                         parentId = region.parentId,
-                        countryName = ""
+                        countryName = response.items.filter { it.id == region.parentId }[0].name
                     )
                 )
             }
         }
-        nestedRegions.addAll(nestedCities.map {
+        nestedRegions.addAll(nestedCities.map { city ->
             Area(
-                id = it.id,
-                name = it.name,
-                parentId = it.parentId,
-                countryName = ""
+                id = city.id,
+                name = city.name,
+                parentId = city.parentId,
+                countryName = response.items.filter { it.id == city.parentId }[0].name
             )
         })
         return nestedRegions
 
     }
+
 }
