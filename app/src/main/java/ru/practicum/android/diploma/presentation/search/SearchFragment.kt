@@ -41,6 +41,8 @@ class SearchFragment : Fragment() {
         VacanciesAdapter(clickListener = { data -> onVacancyClickDebounce?.invoke(data) }, vacancies)
     private var searchInput: EditText? = null
     private var iconSearch: ImageView? = null
+    private var lastSearchText = ""
+    private var newSearchText = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,8 +91,8 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 setIconToTextView()
-                vacancies.clear()
-                viewModel.searchDebounce(s.toString())
+                newSearchText = s.toString()
+                viewModel.searchDebounce(newSearchText)
             }
 
             override fun afterTextChanged(s: Editable?) = Unit
@@ -99,8 +101,8 @@ class SearchFragment : Fragment() {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
-                if (dy > 0) {
+                val itemsCount = vacancyAdapter.itemCount
+                if (dy > 0 && itemsCount > 0) {
                     val pos =
                         (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacancyAdapter.itemCount
@@ -181,6 +183,10 @@ class SearchFragment : Fragment() {
     private fun updateScreen(state: SearchState) {
         when (state) {
             is SearchState.Content -> {
+                if (!lastSearchText.equals(newSearchText)) {
+                    vacancies.clear()
+                    lastSearchText = newSearchText
+                }
                 vacancies.addAll(state.vacancies)
                 vacancyAdapter.notifyDataSetChanged()
                 showFoundResultBar(state.foundItems)
