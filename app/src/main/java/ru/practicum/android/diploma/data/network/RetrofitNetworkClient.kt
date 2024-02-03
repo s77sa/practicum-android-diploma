@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.AreaResponse
@@ -10,6 +11,7 @@ import ru.practicum.android.diploma.data.dto.IndustryResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
+import java.net.UnknownHostException
 
 class RetrofitNetworkClient(
     private val context: Context,
@@ -19,20 +21,26 @@ class RetrofitNetworkClient(
         if (!isConnected()) {
             return Response().apply { resultCode = -1 }
         }
+
         return withContext(Dispatchers.IO) {
-            val response = hhApi.search(request)
+            try {
+                val response = hhApi.search(request)
 
-            when (response.isSuccessful) {
-                true -> VacancyResponse(
-                    items = response.body()?.items,
-                    found = response.body()?.found,
-                    page = response.body()?.page,
-                    pages = response.body()?.pages
-                ).apply { resultCode = response.code() }
+                when (response.isSuccessful) {
+                    true -> VacancyResponse(
+                        items = response.body()?.items,
+                        found = response.body()?.found,
+                        page = response.body()?.page,
+                        pages = response.body()?.pages
+                    ).apply { if (isConnected()) resultCode = response.code() }
 
-                else -> {
-                    Response().apply { resultCode = response.code() }
+                    else -> {
+                        Response().apply { resultCode = response.code() }
+                    }
                 }
+            } catch (e: UnknownHostException) {
+                Log.i(TAG, "$e")
+                Response().apply { resultCode = -1 }
             }
         }
     }
@@ -137,5 +145,8 @@ class RetrofitNetworkClient(
             }
         }
         return false
+    }
+    companion object {
+        const val TAG = "_TAG"
     }
 }

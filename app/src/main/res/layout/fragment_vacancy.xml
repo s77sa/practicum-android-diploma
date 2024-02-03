@@ -361,7 +361,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_223dp"
             android:layout_gravity="center"
-            android:src="@drawable/il_7_1_1" />
+            android:src="@drawable/il_7_confused_cat" />
 
         <TextView
             android:id="@+id/error_text"

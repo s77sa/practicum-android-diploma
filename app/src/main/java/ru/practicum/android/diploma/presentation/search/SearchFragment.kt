@@ -41,6 +41,8 @@ class SearchFragment : Fragment() {
         VacanciesAdapter(clickListener = { data -> onVacancyClickDebounce?.invoke(data) }, vacancies)
     private var searchInput: EditText? = null
     private var iconSearch: ImageView? = null
+    private var lastSearchText = ""
+    private var newSearchText = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,6 +73,7 @@ class SearchFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.placeholderStatusData.observe(viewLifecycleOwner) {
+            Log.d(TAG, "placeholderStatusData: ${it.name}")
             setPlaceholder(it)
         }
         viewModel.observeState().observe(viewLifecycleOwner) {
@@ -89,8 +92,8 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 setIconToTextView()
-                vacancies.clear()
-                viewModel.searchDebounce(s.toString())
+                newSearchText = s.toString()
+                viewModel.searchDebounce(newSearchText)
             }
 
             override fun afterTextChanged(s: Editable?) = Unit
@@ -99,8 +102,8 @@ class SearchFragment : Fragment() {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
-                if (dy > 0) {
+                val itemsCount = vacancyAdapter.itemCount
+                if (dy > 0 && itemsCount > 0) {
                     val pos =
                         (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacancyAdapter.itemCount
@@ -117,10 +120,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun clearSearch() {
+        viewModel.clearSearchResult()
         showFoundResultBar()
         searchInput?.text?.clear()
-        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
-        binding.foundResults.visibility = View.GONE
     }
 
     private fun setIconToTextView() {
@@ -134,7 +136,8 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun setPlaceholder(placeholder: PlaceholdersEnum) {
+    private fun setPlaceholder(placeholder: PlaceholdersSearchEnum) {
+        Log.d(TAG, "setPlaceholder: ${placeholder.name}")
         binding.recyclerView.visibility = View.GONE
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).visibility = View.GONE
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.GONE
@@ -142,33 +145,33 @@ class SearchFragment : Fragment() {
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility = View.GONE
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility = View.GONE
         when (placeholder) {
-            PlaceholdersEnum.SHOW_BLANK -> {
+            PlaceholdersSearchEnum.SHOW_BLANK -> {
                 binding.recyclerView.visibility = View.GONE
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.SHOW_NO_INTERNET -> {
+            PlaceholdersSearchEnum.SHOW_NO_INTERNET -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.SHOW_NO_VACANCY -> {
+            PlaceholdersSearchEnum.SHOW_NO_VACANCY -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoVacancy).visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.SHOW_PROGRESS_CENTER -> {
+            PlaceholdersSearchEnum.SHOW_PROGRESS_CENTER -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.SHOW_PROGRESS_BOTTOM -> {
+            PlaceholdersSearchEnum.SHOW_PROGRESS_BOTTOM -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.SHOW_RESULT -> {
+            PlaceholdersSearchEnum.SHOW_RESULT -> {
                 binding.recyclerView.visibility = View.VISIBLE
             }
 
-            PlaceholdersEnum.HIDE_ALL -> {}
+            PlaceholdersSearchEnum.HIDE_ALL -> {}
 
         }
     }
@@ -181,9 +184,15 @@ class SearchFragment : Fragment() {
     private fun updateScreen(state: SearchState) {
         when (state) {
             is SearchState.Content -> {
+                if (!lastSearchText.equals(newSearchText)) {
+                    vacancies.clear()
+                    lastSearchText = newSearchText
+                }
                 vacancies.addAll(state.vacancies)
                 vacancyAdapter.notifyDataSetChanged()
-                showFoundResultBar(state.foundItems)
+                Log.d(TAG, "updateScreen ${state.foundItems}")
+                if (binding.searchInput.text.isNotEmpty()) showFoundResultBar(state.foundItems)
+
             }
 
             is SearchState.Empty -> {
@@ -243,12 +252,6 @@ class SearchFragment : Fragment() {
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(binding.searchInput.windowToken, 0)
         binding.searchInput.clearFocus()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
-        binding.foundResults.visibility = View.GONE
     }
 
     companion object {
