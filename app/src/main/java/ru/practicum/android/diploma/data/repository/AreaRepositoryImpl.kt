@@ -26,7 +26,7 @@ class AreaRepositoryImpl(
             val areas = response as AreaResponse
             Resource.Success(converter.map(areas))
         } else {
-            Resource.Error(getString(context, R.string.error)+" ${response.resultCode}")
+            Resource.Error("${getString(context, R.string.error)} ${response.resultCode}")
         }
     }
 
@@ -40,7 +40,7 @@ class AreaRepositoryImpl(
             Resource.Success(converter.mapCity(areas))
 
         } else {
-            Resource.Error(getString(context, R.string.error)+" ${response.resultCode}")
+            Resource.Error("${getString(context, R.string.error)} ${response.resultCode}")
         }
     }
 
@@ -53,7 +53,7 @@ class AreaRepositoryImpl(
             val areas = response as AreaResponse
             Resource.Success(converter.mapCityAll(areas))
         } else {
-            Resource.Error(getString(context, R.string.error)+" ${response.resultCode}")
+            Resource.Error("${getString(context, R.string.error)} ${response.resultCode}")
         }
     }
 
