@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.data.conventers
 
-import android.util.Log
 import ru.practicum.android.diploma.data.dto.AreaNestedDto
 import ru.practicum.android.diploma.data.dto.AreaResponse
 import ru.practicum.android.diploma.domain.models.Area
@@ -74,7 +73,6 @@ class AreaMapper {
                 country = countries.filter { it.id == city.parentId }[0]
             )
         })
-        Log.i("Area","${nestedRegions.filter { it.name=="Ростов-на-Дону" }}")
         return nestedRegions
 
     }
