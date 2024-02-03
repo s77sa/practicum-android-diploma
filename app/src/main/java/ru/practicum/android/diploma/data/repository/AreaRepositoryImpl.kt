@@ -10,7 +10,8 @@ import ru.practicum.android.diploma.domain.api.AreaRepository
 import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.presentation.util.Resource
 
-const val ERROR_RESPONSE= "Ошибка"
+const val ERROR_RESPONSE = "Ошибка"
+
 class AreaRepositoryImpl(
     private val networkClient: NetworkClient,
     private val context: Context,
