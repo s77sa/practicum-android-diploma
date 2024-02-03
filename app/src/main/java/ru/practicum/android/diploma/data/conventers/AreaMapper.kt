@@ -12,7 +12,7 @@ class AreaMapper {
                 id = it.id,
                 name = it.name,
                 parentId = it.parentId,
-                countryName = ""
+                country = null
             )
         }
         return data
@@ -34,7 +34,7 @@ class AreaMapper {
                 id = it.id,
                 name = it.name,
                 parentId = it.parentId,
-                countryName = ""
+                country = null
             )
         }
         return data
@@ -44,6 +44,14 @@ class AreaMapper {
         val responseItemsRegions = response.items.map { area -> area.areas!! }.flatten()
         val nestedCities =
             responseItemsRegions.map { area -> area.areas!!.map { it.copy(parentId = area.parentId) } }.flatten()
+        val countries = response.items.map {
+            Area(
+                id = it.id,
+                name = it.name,
+                parentId = it.parentId,
+                country = null
+            )
+        }
         val nestedRegions = mutableListOf<Area>()
         for (region in responseItemsRegions) {
             if (region.areas?.isEmpty() == true) {
@@ -52,7 +60,7 @@ class AreaMapper {
                         id = region.id,
                         name = region.name,
                         parentId = region.parentId,
-                        countryName = response.items.filter { it.id == region.parentId }[0].name
+                        country = countries.filter { it.id == region.parentId }[0]
                     )
                 )
             }
@@ -62,7 +70,7 @@ class AreaMapper {
                 id = city.id,
                 name = city.name,
                 parentId = city.parentId,
-                countryName = response.items.filter { it.id == city.parentId }[0].name
+                country = countries.filter { it.id == city.parentId }[0]
             )
         })
         return nestedRegions
