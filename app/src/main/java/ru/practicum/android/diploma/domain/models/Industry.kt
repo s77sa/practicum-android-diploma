@@ -3,5 +3,5 @@ package ru.practicum.android.diploma.domain.models
 data class Industry(
     val id: String,
     val name: String,
-    var isChecked: Boolean
+    val isChecked: Boolean
 )
