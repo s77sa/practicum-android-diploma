@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -42,6 +44,7 @@ class SearchFragment : Fragment() {
     private var searchInput: EditText? = null
     private var iconSearch: ImageView? = null
     private var foundVacancies = 0
+    private var isNeedAddItems = true
     private var lastSearchText = ""
     private var newSearchText = ""
 
@@ -106,8 +109,8 @@ class SearchFragment : Fragment() {
                 if (dy > 0 && itemsCount > 0) {
                     val pos =
                         (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    val itemsCount = vacancyAdapter.itemCount
                     if (pos >= itemsCount - 1) {
+                        isNeedAddItems = true
                         viewModel.onNextPage()
                     }
                 }
@@ -151,7 +154,12 @@ class SearchFragment : Fragment() {
             }
 
             PlaceholdersEnum.SHOW_NO_INTERNET -> {
-                binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.VISIBLE
+                if (vacancies.size > 0) {
+                    showAnackBar()
+                    binding.recyclerView.visibility = View.VISIBLE
+                } else {
+                    binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.VISIBLE
+                }
             }
 
             PlaceholdersEnum.SHOW_NO_VACANCY -> {
@@ -159,11 +167,13 @@ class SearchFragment : Fragment() {
             }
 
             PlaceholdersEnum.SHOW_PROGRESS_CENTER -> {
-                binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility = View.VISIBLE
+                binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility =
+                    View.VISIBLE
             }
 
             PlaceholdersEnum.SHOW_PROGRESS_BOTTOM -> {
-                binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility = View.VISIBLE
+                binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility =
+                    View.VISIBLE
                 binding.recyclerView.visibility = View.VISIBLE
             }
 
@@ -172,8 +182,13 @@ class SearchFragment : Fragment() {
             }
 
             PlaceholdersEnum.HIDE_ALL -> {}
-
         }
+    }
+
+    private fun showAnackBar() {
+        Snackbar.make(binding.recyclerView, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
+            .show()
+        updateScreen(SearchState.Content(vacancies, foundVacancies))
     }
 
     private fun initRecyclerView() {
@@ -188,13 +203,11 @@ class SearchFragment : Fragment() {
                     vacancies.clear()
                     lastSearchText = newSearchText
                 }
-                vacancies.addAll(state.vacancies)
-                vacancyAdapter.notifyDataSetChanged()
-                state.foundItems.also {
-                    if (it != null) {
-                        foundVacancies = it
-                    }
+                foundVacancies = state.foundItems!!
+                if (state.vacancies.isNotEmpty() && !vacancies.contains(state.vacancies[0])) {
+                    vacancies.addAll(state.vacancies)
                 }
+                vacancyAdapter.notifyDataSetChanged()
                 showFoundResultBar(foundVacancies)
             }
 
@@ -259,13 +272,11 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
-        binding.foundResults.visibility = View.GONE
-
         if (vacancies.size > 0) {
             setPlaceholder(PlaceholdersEnum.SHOW_RESULT)
-            updateScreen(SearchState.Content(vacancies, foundVacancies))
-            binding.foundResults.isVisible = true
+        } else {
+            setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
+            binding.foundResults.visibility = View.GONE
         }
     }
 
