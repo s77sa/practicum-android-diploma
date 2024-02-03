@@ -41,6 +41,7 @@ class SearchFragment : Fragment() {
         VacanciesAdapter(clickListener = { data -> onVacancyClickDebounce?.invoke(data) }, vacancies)
     private var searchInput: EditText? = null
     private var iconSearch: ImageView? = null
+    private var foundVacancies = 0
     private var lastSearchText = ""
     private var newSearchText = ""
 
@@ -189,7 +190,12 @@ class SearchFragment : Fragment() {
                 }
                 vacancies.addAll(state.vacancies)
                 vacancyAdapter.notifyDataSetChanged()
-                showFoundResultBar(state.foundItems)
+                state.foundItems.also {
+                    if (it != null) {
+                        foundVacancies = it
+                    }
+                }
+                showFoundResultBar(foundVacancies)
             }
 
             is SearchState.Empty -> {
@@ -255,6 +261,12 @@ class SearchFragment : Fragment() {
         super.onResume()
         setPlaceholder(PlaceholdersEnum.SHOW_BLANK)
         binding.foundResults.visibility = View.GONE
+        Log.d(TAG, "onResume ${foundVacancies}")
+        if (vacancies.size>0) {
+            setPlaceholder(PlaceholdersEnum.SHOW_RESULT)
+            updateScreen(SearchState.Content(vacancies,foundVacancies))
+            binding.foundResults.isVisible=true
+        }
     }
 
     companion object {
