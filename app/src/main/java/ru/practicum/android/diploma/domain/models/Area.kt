@@ -4,5 +4,5 @@ data class Area(
     val id: String,
     val name: String,
     val parentId: String?,
-    val countryName: String?
+    val country: Area?
 )
