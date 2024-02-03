@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.data.conventers
 
-import android.util.Log
 import ru.practicum.android.diploma.data.dto.AreaNestedDto
 import ru.practicum.android.diploma.data.dto.AreaResponse
 import ru.practicum.android.diploma.domain.models.Area
@@ -28,8 +27,7 @@ class AreaMapper {
                 nestedCities.add(area)
             }
         }
-        val nestedAreasFlat = response.items.map { it.areas!! }.flatMap { it }
-        Log.i("getCitiesmapCity3", "${nestedAreasFlat}")
+        val nestedAreasFlat = response.items.map { it.areas!! }.flatten()
         nestedCities.addAll(nestedAreasFlat)
         val data = nestedCities.map {
             Area(
@@ -39,16 +37,13 @@ class AreaMapper {
                 countryName = ""
             )
         }
-        Log.i("getCitiesmapCity4", "data is ${data}")
         return data
     }
 
     fun mapCityAll(response: AreaResponse): List<Area> {
-        val responseItemsRegions = response.items.map { area -> area.areas!! }.flatMap { it }
-        Log.i("mapCityAll2", "data is ${responseItemsRegions}")
+        val responseItemsRegions = response.items.map { area -> area.areas!! }.flatten()
         val nestedCities =
-            responseItemsRegions.map { area -> area.areas!!.map { it.copy(parentId = area.parentId) } }.flatMap { it }
-        Log.i("mapCityAll3", "data is ${nestedCities}")
+            responseItemsRegions.map { area -> area.areas!!.map { it.copy(parentId = area.parentId) } }.flatten()
         val nestedRegions = mutableListOf<Area>()
         for (region in responseItemsRegions) {
             if (region.areas?.isEmpty() == true) {
