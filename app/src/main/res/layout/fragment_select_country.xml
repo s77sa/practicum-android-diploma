@@ -58,7 +58,7 @@
         app:layout_constraintHeight_max="223dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/image_error_favorite" />
+        tools:src="@drawable/il_angry_cat" />
 
     <TextView
         android:id="@+id/tv_error"

@@ -67,7 +67,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="223dp"
-            android:src="@drawable/image_error_favorite"
+            android:src="@drawable/il_angry_cat"
             android:layout_gravity="center"/>
 
         <TextView
