@@ -22,11 +22,11 @@ class AreaRepositoryImpl(
         if (response.resultCode == NO_CONNECTION) {
             return Resource.Error(getString(context, R.string.no_internet))
         }
-        if (response.resultCode == SUCCESS) {
+        return if (response.resultCode == SUCCESS) {
             val areas = response as AreaResponse
-            return Resource.Success(converter.map(areas))
+            Resource.Success(converter.map(areas))
         } else {
-            return Resource.Error("Ошибка ${response.resultCode}")
+            Resource.Error("Ошибка ${response.resultCode}")
         }
     }
 
@@ -46,7 +46,6 @@ class AreaRepositoryImpl(
 
     override suspend fun getCitiesAll(): Resource<List<Area>> {
         val response = networkClient.getAreas()
-
         if (response.resultCode == NO_CONNECTION) {
             return Resource.Error(getString(context, R.string.no_internet))
         }

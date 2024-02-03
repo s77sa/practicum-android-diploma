@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.data.conventers
 
+import android.util.Log
 import ru.practicum.android.diploma.data.dto.AreaNestedDto
 import ru.practicum.android.diploma.data.dto.AreaResponse
 import ru.practicum.android.diploma.domain.models.Area
@@ -25,16 +26,11 @@ class AreaMapper {
         for (area in responseItems) {
             if (area.areas?.isEmpty() == true) {
                 nestedCities.add(area)
-            } else {
-                val regions = area.areas
-                if (regions != null) {
-                    for (region in regions) {
-                        nestedCities.add(region)
-                    }
-                }
             }
-
         }
+        val nestedAreasFlat = response.items.map { it.areas!! }.flatMap { it }
+        Log.i("getCitiesmapCity3", "${nestedAreasFlat}")
+        nestedCities.addAll(nestedAreasFlat)
         val data = nestedCities.map {
             Area(
                 id = it.id,
@@ -43,41 +39,37 @@ class AreaMapper {
                 countryName = ""
             )
         }
+        Log.i("getCitiesmapCity4", "data is ${data}")
         return data
-
     }
 
     fun mapCityAll(response: AreaResponse): List<Area> {
-        val responseItems = response.items
+        val responseItemsRegions = response.items.map { area -> area.areas!! }.flatMap { it }
+        Log.i("mapCityAll2", "data is ${responseItemsRegions}")
+        val nestedCities =
+            responseItemsRegions.map { area -> area.areas!!.map { it.copy(parentId = area.parentId) } }.flatMap { it }
+        Log.i("mapCityAll3", "data is ${nestedCities}")
         val nestedRegions = mutableListOf<Area>()
-        for (country in responseItems) {
-            val countryName = country.name
-            for (region in country.areas!!) {
-                if (region.areas?.isEmpty() == true) {
-                    nestedRegions.add(
-                        Area(
-                            id = region.id,
-                            name = region.name,
-                            parentId = region.parentId,
-                            countryName = countryName
-                        )
+        for (region in responseItemsRegions) {
+            if (region.areas?.isEmpty() == true) {
+                nestedRegions.add(
+                    Area(
+                        id = region.id,
+                        name = region.name,
+                        parentId = region.parentId,
+                        countryName = ""
                     )
-                } else {
-                    for (area in region.areas!!) {
-                        nestedRegions.add(
-                            Area(
-                                id = area.id,
-                                name = area.name,
-                                parentId = area.parentId,
-                                countryName = countryName
-                            )
-                        )
-                    }
-
-
-                }
+                )
             }
         }
+        nestedRegions.addAll(nestedCities.map {
+            Area(
+                id = it.id,
+                name = it.name,
+                parentId = it.parentId,
+                countryName = ""
+            )
+        })
         return nestedRegions
 
     }
