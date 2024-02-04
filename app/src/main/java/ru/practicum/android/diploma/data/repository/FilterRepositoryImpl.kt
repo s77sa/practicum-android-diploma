@@ -36,4 +36,3 @@ class FilterRepositoryImpl(val sharedPreferences: SharedPreferences) : FilterRep
             .apply()
     }
 }
-
