@@ -11,4 +11,8 @@ interface FiltersInteractor {
     fun applyCountryFilter(country: Country)
     fun applyRegionFilter(region:Region)
     fun searchRegionByName(regionName: String): Flow<Resource<List<Region>>>
+    fun getSelectedRegion(): Region
+    fun getSelectedCountry(): Country
+    fun clearCountryFilter()
+    fun clearRegionFilter()
 }
