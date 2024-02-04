@@ -35,7 +35,15 @@ class VacancyViewModel(
                 }
 
                 is Resource.Error -> {
-                    _vacancyScreenState.value = result.message?.let { VacancyScreenState.Error(it) }
+                    when (val resultDb = vacancyInteractor.getDbDetailsById(id)) {
+                        is Resource.Success -> {
+                            _vacancyScreenState.value = VacancyScreenState.Success(resultDb.data!!)
+                        }
+
+                        else -> {
+                            _vacancyScreenState.value = result.message?.let { VacancyScreenState.Error(it) }
+                        }
+                    }
                 }
             }
         }

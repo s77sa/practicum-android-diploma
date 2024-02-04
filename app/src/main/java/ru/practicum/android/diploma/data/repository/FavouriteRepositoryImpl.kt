@@ -1,16 +1,21 @@
 package ru.practicum.android.diploma.data.repository
 
+import android.content.Context
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.converter.VacancyConverter
 import ru.practicum.android.diploma.domain.api.FavouriteRepository
 import ru.practicum.android.diploma.domain.models.FavouriteStates
 import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.presentation.util.Resource
 
 class FavouriteRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val favouriteConverter: VacancyConverter,
+    private val context: Context
 ) : FavouriteRepository {
     override suspend fun addFavourite(vacancy: Vacancy) {
         appDatabase.favouriteDao().addFavourite(favouriteConverter.map(vacancy))
@@ -32,9 +37,6 @@ class FavouriteRepositoryImpl(
             }
             emit(Pair(FavouriteStates.Success, mappedFavourites.toMutableList()))
         }
-        // } catch (e: Exception) {
-        //     emit(Pair(FavouriteStates.Error, mutableListOf()))
-        // }
     }
 
     override fun getFavourite(vacancyId: String): Flow<List<Vacancy>> = flow {
@@ -43,7 +45,17 @@ class FavouriteRepositoryImpl(
             favouriteConverter.map(vacancy)
         })
     }
+
     override suspend fun getFavId(): List<String> {
         return appDatabase.favouriteDao().getFavId()
+    }
+
+    override suspend fun getDbDetailById(vacancyId: String): Resource<Vacancy> {
+        return if (appDatabase.favouriteDao().getVacancyById(vacancyId) != null) {
+            val vacancyDb = appDatabase.favouriteDao().getVacancyById(vacancyId)
+            Resource.Success(favouriteConverter.map(vacancyDb))
+        } else {
+            Resource.Error(ContextCompat.getString(context, R.string.no_internet))
+        }
     }
 }

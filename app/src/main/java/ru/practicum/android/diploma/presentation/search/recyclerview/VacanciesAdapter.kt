@@ -23,8 +23,4 @@ class VacanciesAdapter(
         holder.bind(vacancies[position])
         holder.itemView.setOnClickListener { this@VacanciesAdapter.clickListener(vacancies[position]) }
     }
-
-    fun interface ClickListener {
-        fun onClick(vacancy: Vacancy)
-    }
 }
