@@ -20,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -41,6 +42,8 @@ class SearchFragment : Fragment() {
         VacanciesAdapter(clickListener = { data -> onVacancyClickDebounce?.invoke(data) }, vacancies)
     private var searchInput: EditText? = null
     private var iconSearch: ImageView? = null
+    private var foundVacancies = 0
+    private var isNeedAddItems = true
     private var lastSearchText = ""
     private var newSearchText = ""
 
@@ -82,12 +85,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun initListeners() {
-        searchInput?.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                // Empty
-            }
-        }
-
         searchInput?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -106,8 +103,8 @@ class SearchFragment : Fragment() {
                 if (dy > 0 && itemsCount > 0) {
                     val pos =
                         (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    val itemsCount = vacancyAdapter.itemCount
                     if (pos >= itemsCount - 1) {
+                        isNeedAddItems = true
                         viewModel.onNextPage()
                     }
                 }
@@ -151,7 +148,12 @@ class SearchFragment : Fragment() {
             }
 
             PlaceholdersSearchEnum.SHOW_NO_INTERNET -> {
-                binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.VISIBLE
+                if (vacancies.size > 0) {
+                    showAnackBar()
+                    binding.recyclerView.visibility = View.VISIBLE
+                } else {
+                    binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.VISIBLE
+                }
             }
 
             PlaceholdersSearchEnum.SHOW_NO_VACANCY -> {
@@ -172,8 +174,13 @@ class SearchFragment : Fragment() {
             }
 
             PlaceholdersSearchEnum.HIDE_ALL -> {}
-
         }
+    }
+
+    private fun showAnackBar() {
+        Snackbar.make(binding.recyclerView, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
+            .show()
+        updateScreen(SearchState.Content(vacancies, foundVacancies))
     }
 
     private fun initRecyclerView() {
@@ -188,11 +195,12 @@ class SearchFragment : Fragment() {
                     vacancies.clear()
                     lastSearchText = newSearchText
                 }
-                vacancies.addAll(state.vacancies)
+                foundVacancies = state.foundItems!!
+                if (state.vacancies.isNotEmpty() && !vacancies.contains(state.vacancies[0])) {
+                    vacancies.addAll(state.vacancies)
+                }
                 vacancyAdapter.notifyDataSetChanged()
-                Log.d(TAG, "updateScreen ${state.foundItems}")
-                if (binding.searchInput.text.isNotEmpty()) showFoundResultBar(state.foundItems)
-
+                showFoundResultBar(foundVacancies)
             }
 
             is SearchState.Empty -> {
@@ -252,6 +260,16 @@ class SearchFragment : Fragment() {
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(binding.searchInput.windowToken, 0)
         binding.searchInput.clearFocus()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (vacancies.size > 0) {
+            setPlaceholder(PlaceholdersSearchEnum.SHOW_RESULT)
+        } else {
+            setPlaceholder(PlaceholdersSearchEnum.SHOW_BLANK)
+            binding.foundResults.visibility = View.GONE
+        }
     }
 
     companion object {
