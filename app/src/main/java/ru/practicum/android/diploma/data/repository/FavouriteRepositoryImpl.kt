@@ -1,14 +1,12 @@
 package ru.practicum.android.diploma.data.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.converter.VacancyConverter
-import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.domain.api.FavouriteRepository
 import ru.practicum.android.diploma.domain.models.FavouriteStates
 import ru.practicum.android.diploma.domain.models.Vacancy
@@ -53,12 +51,11 @@ class FavouriteRepositoryImpl(
     }
 
     override suspend fun getDbDetailById(vacancyId: String): Resource<Vacancy> {
-        try {
+        return if (appDatabase.favouriteDao().getVacancyById(vacancyId) != null) {
             val vacancyDb = appDatabase.favouriteDao().getVacancyById(vacancyId)
-            return Resource.Success(favouriteConverter.map(vacancyDb))
-        } catch (e: NullPointerException) {
-            Log.i(RetrofitNetworkClient.TAG, "$e")
-            return Resource.Error(ContextCompat.getString(context, R.string.no_internet))
+            Resource.Success(favouriteConverter.map(vacancyDb))
+        } else {
+            Resource.Error(ContextCompat.getString(context, R.string.no_internet))
         }
     }
 }
