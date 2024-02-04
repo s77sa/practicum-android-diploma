@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.converter.VacancyConverter
-import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
+import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.domain.api.FavouriteRepository
 import ru.practicum.android.diploma.domain.models.FavouriteStates
 import ru.practicum.android.diploma.domain.models.Vacancy
@@ -57,6 +57,7 @@ class FavouriteRepositoryImpl(
             val vacancyDb = appDatabase.favouriteDao().getVacancyById(vacancyId)
             return Resource.Success(favouriteConverter.map(vacancyDb))
         } catch (e: NullPointerException) {
+            Log.i(RetrofitNetworkClient.TAG, "$e")
             return Resource.Error(ContextCompat.getString(context, R.string.no_internet))
         }
     }
