@@ -23,20 +23,7 @@ class SelectRegionViewModel(
         _regionSelectionState.value = RegionSelectionState.Loading
         viewModelScope.launch {
             filtersInteractor.getRegions(countryId).collect { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        val regions = resource.data ?: emptyList()
-                        if (regions.isNotEmpty()) {
-                            _regionSelectionState.value = RegionSelectionState.Success(regions)
-                        } else {
-                            _regionSelectionState.value = RegionSelectionState.NoData
-                        }
-                    }
-
-                    is Resource.Error -> {
-                        _regionSelectionState.value = RegionSelectionState.Error
-                    }
-                }
+                processRegionResult(resource)
             }
         }
     }
@@ -54,7 +41,26 @@ class SelectRegionViewModel(
 
     private fun searchRegionByName(regionName: String) {
         viewModelScope.launch {
-            getRegions(regionName)
+            filtersInteractor.searchRegionByName(regionName).collect { resource ->
+                processRegionResult(resource)
+            }
+        }
+    }
+
+    private suspend fun processRegionResult(resource: Resource<List<Region>>) {
+        when (resource) {
+            is Resource.Success -> {
+                val regions = resource.data ?: emptyList()
+                if (regions.isNotEmpty()) {
+                    _regionSelectionState.value = RegionSelectionState.Success(regions)
+                } else {
+                    _regionSelectionState.value = RegionSelectionState.NoData
+                }
+            }
+
+            is Resource.Error -> {
+                _regionSelectionState.value = RegionSelectionState.Error
+            }
         }
     }
 }
