@@ -67,7 +67,8 @@ class SearchViewModel(
                             showSalary = true,
                             industry = null,
                             salary = 100_000,
-                        ), page = page
+                        ),
+                        page = page
                     )
                     .collect { pair ->
                         processResult(pair.first, pair.second, searchInteractor.foundItems)
