@@ -74,4 +74,8 @@
     <string name="filter_no_show_salary">Не показывать без зарплаты</string>
     <string name="filter_settings_apply">Применить</string>
     <string name="filter_settings_reset">Сбросить</string>
+    <string name="net_error">Ошибка сети</string>
+    <string name="placeholder_no_region">Такого региона нет</string>
+    <string name="placeholder_no_region_list">Не удалось получить\nсписок</string>
+    <string name="placeholder_server_error">Ошибка сервера</string>
 </resources>
