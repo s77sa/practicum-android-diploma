@@ -76,7 +76,6 @@ class SearchFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.placeholderStatusData.observe(viewLifecycleOwner) {
-            Log.d(TAG, "placeholderStatusData: ${it.name}")
             setPlaceholder(it)
         }
         viewModel.observeState().observe(viewLifecycleOwner) {
@@ -134,7 +133,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun setPlaceholder(placeholder: PlaceholdersSearchEnum) {
-        Log.d(TAG, "setPlaceholder: ${placeholder.name}")
         binding.recyclerView.visibility = View.GONE
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderBlanc).visibility = View.GONE
         binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.GONE
@@ -200,7 +198,7 @@ class SearchFragment : Fragment() {
                     vacancies.addAll(state.vacancies)
                 }
                 vacancyAdapter.notifyDataSetChanged()
-                showFoundResultBar(foundVacancies)
+                if (binding.searchInput.text.isNotEmpty()) showFoundResultBar(foundVacancies)
             }
 
             is SearchState.Empty -> {

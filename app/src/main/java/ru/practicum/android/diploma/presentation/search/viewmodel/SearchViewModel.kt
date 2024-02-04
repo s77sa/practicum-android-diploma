@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.domain.api.SearchInteractor
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.search.PlaceholdersSearchEnum
 import ru.practicum.android.diploma.presentation.search.models.SearchState
+import ru.practicum.android.diploma.presentation.util.IsLastPage
 import ru.practicum.android.diploma.presentation.util.debounce
 
 class SearchViewModel(
@@ -56,7 +57,7 @@ class SearchViewModel(
             if (page == 0) {
                 setPlaceholder(PlaceholdersSearchEnum.SHOW_PROGRESS_CENTER)
             } else {
-                setPlaceholder(PlaceholdersSearchEnum.SHOW_PROGRESS_BOTTOM)
+                IsLastPage.IS_LAST_PAGE = true
             }
             viewModelScope.launch {
                 searchInteractor
