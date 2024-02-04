@@ -20,7 +20,7 @@ class SelectRegionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSelectRegionBinding.inflate(inflater, container, false)
-        setPlaceholder(PlaceholdersRegionEnum.HIDE_ALL)
+        setPlaceholder(PlaceholdersRegionEnum.HIDE_ALL) // Добавил, что бы детект не ругался, ПОТОМ УБРАТЬ
         return binding.root
     }
 

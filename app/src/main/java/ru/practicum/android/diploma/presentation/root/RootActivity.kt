@@ -7,11 +7,14 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
+import ru.practicum.android.diploma.domain.models.FilterSettings
 
-class RootActivity : AppCompatActivity() {
+class RootActivity : AppCompatActivity(), FilterSettingsStorage {
     val binding by lazy {
         ActivityRootBinding.inflate(layoutInflater)
     }
+
+    private var filterStorage: FilterSettings? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +35,20 @@ class RootActivity : AppCompatActivity() {
         }
     }
 
-    fun showBottomNavigationView() {
+    private fun showBottomNavigationView() {
         binding.bottomNavigationView.isVisible = true
     }
 
-    fun hideBottomNavigationView() {
+    private fun hideBottomNavigationView() {
         binding.bottomNavigationView.isVisible = false
+    }
+
+    override fun getFilters(): FilterSettings? {
+        return filterStorage
+    }
+
+    override fun setFilters(filterSettings: FilterSettings) {
+        filterStorage = filterSettings
     }
 
 }
