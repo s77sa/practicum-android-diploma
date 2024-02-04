@@ -20,7 +20,7 @@ val viewModelModule = module {
         FavouriteFragmentViewModel(get())
     }
     single<ExternalNavigatorRepository> { ExternalNavigatorRepositoryImpl(get()) }
-    single<VacancyInteractor> { VacancyInteractorImpl(get(), get()) }
+    single<VacancyInteractor> { VacancyInteractorImpl(get(), get(), get()) }
     viewModel<VacancyViewModel> {
         VacancyViewModel(vacancyInteractor = get(), favouriteInteractor = get())
     }

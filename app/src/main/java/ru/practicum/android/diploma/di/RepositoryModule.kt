@@ -12,11 +12,11 @@ val repositoryModule = module {
     single<SearchRepository> {
         SearchRepositoryImpl(get(), get(), get(), get())
     }
-    single { FavouriteRepositoryImpl(get(), get()) }
+
     single { VacancyConverter() }
 
     single<FavouriteRepository> {
-        FavouriteRepositoryImpl(get(), get())
+        FavouriteRepositoryImpl(get(), get(), get())
     }
 
 }

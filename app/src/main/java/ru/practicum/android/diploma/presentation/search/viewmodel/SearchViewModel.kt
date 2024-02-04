@@ -75,7 +75,7 @@ class SearchViewModel(
                     }
             }
         }
-    } // ToDo Протестить , заменить часть параметров VacancyRequest на Фильтр")
+    }
 
     private fun processResult(foundVacancies: List<Vacancy>?, errorMessage: String?, foundItems: Int?) {
         val vacancyList = mutableListOf<Vacancy>()
@@ -136,6 +136,5 @@ class SearchViewModel(
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val RELOAD_DEBOUNCE_DELAY = 300L
         private const val ITEMS_PER_PAGE: Int = 20
-        private val TAG = SearchViewModel::class.java.simpleName
     }
 }
