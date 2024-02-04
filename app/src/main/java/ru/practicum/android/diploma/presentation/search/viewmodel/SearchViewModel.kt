@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.data.dto.VacancyRequest
 import ru.practicum.android.diploma.domain.api.SearchInteractor
+import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.search.PlaceholdersSearchEnum
 import ru.practicum.android.diploma.presentation.search.models.SearchState
@@ -61,14 +61,13 @@ class SearchViewModel(
             viewModelScope.launch {
                 searchInteractor
                     .searchVacancies(
-                        VacancyRequest(
-                            changedText,
+                        changedText,
+                        Filter(
                             area = "113",
                             showSalary = true,
                             industry = null,
                             salary = 100_000,
-                            page = page
-                        ).map()
+                        ), page = page
                     )
                     .collect { pair ->
                         processResult(pair.first, pair.second, searchInteractor.foundItems)
