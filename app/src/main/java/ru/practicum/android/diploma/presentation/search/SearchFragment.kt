@@ -198,7 +198,7 @@ class SearchFragment : Fragment() {
                     vacancies.addAll(state.vacancies)
                 }
                 vacancyAdapter.notifyDataSetChanged()
-                showFoundResultBar(foundVacancies)
+                if (binding.searchInput.text.isNotEmpty()) showFoundResultBar(foundVacancies)
             }
 
             is SearchState.Empty -> {
