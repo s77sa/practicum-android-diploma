@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectWorkplaceBinding
+import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectWorkplaceViewModel
 
 class SelectWorkplaceFragment : Fragment() {
     private var _binding: FragmentSelectWorkplaceBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: SelectWorkplaceViewModel by viewModel()
 
     override fun onCreateView(
 
