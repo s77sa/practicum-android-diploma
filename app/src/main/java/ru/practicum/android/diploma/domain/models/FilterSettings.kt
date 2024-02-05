@@ -4,6 +4,5 @@ data class FilterSettings(
     val country: Country?,
     val areaPlain: AreaPlain?,
     val industry: Industry?,
-    val expectedSalary: Int,
-    val notShowWithoutSalary: Boolean
+    val plainFilterSettings: PlainFilterSettings?
 )

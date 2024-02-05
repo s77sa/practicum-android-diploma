@@ -29,7 +29,7 @@ class SelectRegionFragment : Fragment() {
         return binding.root
     }
 
-    private fun initClickListeners(){
+    private fun initClickListeners() {
         binding.selectRegionBackArrowImageview.setOnClickListener {
             findNavController().popBackStack()
         }

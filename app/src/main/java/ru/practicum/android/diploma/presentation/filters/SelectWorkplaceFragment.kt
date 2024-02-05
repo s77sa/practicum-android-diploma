@@ -26,7 +26,7 @@ class SelectWorkplaceFragment : Fragment() {
         return binding.root
     }
 
-    private fun initClickListeners(){
+    private fun initClickListeners() {
         binding.selectWorkplaceBack.setOnClickListener {
             findNavController().popBackStack()
         }
