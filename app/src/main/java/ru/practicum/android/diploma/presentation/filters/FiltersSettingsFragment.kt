@@ -13,12 +13,17 @@ import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFiltersSettingsBinding
+import ru.practicum.android.diploma.domain.models.Area
+import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FiltersSettingsViewModel
 
 class FiltersSettingsFragment : Fragment() {
     private var _binding: FragmentFiltersSettingsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: FiltersSettingsViewModel by viewModel()
+    private var country: String? = null
+    private var area: String? = null
 
     override fun onCreateView(
 
@@ -68,6 +73,54 @@ class FiltersSettingsFragment : Fragment() {
                 renderCheckbox(it.notShowWithoutSalary)
                 renderExpectedSalary(it.expectedSalary)
             }
+        }
+
+        viewModel.countryData.observe(viewLifecycleOwner) {
+            setCountryValue(it)
+        }
+
+        viewModel.areaData.observe(viewLifecycleOwner) {
+            setAreaValue(it)
+        }
+
+        viewModel.industryData.observe(viewLifecycleOwner) {
+            renderIndustryTextView(it)
+        }
+    }
+
+    private fun setCountryValue(value: Country?) {
+        if (value != null) {
+            country = value.name
+        } else {
+            country = "Country=null" // For test
+        }
+        renderWorkplaceTextView()
+    }
+
+    private fun setAreaValue(value: Area?) {
+        if (value != null) {
+            area = value.name
+        } else {
+            area = "Area=null" // For test
+        }
+        renderWorkplaceTextView()
+    }
+
+    private fun renderWorkplaceTextView() {
+        if (country?.isNotEmpty() == true) {
+            (binding.workplaceEditText as TextView).text = country
+            if (area?.isNotEmpty() == true) {
+                val text = "$country, $area"
+                (binding.workplaceEditText as TextView).text = text
+            }
+        }
+    }
+
+    private fun renderIndustryTextView(value: Industry?) {
+        if (value != null) {
+            (binding.industryEditText as TextView).text = value.name
+        } else {
+            (binding.industryEditText as TextView).text = "Industry=null" // For test
         }
     }
 
