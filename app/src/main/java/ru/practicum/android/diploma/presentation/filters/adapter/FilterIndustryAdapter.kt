@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.presentation.filters.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.ItemIndustryBinding
@@ -28,3 +29,4 @@ class FilterIndustryAdapter(val onIndustryClickedCB: (Industry) -> Unit) :
         }
     }
 }
+
