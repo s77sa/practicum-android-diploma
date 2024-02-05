@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFiltersSettingsBinding
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FiltersSettingsViewModel
 
@@ -29,6 +30,14 @@ class FiltersSettingsFragment : Fragment() {
     private fun initClickListeners() {
         binding.filterSettingsHeaderBack.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.workplaceForward.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectWorkplaceFragment)
+        }
+
+        binding.industryForward.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectIndustryFragment)
         }
     }
 }
