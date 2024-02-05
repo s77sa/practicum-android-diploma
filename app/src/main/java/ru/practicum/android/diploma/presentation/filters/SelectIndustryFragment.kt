@@ -45,53 +45,57 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recyclerFilterIndustry.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerFilterIndustry.adapter = adapter
-        viewModel.getState().observe(viewLifecycleOwner) {
-            when (it) { FilterIndustryStates.ConnectionError -> {
-                    binding.recyclerFilterIndustry.visibility = GONE
-                    binding.pbLoading.visibility = GONE
-                    binding.filterSettingsApply.visibility = GONE
-                    binding.tvError.visibility = VISIBLE
-                    binding.ivError.visibility = VISIBLE
-                    binding.tvError.setText(R.string.no_internet)
-                    binding.ivError.setImageResource(R.drawable.il_scull) }
-                FilterIndustryStates.Loading -> {
-                    binding.pbLoading.visibility = VISIBLE
-                    binding.filterSettingsApply.visibility = GONE
-                    binding.tvError.visibility = GONE
-                    binding.ivError.visibility = GONE }
-                FilterIndustryStates.ServerError -> {
-                    binding.recyclerFilterIndustry.visibility = GONE
-                    binding.pbLoading.visibility = GONE
-                    binding.filterSettingsApply.visibility = GONE
-                    binding.tvError.visibility = VISIBLE
-                    binding.ivError.visibility = VISIBLE
-                    binding.tvError.setText(R.string.server_error)
-                    binding.ivError.setImageResource(R.drawable.il_3_server_cry) }
-                is FilterIndustryStates.Success -> {
-                    binding.recyclerFilterIndustry.visibility = VISIBLE
-                    binding.pbLoading.visibility = GONE
-                    adapter.industries.clear()
-                    adapter.industries = it.industries.toMutableList()
-                    adapter.notifyDataSetChanged()
-                    binding.filterSettingsApply.visibility = GONE
-                    binding.tvError.visibility = GONE
-                    binding.ivError.visibility = GONE
-                    viewModel.isChecked() }
-                FilterIndustryStates.HasSelected -> {
-                    binding.filterSettingsApply.visibility = VISIBLE
-                    binding.pbLoading.visibility = GONE }
-                FilterIndustryStates.Empty -> {
-                    binding.recyclerFilterIndustry.visibility = GONE
-                    binding.pbLoading.visibility = GONE
-                    binding.filterSettingsApply.visibility = GONE
-                    binding.tvError.visibility = VISIBLE
-                    binding.ivError.visibility = VISIBLE
-                    binding.tvError.setText(R.string.no_such_industry)
-                    binding.ivError.setImageResource(R.drawable.il_angry_cat) } } }
+        binding.recyclerFilterIndustry.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = adapter
+        }
+        viewModel.getState().observe(viewLifecycleOwner) { state ->
+            binding.recyclerFilterIndustry.visibility = when (state) {
+                FilterIndustryStates.ConnectionError, FilterIndustryStates.ServerError,
+                FilterIndustryStates.Empty -> GONE
+                else -> VISIBLE
+            }
+            binding.pbLoading.visibility = when (state) {
+                FilterIndustryStates.ConnectionError, FilterIndustryStates.Loading,
+                FilterIndustryStates.ServerError, FilterIndustryStates.Empty -> GONE
+                else -> VISIBLE
+            }
+            binding.filterSettingsApply.visibility = when (state) {
+                FilterIndustryStates.HasSelected -> VISIBLE
+                else -> GONE
+            }
+            binding.tvError.visibility = when (state) {
+                FilterIndustryStates.ConnectionError, FilterIndustryStates.ServerError,
+                FilterIndustryStates.Empty -> VISIBLE
+                else -> GONE
+            }
+            binding.ivError.visibility = when (state) {
+                FilterIndustryStates.ConnectionError, FilterIndustryStates.ServerError,
+                FilterIndustryStates.Empty -> VISIBLE
+                else -> GONE
+            }
+            when (state) {
+                FilterIndustryStates.ConnectionError -> R.string.no_internet
+                FilterIndustryStates.ServerError -> R.string.server_error
+                FilterIndustryStates.Empty -> R.string.no_such_industry
+                else -> null
+            }?.let { binding.tvError.setText(it) }
+            when (state) {
+                FilterIndustryStates.ConnectionError -> R.drawable.il_scull
+                FilterIndustryStates.ServerError -> R.drawable.il_3_server_cry
+                FilterIndustryStates.Empty -> R.drawable.il_angry_cat
+                else -> null
+            }?.let { binding.ivError.setImageResource(it) }
+            if (state is FilterIndustryStates.Success) {
+                adapter.industries.clear()
+                adapter.industries = state.industries.toMutableList()
+                adapter.notifyDataSetChanged()
+                viewModel.isChecked()
+            }
+        }
         viewModel.getIndustries()
-        initListeners() }
+        initListeners()
+    }
 
     private fun initListeners() {
         binding.etSearch.addTextChangedListener(textWatcherListener())
