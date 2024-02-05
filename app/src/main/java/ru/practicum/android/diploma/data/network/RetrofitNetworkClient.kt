@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.practicum.android.diploma.data.dto.AreaRequest
 import ru.practicum.android.diploma.data.dto.AreaResponse
 import ru.practicum.android.diploma.data.dto.IndustryResponse
 import ru.practicum.android.diploma.data.dto.Response
@@ -88,12 +89,12 @@ class RetrofitNetworkClient(
         }
     }
 
-    override suspend fun getNestedAreas(id: String): Response {
+    override suspend fun getNestedAreas(request: AreaRequest): Response {
         if (!isConnected()) {
             return Response().apply { resultCode = -1 }
         }
         return withContext(Dispatchers.IO) {
-            val response = hhApi.getNestedArea(id)
+            val response = hhApi.getNestedArea(request.expression)
             when (response.isSuccessful) {
                 true -> {
                     AreaResponse().apply {

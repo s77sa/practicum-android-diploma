@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.content.ContextCompat.getString
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.conventers.AreaMapper
+import ru.practicum.android.diploma.data.dto.AreaRequest
 import ru.practicum.android.diploma.data.dto.AreaResponse
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.domain.api.AreaRepository
@@ -30,8 +31,8 @@ class AreaRepositoryImpl(
         }
     }
 
-    override suspend fun getCities(countryId: String): Resource<List<Area>> {
-        val response = networkClient.getNestedAreas(countryId)
+    override suspend fun getCities(expression: String): Resource<List<Area>> {
+        val response = networkClient.getNestedAreas(AreaRequest(expression))
         if (response.resultCode == NO_CONNECTION) {
             return Resource.Error(getString(context, R.string.no_internet))
         }
