@@ -49,6 +49,7 @@ class RetrofitNetworkClient(
         if (!isConnected()) {
             return Response().apply { resultCode = -1 }
         }
+
         return withContext(Dispatchers.IO) {
             val response = hhApi.getVacancy(id)
 
@@ -93,8 +94,6 @@ class RetrofitNetworkClient(
         }
         return withContext(Dispatchers.IO) {
             val response = hhApi.getNestedArea(id)
-//            val responseBody = response.body()?.areas?.map { it.areas }
-
             when (response.isSuccessful) {
                 true -> {
                     AreaResponse().apply {
@@ -146,6 +145,7 @@ class RetrofitNetworkClient(
         }
         return false
     }
+
     companion object {
         const val TAG = "_TAG"
     }

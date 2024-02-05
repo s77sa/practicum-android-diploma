@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
+import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectRegionViewModel
 
 class SelectRegionFragment : Fragment() {
     private var _binding: FragmentSelectRegionBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: SelectRegionViewModel by viewModel()
 
     override fun onCreateView(
 
@@ -21,7 +25,14 @@ class SelectRegionFragment : Fragment() {
     ): View {
         _binding = FragmentSelectRegionBinding.inflate(inflater, container, false)
         setPlaceholder(PlaceholdersRegionEnum.HIDE_ALL) // Добавил, что бы детект не ругался, ПОТОМ УБРАТЬ
+        initClickListeners()
         return binding.root
+    }
+
+    private fun initClickListeners() {
+        binding.selectRegionBackArrowImageview.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun setPlaceholder(placeholder: PlaceholdersRegionEnum) {

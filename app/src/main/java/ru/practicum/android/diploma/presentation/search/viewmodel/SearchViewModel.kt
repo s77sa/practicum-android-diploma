@@ -8,11 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.data.dto.VacancyRequest
 import ru.practicum.android.diploma.domain.api.SearchInteractor
+import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.search.PlaceholdersSearchEnum
 import ru.practicum.android.diploma.presentation.search.models.SearchState
+import ru.practicum.android.diploma.presentation.util.IsLastPage
 import ru.practicum.android.diploma.presentation.util.debounce
 
 class SearchViewModel(
@@ -56,26 +57,26 @@ class SearchViewModel(
             if (page == 0) {
                 setPlaceholder(PlaceholdersSearchEnum.SHOW_PROGRESS_CENTER)
             } else {
-                setPlaceholder(PlaceholdersSearchEnum.SHOW_PROGRESS_BOTTOM)
+                IsLastPage.IS_LAST_PAGE = true
             }
             viewModelScope.launch {
                 searchInteractor
                     .searchVacancies(
-                        VacancyRequest(
-                            changedText,
+                        changedText,
+                        Filter(
                             area = "113",
                             showSalary = true,
                             industry = null,
                             salary = 100_000,
-                            page = page
-                        ).map()
+                        ),
+                        page = page
                     )
                     .collect { pair ->
                         processResult(pair.first, pair.second, searchInteractor.foundItems)
                     }
             }
         }
-    } // ToDo Протестить , заменить часть параметров VacancyRequest на Фильтр")
+    }
 
     private fun processResult(foundVacancies: List<Vacancy>?, errorMessage: String?, foundItems: Int?) {
         val vacancyList = mutableListOf<Vacancy>()
@@ -136,6 +137,5 @@ class SearchViewModel(
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val RELOAD_DEBOUNCE_DELAY = 300L
         private const val ITEMS_PER_PAGE: Int = 20
-        private val TAG = SearchViewModel::class.java.simpleName
     }
 }
