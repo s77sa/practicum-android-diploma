@@ -7,7 +7,9 @@ import ru.practicum.android.diploma.domain.models.FilterSettings
 import ru.practicum.android.diploma.domain.models.PlainFilterSettings
 import ru.practicum.android.diploma.presentation.util.DataTransfer
 
-class FiltersSettingsViewModel(context: Context) : ViewModel() {
+class FiltersSettingsViewModel(
+    private val context: Context
+) : ViewModel() {
 
     private val _filterSettingsData = MutableLiveData<FilterSettings?>()
     val filterSettingsData get() = _filterSettingsData

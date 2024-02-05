@@ -23,6 +23,7 @@ class SelectIndustryFragment : Fragment() {
     ): View {
         _binding = FragmentSelectIndustryBinding.inflate(inflater, container, false)
         initClickListeners()
+        viewModel.loadIndustryList()
         return binding.root
     }
 
