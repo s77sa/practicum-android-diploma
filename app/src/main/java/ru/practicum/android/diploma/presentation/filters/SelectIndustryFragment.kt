@@ -26,7 +26,8 @@ import ru.practicum.android.diploma.presentation.filters.adapter.FilterIndustryA
 import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectIndustryViewModel
 
 class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
-    private lateinit var binding: FragmentSelectIndustryBinding
+    private var _binding: FragmentSelectIndustryBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: SelectIndustryViewModel by viewModel()
     private val adapter = FilterIndustryAdapter {
         chooseIndustry(it)
@@ -38,16 +39,14 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSelectIndustryBinding.inflate(inflater, container, false)
+        _binding = FragmentSelectIndustryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.recyclerFilterIndustry.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerFilterIndustry.adapter = adapter
-
         viewModel.getState().observe(viewLifecycleOwner) {
             when (it) {
                 FilterIndustryStates.ConnectionError -> {
@@ -59,14 +58,12 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     binding.tvError.setText(R.string.no_internet)
                     binding.ivError.setImageResource(R.drawable.il_scull)
                 }
-
                 FilterIndustryStates.Loading -> {
                     binding.pbLoading.visibility = VISIBLE
                     binding.filterSettingsApply.visibility = GONE
                     binding.tvError.visibility = GONE
                     binding.ivError.visibility = GONE
                 }
-
                 FilterIndustryStates.ServerError -> {
                     binding.recyclerFilterIndustry.visibility = GONE
                     binding.pbLoading.visibility = GONE
@@ -76,7 +73,6 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     binding.tvError.setText(R.string.server_error)
                     binding.ivError.setImageResource(R.drawable.il_3_server_cry)
                 }
-
                 is FilterIndustryStates.Success -> {
                     binding.recyclerFilterIndustry.visibility = VISIBLE
                     binding.pbLoading.visibility = GONE
@@ -88,12 +84,10 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     binding.ivError.visibility = GONE
                     viewModel.isChecked()
                 }
-
                 FilterIndustryStates.HasSelected -> {
                     binding.filterSettingsApply.visibility = VISIBLE
                     binding.pbLoading.visibility = GONE
                 }
-
                 FilterIndustryStates.Empty -> {
                     binding.recyclerFilterIndustry.visibility = GONE
                     binding.pbLoading.visibility = GONE
@@ -139,7 +133,6 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
     private fun textWatcherListener() = object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            //
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -168,10 +161,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             }
         }
 
-        override fun afterTextChanged(p0: Editable?) {
-            //
-        }
-
+        override fun afterTextChanged(p0: Editable?) {}
     }
 
     private fun chooseIndustry(industry: Industry) {
@@ -184,4 +174,3 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         const val SEARCH_DEBOUNCE_DELAY_MILS = 2000L
     }
 }
-

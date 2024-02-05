@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.models.FilterIndustryStates
 import ru.practicum.android.diploma.domain.models.Industry
-import ru.practicum.android.diploma.presentation.util.Resource
 
 class SelectIndustryViewModel(
     private val industryInteractor: IndustryInteractor
@@ -21,37 +20,20 @@ class SelectIndustryViewModel(
     fun getIndustries() {
         stateLiveData.postValue(FilterIndustryStates.Loading)
         viewModelScope.launch {
-            industryInteractor//
+            // industryInteractor
         }
     }
-
 
     fun getIndustriesByName(industry: String) {
         stateLiveData.postValue(FilterIndustryStates.Loading)
         viewModelScope.launch {
-            industryInteractor//
+            // industryInteractor
         }
     }
 
     fun isChecked() {
         viewModelScope.launch {
-            industryInteractor//
-        }
-    }
-
-    private fun postIndustry(dto: Resource<List<Industry>>) {
-        when (dto) {
-            is Resource.Error -> {
-                stateLiveData.postValue(FilterIndustryStates.ServerError)
-            }
-
-            is Resource.Success -> {
-                if (dto.data!!.size > 0) {
-                    stateLiveData.postValue(FilterIndustryStates.Success(dto.data))
-                } else {
-                    stateLiveData.postValue(FilterIndustryStates.Empty)
-                }
-            }
+            // industryInteractor
         }
     }
 
@@ -64,7 +46,5 @@ class SelectIndustryViewModel(
         viewModelScope.launch {
             industryInteractor
         }
-
     }
-
 }
