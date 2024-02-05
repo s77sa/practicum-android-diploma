@@ -58,12 +58,14 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     binding.tvError.setText(R.string.no_internet)
                     binding.ivError.setImageResource(R.drawable.il_scull)
                 }
+
                 FilterIndustryStates.Loading -> {
                     binding.pbLoading.visibility = VISIBLE
                     binding.filterSettingsApply.visibility = GONE
                     binding.tvError.visibility = GONE
                     binding.ivError.visibility = GONE
                 }
+
                 FilterIndustryStates.ServerError -> {
                     binding.recyclerFilterIndustry.visibility = GONE
                     binding.pbLoading.visibility = GONE
@@ -73,6 +75,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     binding.tvError.setText(R.string.server_error)
                     binding.ivError.setImageResource(R.drawable.il_3_server_cry)
                 }
+
                 is FilterIndustryStates.Success -> {
                     binding.recyclerFilterIndustry.visibility = VISIBLE
                     binding.pbLoading.visibility = GONE
@@ -84,10 +87,12 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     binding.ivError.visibility = GONE
                     viewModel.isChecked()
                 }
+
                 FilterIndustryStates.HasSelected -> {
                     binding.filterSettingsApply.visibility = VISIBLE
                     binding.pbLoading.visibility = GONE
                 }
+
                 FilterIndustryStates.Empty -> {
                     binding.recyclerFilterIndustry.visibility = GONE
                     binding.pbLoading.visibility = GONE
@@ -99,9 +104,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 }
             }
         }
-
         viewModel.getIndustries()
-
         initListeners()
     }
 
@@ -132,8 +135,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     }
 
     private fun textWatcherListener() = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             if (!binding.etSearch.text.toString().isNullOrEmpty()) {
@@ -161,7 +163,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             }
         }
 
-        override fun afterTextChanged(p0: Editable?) {}
+        override fun afterTextChanged(p0: Editable?) = Unit
     }
 
     private fun chooseIndustry(industry: Industry) {
