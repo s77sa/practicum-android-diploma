@@ -17,6 +17,7 @@ class FilterIndustryAdapter(val onIndustryClickedCB: (Industry) -> Unit) :
     }
 
     override fun getItemCount() = industries.size
+
     override fun onBindViewHolder(holder: FilterIndustryViewHolder, position: Int) {
         val industry = industries[position]
         holder.bind(industry)
@@ -25,4 +26,3 @@ class FilterIndustryAdapter(val onIndustryClickedCB: (Industry) -> Unit) :
         }
     }
 }
-

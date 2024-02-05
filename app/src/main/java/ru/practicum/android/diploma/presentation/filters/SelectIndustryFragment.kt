@@ -48,24 +48,19 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         binding.recyclerFilterIndustry.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerFilterIndustry.adapter = adapter
         viewModel.getState().observe(viewLifecycleOwner) {
-            when (it) {
-                FilterIndustryStates.ConnectionError -> {
+            when (it) { FilterIndustryStates.ConnectionError -> {
                     binding.recyclerFilterIndustry.visibility = GONE
                     binding.pbLoading.visibility = GONE
                     binding.filterSettingsApply.visibility = GONE
                     binding.tvError.visibility = VISIBLE
                     binding.ivError.visibility = VISIBLE
                     binding.tvError.setText(R.string.no_internet)
-                    binding.ivError.setImageResource(R.drawable.il_scull)
-                }
-
+                    binding.ivError.setImageResource(R.drawable.il_scull) }
                 FilterIndustryStates.Loading -> {
                     binding.pbLoading.visibility = VISIBLE
                     binding.filterSettingsApply.visibility = GONE
                     binding.tvError.visibility = GONE
-                    binding.ivError.visibility = GONE
-                }
-
+                    binding.ivError.visibility = GONE }
                 FilterIndustryStates.ServerError -> {
                     binding.recyclerFilterIndustry.visibility = GONE
                     binding.pbLoading.visibility = GONE
@@ -73,9 +68,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     binding.tvError.visibility = VISIBLE
                     binding.ivError.visibility = VISIBLE
                     binding.tvError.setText(R.string.server_error)
-                    binding.ivError.setImageResource(R.drawable.il_3_server_cry)
-                }
-
+                    binding.ivError.setImageResource(R.drawable.il_3_server_cry) }
                 is FilterIndustryStates.Success -> {
                     binding.recyclerFilterIndustry.visibility = VISIBLE
                     binding.pbLoading.visibility = GONE
@@ -85,14 +78,10 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     binding.filterSettingsApply.visibility = GONE
                     binding.tvError.visibility = GONE
                     binding.ivError.visibility = GONE
-                    viewModel.isChecked()
-                }
-
+                    viewModel.isChecked() }
                 FilterIndustryStates.HasSelected -> {
                     binding.filterSettingsApply.visibility = VISIBLE
-                    binding.pbLoading.visibility = GONE
-                }
-
+                    binding.pbLoading.visibility = GONE }
                 FilterIndustryStates.Empty -> {
                     binding.recyclerFilterIndustry.visibility = GONE
                     binding.pbLoading.visibility = GONE
@@ -100,13 +89,9 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     binding.tvError.visibility = VISIBLE
                     binding.ivError.visibility = VISIBLE
                     binding.tvError.setText(R.string.no_such_industry)
-                    binding.ivError.setImageResource(R.drawable.il_angry_cat)
-                }
-            }
-        }
+                    binding.ivError.setImageResource(R.drawable.il_angry_cat) } } }
         viewModel.getIndustries()
-        initListeners()
-    }
+        initListeners() }
 
     private fun initListeners() {
         binding.etSearch.addTextChangedListener(textWatcherListener())
