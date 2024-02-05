@@ -65,7 +65,7 @@
             android:inputType="textNoSuggestions"
             android:maxLines="1"
             android:textColor="@color/blackDayWhiteNight"
-            android:textColorHint="?attr/colorGreyWhite"
+            android:textColorHint="@color/yp_gray"
             android:textSize="@dimen/sp_16" />
 
     </com.google.android.material.textfield.TextInputLayout>
