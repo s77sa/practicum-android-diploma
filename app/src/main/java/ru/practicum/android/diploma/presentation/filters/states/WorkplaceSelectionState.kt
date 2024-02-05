@@ -5,5 +5,6 @@ import ru.practicum.android.diploma.domain.models.Region
 
 sealed class WorkplaceSelectionState {
     object Empty : WorkplaceSelectionState()
-    data class Filled(val country: Country, val region: Region) : WorkplaceSelectionState()
+    data class CountryFilled(val country: Country) : WorkplaceSelectionState()
+    data class RegionFilled(val region: Region) : WorkplaceSelectionState()
 }
