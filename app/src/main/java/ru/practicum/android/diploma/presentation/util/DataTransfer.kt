@@ -17,7 +17,7 @@ object DataTransfer {
         return industry
     }
 
-    fun setIndustry(industryValue: Industry) {
+    fun setIndustry(industryValue: Industry?) {
         industry = industryValue
     }
 
