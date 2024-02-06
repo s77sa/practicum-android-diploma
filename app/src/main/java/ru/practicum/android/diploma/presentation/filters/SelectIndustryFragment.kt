@@ -25,7 +25,7 @@ import ru.practicum.android.diploma.domain.models.FilterIndustryStates
 import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.presentation.filters.adapter.FilterIndustryAdapter
 import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectIndustryViewModel
-import ru.practicum.android.diploma.presentation.util.DataTransfer
+
 
 class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private var _binding: FragmentSelectIndustryBinding? = null
@@ -45,11 +45,8 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         _binding = FragmentSelectIndustryBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         viewModel.getState().observe(viewLifecycleOwner) {
             Log.i("Industry", "State is $it")
             initStates(it)
@@ -58,7 +55,6 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         initListeners()
         initAdapter()
     }
-
     fun initStates(data: FilterIndustryStates) {
         when (data) {
             FilterIndustryStates.ConnectionError -> {
@@ -125,15 +121,11 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         }
 
         binding.filterSettingsApply.setOnClickListener {
-            viewModel.saveIndustryFilter()
+            selectedIndustry?.let { it1 -> viewModel.saveIndustryFilter(it1) }
             findNavController().popBackStack()
         }
 
         binding.selectIndustryBackArrowImageview.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.filterSettingsApply.setOnClickListener {
-            DataTransfer.setIndustry(selectedIndustry)
             findNavController().popBackStack()
         }
 

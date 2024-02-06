@@ -11,10 +11,11 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.models.FilterIndustryStates
 import ru.practicum.android.diploma.domain.models.Industry
+import ru.practicum.android.diploma.presentation.util.DataTransfer
 
 class SelectIndustryViewModel(
     private val industryInteractor: IndustryInteractor,
-    private val context: Context
+    private val context: Context,
 ) : ViewModel() {
 
     private var selectedIndustry: Industry? = null
@@ -57,14 +58,10 @@ class SelectIndustryViewModel(
                     stateLiveData.postValue(FilterIndustryStates.Success(industryList))
                 }
             }
-
-
         }
     }
 
-
     fun isChecked() {
-
     }
 
     fun bufferIndustry() {
@@ -75,10 +72,8 @@ class SelectIndustryViewModel(
         return selectedIndustry
     }
 
-    fun saveIndustryFilter() {
-        viewModelScope.launch {
-
-        }
+    fun saveIndustryFilter(selectedIndustry: Industry) {
+        DataTransfer.setIndustry(selectedIndustry)
     }
 
     private fun processResult(found: List<Industry>?, errorMessage: String?) {
@@ -87,7 +82,6 @@ class SelectIndustryViewModel(
             industryList.clear()
             industryList.addAll(found)
         }
-
         when {
             errorMessage != null -> {
                 if (errorMessage == getString(context, R.string.no_internet)) {
