@@ -25,20 +25,17 @@ class FilterIndustryAdapter(val onIndustryClickedCB: (Industry) -> Unit) :
             industries[position].isChecked = !industries[position].isChecked
             selectedIndustry = industries[position]
             industries.forEach {
-                it.isChecked = (it == industries[position])
+                it.isChecked = it == industries[position]
             }
             notifyDataSetChanged()
             onIndustryClickedCB(industries[position])
         }
-        if (selectedIndustry != null) {
-            if (industries[position].id == selectedIndustry!!.id) {
-                industries[position].isChecked = true
-            }
+        if (selectedIndustry != null && (industries[position].id == selectedIndustry!!.id)) {
+            industries[position].isChecked = true
         }
+
         holder.bind(industries[position])
         holder.rbIndustry.setOnClickListener(clickListener)
         holder.itemView.setOnClickListener(clickListener)
     }
 }
-
-
