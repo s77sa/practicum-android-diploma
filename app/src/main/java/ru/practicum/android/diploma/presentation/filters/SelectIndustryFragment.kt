@@ -26,7 +26,6 @@ import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.presentation.filters.adapter.FilterIndustryAdapter
 import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectIndustryViewModel
 
-
 class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private var _binding: FragmentSelectIndustryBinding? = null
     private val binding get() = _binding!!
