@@ -16,6 +16,7 @@ import ru.practicum.android.diploma.presentation.util.DataTransfer
 class SelectIndustryViewModel(
     private val industryInteractor: IndustryInteractor,
     private val context: Context,
+    private val dataTransfer: DataTransfer
 ) : ViewModel() {
 
     private var selectedIndustry: Industry? = null
@@ -73,7 +74,7 @@ class SelectIndustryViewModel(
     }
 
     fun saveIndustryFilter(selectedIndustry: Industry) {
-        DataTransfer.setIndustry(selectedIndustry)
+        dataTransfer.setIndustry(selectedIndustry)
     }
 
     private fun processResult(found: List<Industry>?, errorMessage: String?) {
