@@ -63,6 +63,7 @@ class SelectIndustryViewModel(
     }
 
     fun isChecked() {
+        // Empty
     }
 
     fun bufferIndustry() {
