@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.domain.models.FilterSettings
 import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.domain.models.PlainFilterSettings
 import ru.practicum.android.diploma.presentation.util.DataTransfer
@@ -26,8 +27,27 @@ class FiltersSettingsViewModel(
     private val _plainFiltersData = MutableLiveData<PlainFilterSettings?>()
     val plainFiltersData get() = _plainFiltersData
 
+    private val _equalFilter = MutableLiveData<Boolean>(false)
+    val equalFilter get() = _equalFilter
+
+    private val _changedFilter = MutableLiveData<Boolean>(false)
+    val changedFilter get() = _changedFilter
+
     private var expectedSalary: Int = -1
     private var notShowWithoutSalary: Boolean = false
+    private var filterSettings: FilterSettings? = null
+
+    fun compareFilters() {
+        _equalFilter.postValue(true)
+    }
+
+    fun resetFilters() {
+
+    }
+
+    fun saveFilters() {
+
+    }
 
     fun saveSalaryCheckBox(isChecked: Boolean) {
         notShowWithoutSalary = isChecked

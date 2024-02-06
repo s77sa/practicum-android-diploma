@@ -23,6 +23,7 @@ class FiltersSettingsFragment : Fragment() {
     private val viewModel: FiltersSettingsViewModel by viewModel()
     private var country: String? = null
     private var area: String? = null
+    private val compareFilters = true
 
     override fun onCreateView(
 
@@ -67,6 +68,12 @@ class FiltersSettingsFragment : Fragment() {
             (binding.salaryEditText as TextView).text = ""
             viewModel.clearSalary()
         }
+        binding.bottonSettingsApply.setOnClickListener {
+            viewModel.saveFilters()
+        }
+        binding.bottonSettingsReset.setOnClickListener {
+            viewModel.resetFilters()
+        }
 
         binding.salaryEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
@@ -86,17 +93,20 @@ class FiltersSettingsFragment : Fragment() {
                 renderExpectedSalary(it.expectedSalary)
             }
         }
-
         viewModel.countryData.observe(viewLifecycleOwner) {
             setCountryValue(it)
         }
-
         viewModel.areaData.observe(viewLifecycleOwner) {
             setAreaValue(it)
         }
-
         viewModel.industryData.observe(viewLifecycleOwner) {
             renderIndustryTextView(it)
+        }
+        viewModel.equalFilter.observe(viewLifecycleOwner) {
+            renderBottonApply(it)
+        }
+        viewModel.changedFilter.observe(viewLifecycleOwner) {
+            renderBottonReset(it)
         }
     }
 
@@ -208,6 +218,16 @@ class FiltersSettingsFragment : Fragment() {
 
     private fun renderCheckbox(isChecked: Boolean) {
         binding.checkboxNoSalary.isChecked = isChecked
+    }
+
+    private fun renderBottonApply(show: Boolean) {
+        if (show) binding.bottonSettingsApply.visibility = View.VISIBLE
+        else binding.bottonSettingsApply.visibility = View.GONE
+    }
+
+    private fun renderBottonReset(show: Boolean) {
+        if (show) binding.bottonSettingsReset.visibility = View.VISIBLE
+        else binding.bottonSettingsReset.visibility = View.GONE
     }
 
     companion object {

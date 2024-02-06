@@ -212,7 +212,7 @@
         app:layout_constraintVertical_bias="0.31" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/filterSettingsApply"
+        android:id="@+id/bottonSettingsApply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dp_16"
@@ -225,12 +225,12 @@
         android:textColor="@color/white"
         android:textSize="@dimen/sp_16"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/filterSettingsReset"
-        app:layout_constraintEnd_toEndOf="@+id/filterSettingsReset"
-        app:layout_constraintStart_toStartOf="@+id/filterSettingsReset" />
+        app:layout_constraintBottom_toTopOf="@+id/bottonSettingsReset"
+        app:layout_constraintEnd_toEndOf="@+id/bottonSettingsReset"
+        app:layout_constraintStart_toStartOf="@+id/bottonSettingsReset" />
 
     <TextView
-        android:id="@+id/filterSettingsReset"
+        android:id="@+id/bottonSettingsReset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dp_16"
