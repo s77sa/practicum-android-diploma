@@ -43,43 +43,29 @@ class SelectCountryFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.getCountries()
         }
+
         viewModel.countrySelectionState.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is CountrySelectionState.Loading -> {
-                    binding.pbLoading.isVisible = true
-                    binding.tvError.isVisible = false
-                    binding.ivError.isVisible = false
-                    binding.recyclerFilterCountry.isVisible = false
-                }
-                is CountrySelectionState.Success -> {
-                    lifecycleScope.launch {
-                        val countries = state.selectedCountry
-                        countries.let {
-                            // Обновление списка стран в адаптере
-                            val countriesList: MutableList<Country> = it.map { area ->
+            binding.apply {
+                pbLoading.isVisible = when (state) {
+                    is CountrySelectionState.Loading -> true
+                    is CountrySelectionState.Success -> {
+                        lifecycleScope.launch {
+                            val countries = state.selectedCountry
+                            val countriesList = countries.map { area ->
                                 Country(area.id, area.name)
-                            }.toMutableList()
-                            countryAdapter?.countries = countriesList
+                            }
+                            countryAdapter?.countries = countriesList.toMutableList()
                             countryAdapter?.notifyDataSetChanged()
                         }
-                        binding.pbLoading.isVisible = false
-                        binding.tvError.isVisible = false
-                        binding.ivError.isVisible = false
-                        binding.recyclerFilterCountry.isVisible = true
+                        false
                     }
+                    is CountrySelectionState.ServerIssue,
+                    is CountrySelectionState.NoData -> false
                 }
-                is CountrySelectionState.ServerIssue -> {
-                    binding.pbLoading.isVisible = false
-                    binding.tvError.isVisible = true
-                    binding.ivError.isVisible = true
-                    binding.recyclerFilterCountry.isVisible = false
-                }
-                is CountrySelectionState.NoData -> {
-                    binding.pbLoading.isVisible = false
-                    binding.tvError.isVisible = true
-                    binding.ivError.isVisible = true
-                    binding.recyclerFilterCountry.isVisible = false
-                }
+
+                tvError.isVisible = state is CountrySelectionState.ServerIssue || state is CountrySelectionState.NoData
+                ivError.isVisible = state is CountrySelectionState.ServerIssue || state is CountrySelectionState.NoData
+                recyclerFilterCountry.isVisible = state is CountrySelectionState.Success
             }
         }
     }
