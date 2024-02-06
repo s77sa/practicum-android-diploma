@@ -35,10 +35,6 @@ class FiltersSettingsViewModel(
 
     private var filterSettings: FilterSettings? = null
 
-    private fun compareFilters() {
-        _equalFilter.value = true
-    }
-
     private fun checkChangedFilters() {
         var value = false
         if (_industryData.value != null) value = true
@@ -59,7 +55,7 @@ class FiltersSettingsViewModel(
     }
 
     fun saveFiltersToSharedPrefs() {
-
+        Log.d(TAG, "saveFiltersToSharedPrefs")
     }
 
     fun saveSalaryCheckBox(isChecked: Boolean) {

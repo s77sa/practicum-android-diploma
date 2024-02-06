@@ -228,13 +228,19 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderBottonApply(show: Boolean) {
-        if (show) binding.bottonSettingsApply.visibility = View.VISIBLE
-        else binding.bottonSettingsApply.visibility = View.GONE
+        if (show) {
+            binding.bottonSettingsApply.visibility = View.VISIBLE
+        } else {
+            binding.bottonSettingsApply.visibility = View.GONE
+        }
     }
 
     private fun renderBottonReset(show: Boolean) {
-        if (show) binding.bottonSettingsReset.visibility = View.VISIBLE
-        else binding.bottonSettingsReset.visibility = View.GONE
+        if (show) {
+            binding.bottonSettingsReset.visibility = View.VISIBLE
+        } else {
+            binding.bottonSettingsReset.visibility = View.GONE
+        }
     }
 
     companion object {
