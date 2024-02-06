@@ -14,13 +14,13 @@ class SelectIndustryViewModel(
 ) : ViewModel() {
 
     private var selectedIndustry: Industry? = null
-    private val stateLiveData = MutableLiveData<FilterIndustryStates>()
+    private var stateLiveData = MutableLiveData<FilterIndustryStates>()
     fun getState(): LiveData<FilterIndustryStates> = stateLiveData
 
     fun getIndustries() {
         stateLiveData.postValue(FilterIndustryStates.Loading)
         viewModelScope.launch {
-            // industryInteractor
+            stateLiveData.postValue(industryInteractor.getIndustries().first?.let { FilterIndustryStates.Success(it) })
         }
     }
 
