@@ -33,8 +33,6 @@ class FiltersSettingsViewModel(
     private val _changedFilter = MutableLiveData<Boolean>(false)
     val changedFilter get() = _changedFilter
 
-    private var expectedSalary: Int = -1
-    private var notShowWithoutSalary: Boolean = false
     private var filterSettings: FilterSettings? = null
 
     private fun compareFilters() {
@@ -56,8 +54,6 @@ class FiltersSettingsViewModel(
         _countryData.value = null
         _areaData.value = null
         _plainFiltersData.value = null
-        expectedSalary = -1
-        notShowWithoutSalary = false
         checkChangedFilters()
         saveData()
     }
@@ -67,7 +63,10 @@ class FiltersSettingsViewModel(
     }
 
     fun saveSalaryCheckBox(isChecked: Boolean) {
-        notShowWithoutSalary = isChecked
+        _plainFiltersData.value = PlainFilterSettings(
+            expectedSalary = _plainFiltersData.value?.expectedSalary,
+            notShowWithoutSalary = isChecked
+        )
         saveData()
     }
 
@@ -83,35 +82,28 @@ class FiltersSettingsViewModel(
     }
 
     fun clearSalary() {
-        val plainFilters =
-            PlainFilterSettings(
-                expectedSalary = -1,
-                notShowWithoutSalary = notShowWithoutSalary
-            )
-        _plainFiltersData.value = plainFilters
+        _plainFiltersData.value = PlainFilterSettings(
+            expectedSalary = null,
+            notShowWithoutSalary = _plainFiltersData.value?.notShowWithoutSalary
+        )
         Log.d(TAG, "${_plainFiltersData.value}")
         saveData()
     }
 
     fun saveExpectedSalary(salary: String) {
         Log.d(TAG, "saveExpectedSalary=$salary")
-        expectedSalary = if (salary.isNotEmpty()) {
-            salary.toInt()
-        } else {
-            -1
+        if (salary.isNotEmpty()) {
+            _plainFiltersData.value =
+                PlainFilterSettings(
+                    expectedSalary = salary.toInt(),
+                    notShowWithoutSalary = _plainFiltersData.value?.notShowWithoutSalary
+                )
         }
         saveData()
     }
 
     fun loadData() {
-        val plainFilters = DataTransfer.getPlainFilters()
-        if (plainFilters != null) {
-            expectedSalary = plainFilters.expectedSalary
-        }
-        if (plainFilters != null) {
-            notShowWithoutSalary = plainFilters.notShowWithoutSalary
-        }
-        _plainFiltersData.value = plainFilters
+        _plainFiltersData.value = DataTransfer.getPlainFilters()
         _countryData.value = DataTransfer.getCountry()
         _industryData.value = DataTransfer.getIndustry()
         _areaData.value = DataTransfer.getArea()
@@ -119,13 +111,7 @@ class FiltersSettingsViewModel(
     }
 
     private fun saveData() {
-        val plainFilters =
-            PlainFilterSettings(
-                expectedSalary = expectedSalary,
-                notShowWithoutSalary = notShowWithoutSalary
-            )
-        _plainFiltersData.value = plainFilters
-        DataTransfer.setPlainFilters(plainFilters)
+        DataTransfer.setPlainFilters(_plainFiltersData.value)
         DataTransfer.setCountry(_countryData.value)
         DataTransfer.setIndustry(_industryData.value)
         DataTransfer.setArea(_areaData.value)

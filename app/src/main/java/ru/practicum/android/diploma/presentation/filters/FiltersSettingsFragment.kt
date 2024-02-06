@@ -91,8 +91,8 @@ class FiltersSettingsFragment : Fragment() {
     private fun initObservers() {
         viewModel.plainFiltersData.observe(viewLifecycleOwner) {
             if (it != null) {
-                renderCheckbox(it.notShowWithoutSalary)
-                renderExpectedSalary(it.expectedSalary)
+                it.notShowWithoutSalary?.let { it1 -> renderCheckbox(it1) }
+                it.expectedSalary?.let { it1 -> renderExpectedSalary(it1) }
             } else {
                 renderCheckbox(false)
                 renderExpectedSalary(-1)
