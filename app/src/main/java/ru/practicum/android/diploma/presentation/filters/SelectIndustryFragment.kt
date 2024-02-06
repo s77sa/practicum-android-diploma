@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -44,6 +43,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         _binding = FragmentSelectIndustryBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getState().observe(viewLifecycleOwner) {
@@ -54,6 +54,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         initListeners()
         initAdapter()
     }
+
     fun initStates(data: FilterIndustryStates) {
         when (data) {
             FilterIndustryStates.ConnectionError -> {
@@ -75,6 +76,8 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             is FilterIndustryStates.Success -> {
                 binding.recyclerFilterIndustry.visibility = VISIBLE
                 binding.pbLoading.visibility = GONE
+                binding.ivError.visibility = GONE
+                binding.tvError.visibility = GONE
                 foundIndustries = data.industries
                 adapter.industries.clear()
                 adapter.industries = data.industries.toMutableList()
@@ -128,6 +131,10 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             findNavController().popBackStack()
         }
 
+        binding.ivClear.setOnClickListener {
+            clearSearch()
+        }
+
     }
 
     private fun textWatcherListener() = object : TextWatcher {
@@ -135,8 +142,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             if (!binding.etSearch.text.toString().isNullOrEmpty()) {
-                binding.container.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
-                binding.container.endIconDrawable = requireContext().getDrawable(R.drawable.ic_close)
+                binding.ivClear.setImageResource(R.drawable.ic_close)
                 if (start != before) {
                     searchJob?.cancel()
                     searchJob = viewLifecycleOwner.lifecycleScope.launch {
@@ -146,8 +152,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     }
                 }
             } else {
-                binding.container.endIconMode = TextInputLayout.END_ICON_CUSTOM
-                binding.container.endIconDrawable = requireContext().getDrawable(R.drawable.ic_search)
+                binding.ivClear.setImageResource(R.drawable.ic_search)
                 val view = requireActivity().currentFocus
                 if (view != null) {
                     val inputMethodManager =
@@ -160,6 +165,12 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         }
 
         override fun afterTextChanged(p0: Editable?) = Unit
+    }
+
+    private fun clearSearch() {
+        binding.etSearch.setText("")
+        binding.ivClear.setImageResource(R.drawable.ic_search)
+        viewModel.getIndustries()
     }
 
     private fun chooseIndustry(industry: Industry) {
