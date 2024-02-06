@@ -46,19 +46,16 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getState().observe(viewLifecycleOwner) {initStates(it)}
+        viewModel.getState().observe(viewLifecycleOwner) { initStates(it) }
         viewModel.getIndustries()
         initListeners()
         initAdapter()
     }
 
-    fun initStates (data: FilterIndustryStates){
+    fun initStates(data: FilterIndustryStates) {
         when (data) {
             FilterIndustryStates.ConnectionError -> {
-                binding.recyclerFilterIndustry.visibility = GONE
-                binding.pbLoading.visibility = GONE
-                binding.tvError.visibility = VISIBLE
-                binding.ivError.visibility = VISIBLE
+                hideViewOnNoSuccess()
                 binding.tvError.setText(R.string.no_internet)
                 binding.ivError.setImageResource(R.drawable.il_scull)
             }
@@ -68,10 +65,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             }
 
             FilterIndustryStates.ServerError -> {
-                binding.recyclerFilterIndustry.visibility = GONE
-                binding.pbLoading.visibility = GONE
-                binding.tvError.visibility = VISIBLE
-                binding.ivError.visibility = VISIBLE
+                hideViewOnNoSuccess()
                 binding.tvError.setText(R.string.server_error)
                 binding.ivError.setImageResource(R.drawable.il_3_server_cry)
             }
@@ -92,15 +86,18 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             }
 
             FilterIndustryStates.Empty -> {
-                binding.recyclerFilterIndustry.visibility = GONE
-                binding.pbLoading.visibility = GONE
+                hideViewOnNoSuccess()
                 binding.filterSettingsApply.visibility = GONE
-                binding.tvError.visibility = VISIBLE
-                binding.ivError.visibility = VISIBLE
                 binding.tvError.setText(R.string.no_such_industry)
                 binding.ivError.setImageResource(R.drawable.il_angry_cat)
             }
         }
+    }
+    private fun hideViewOnNoSuccess() {
+        binding.recyclerFilterIndustry.visibility = GONE
+        binding.pbLoading.visibility = GONE
+        binding.tvError.visibility = VISIBLE
+        binding.ivError.visibility = VISIBLE
     }
 
 
