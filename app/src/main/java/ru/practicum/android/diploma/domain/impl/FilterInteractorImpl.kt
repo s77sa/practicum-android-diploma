@@ -21,25 +21,11 @@ class FilterInteractorImpl(private val filterRepository: FilterRepository) : Fil
         TODO(NOT_IMPLEMENTED_YET)
     }
 
-    override fun getRegions(countryId: String): Flow<Resource<List<Region>>> {
-        TODO(NOT_IMPLEMENTED_YET)
-    }
 
     override fun applyCountryFilter(country: Country) {
         TODO(NOT_IMPLEMENTED_YET)
     }
 
-    override fun applyRegionFilter(region: Region) {
-        TODO(NOT_IMPLEMENTED_YET)
-    }
-
-    override fun searchRegionByName(regionName: String): Flow<Resource<List<Region>>> {
-        TODO(NOT_IMPLEMENTED_YET)
-    }
-
-    override fun getSelectedRegion(): Region {
-        TODO(NOT_IMPLEMENTED_YET)
-    }
 
     override fun getSelectedCountry(): Country {
         TODO(NOT_IMPLEMENTED_YET)
@@ -49,9 +35,6 @@ class FilterInteractorImpl(private val filterRepository: FilterRepository) : Fil
         TODO(NOT_IMPLEMENTED_YET)
     }
 
-    override fun clearRegionFilter() {
-        TODO(NOT_IMPLEMENTED_YET)
-    }
 
     companion object {
         private const val NOT_IMPLEMENTED_YET = "Not yet implemented"
