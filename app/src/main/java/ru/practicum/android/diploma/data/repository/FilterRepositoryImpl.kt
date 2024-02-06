@@ -12,14 +12,18 @@ const val FILTER_KEY = "filter_key"
 class FilterRepositoryImpl(val sharedPreferences: SharedPreferences) : FilterRepository {
     override fun load(): Filter? {
         val json = sharedPreferences.getString(FILTER_KEY, null)
-        val filterDto = Gson().fromJson(json, FilterDTO::class.java)
-        return Filter(
-            area = filterDto.area,
-            pageLimit = filterDto.pageLimit,
-            industry = filterDto.industry,
-            showSalary = filterDto.showSalary,
-            salary = filterDto.salary
-        )
+        return if (json == null) {
+            null
+        } else {
+            val filterDto = Gson().fromJson(json, FilterDTO::class.java)
+            Filter(
+                area = filterDto.area,
+                pageLimit = filterDto.pageLimit,
+                industry = filterDto.industry,
+                showSalary = filterDto.showSalary,
+                salary = filterDto.salary
+            )
+        }
     }
 
     override fun write(filter: Filter) {
