@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.presentation.filters
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,9 +70,10 @@ class FiltersSettingsFragment : Fragment() {
             viewModel.clearSalary()
         }
         binding.bottonSettingsApply.setOnClickListener {
-            viewModel.saveFilters()
+            viewModel.saveFiltersToSharedPrefs()
         }
         binding.bottonSettingsReset.setOnClickListener {
+            (binding.salaryEditText as TextView).text = ""
             viewModel.resetFilters()
         }
 
@@ -91,6 +93,9 @@ class FiltersSettingsFragment : Fragment() {
             if (it != null) {
                 renderCheckbox(it.notShowWithoutSalary)
                 renderExpectedSalary(it.expectedSalary)
+            } else {
+                renderCheckbox(false)
+                renderExpectedSalary(-1)
             }
         }
         viewModel.countryData.observe(viewLifecycleOwner) {
@@ -106,6 +111,7 @@ class FiltersSettingsFragment : Fragment() {
             renderBottonApply(it)
         }
         viewModel.changedFilter.observe(viewLifecycleOwner) {
+            Log.d(TAG, "changedFilter=$it")
             renderBottonReset(it)
         }
     }
@@ -217,6 +223,7 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderCheckbox(isChecked: Boolean) {
+        Log.d(TAG, "renderCheckbox = $isChecked")
         binding.checkboxNoSalary.isChecked = isChecked
     }
 

@@ -37,15 +37,32 @@ class FiltersSettingsViewModel(
     private var notShowWithoutSalary: Boolean = false
     private var filterSettings: FilterSettings? = null
 
-    fun compareFilters() {
-        _equalFilter.postValue(true)
+    private fun compareFilters() {
+        _equalFilter.value = true
+    }
+
+    private fun checkChangedFilters() {
+        var value = false
+        if (_industryData.value != null) value = true
+        if (_countryData.value != null) value = true
+        if (_areaData.value != null) value = true
+        if (_plainFiltersData.value != null) value = true
+        _changedFilter.value = value
     }
 
     fun resetFilters() {
-
+        Log.d(TAG, "resetFilters")
+        _industryData.value = null
+        _countryData.value = null
+        _areaData.value = null
+        _plainFiltersData.value = null
+        expectedSalary = -1
+        notShowWithoutSalary = false
+        checkChangedFilters()
+        saveData()
     }
 
-    fun saveFilters() {
+    fun saveFiltersToSharedPrefs() {
 
     }
 
@@ -55,13 +72,13 @@ class FiltersSettingsViewModel(
     }
 
     fun clearIndustry() {
-        _industryData.postValue(null)
+        _industryData.value = null
         saveData()
     }
 
     fun clearWorkplace() {
-        _countryData.postValue(null)
-        _areaData.postValue(null)
+        _countryData.value = null
+        _areaData.value = null
         saveData()
     }
 
@@ -77,6 +94,7 @@ class FiltersSettingsViewModel(
     }
 
     fun saveExpectedSalary(salary: String) {
+        Log.d(TAG, "saveExpectedSalary=$salary")
         expectedSalary = if (salary.isNotEmpty()) {
             salary.toInt()
         } else {
@@ -93,10 +111,11 @@ class FiltersSettingsViewModel(
         if (plainFilters != null) {
             notShowWithoutSalary = plainFilters.notShowWithoutSalary
         }
-        _plainFiltersData.postValue(plainFilters)
-        _countryData.postValue(DataTransfer.getCountry())
-        _industryData.postValue(DataTransfer.getIndustry())
-        _areaData.postValue(DataTransfer.getArea())
+        _plainFiltersData.value = plainFilters
+        _countryData.value = DataTransfer.getCountry()
+        _industryData.value = DataTransfer.getIndustry()
+        _areaData.value = DataTransfer.getArea()
+        checkChangedFilters()
     }
 
     private fun saveData() {
@@ -105,11 +124,12 @@ class FiltersSettingsViewModel(
                 expectedSalary = expectedSalary,
                 notShowWithoutSalary = notShowWithoutSalary
             )
-        _plainFiltersData.postValue(plainFilters)
+        _plainFiltersData.value = plainFilters
         DataTransfer.setPlainFilters(plainFilters)
         DataTransfer.setCountry(_countryData.value)
         DataTransfer.setIndustry(_industryData.value)
         DataTransfer.setArea(_areaData.value)
+        checkChangedFilters()
     }
 
     companion object {
