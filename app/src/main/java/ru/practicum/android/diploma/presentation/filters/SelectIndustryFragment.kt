@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.presentation.filters
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +34,8 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         chooseIndustry(it)
     }
     private var searchJob: Job? = null
-
+    private var foundIndustries: List<Industry>? = null
+    private var selectedIndustry: Industry? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,16 +44,16 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         _binding = FragmentSelectIndustryBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.getState().observe(viewLifecycleOwner) { initStates(it) }
+        viewModel.getState().observe(viewLifecycleOwner) {
+            Log.i("Industry", "State is $it")
+            initStates(it)
+        }
         viewModel.getIndustries()
         initListeners()
         initAdapter()
     }
-
     fun initStates(data: FilterIndustryStates) {
         when (data) {
             FilterIndustryStates.ConnectionError -> {
@@ -73,6 +75,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             is FilterIndustryStates.Success -> {
                 binding.recyclerFilterIndustry.visibility = VISIBLE
                 binding.pbLoading.visibility = GONE
+                foundIndustries = data.industries
                 adapter.industries.clear()
                 adapter.industries = data.industries.toMutableList()
                 adapter.notifyDataSetChanged()
@@ -110,7 +113,6 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 searchJob = viewLifecycleOwner.lifecycleScope.launch {
                     delay(SEARCH_DEBOUNCE_DELAY_MILS)
 
-                    viewModel.getIndustriesByName(binding.etSearch.text.toString())
                 }
                 true
             }
@@ -118,13 +120,14 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         }
 
         binding.filterSettingsApply.setOnClickListener {
-            viewModel.saveIndustryFilter()
+            selectedIndustry?.let { it1 -> viewModel.saveIndustryFilter(it1) }
             findNavController().popBackStack()
         }
 
         binding.selectIndustryBackArrowImageview.setOnClickListener {
             findNavController().popBackStack()
         }
+
     }
 
     private fun textWatcherListener() = object : TextWatcher {
@@ -139,7 +142,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                     searchJob = viewLifecycleOwner.lifecycleScope.launch {
                         delay(SEARCH_DEBOUNCE_DELAY_MILS)
 
-                        viewModel.getIndustriesByName(binding.etSearch.text.toString())
+                        viewModel.filter(s.toString())
                     }
                 }
             } else {
@@ -160,7 +163,19 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     }
 
     private fun chooseIndustry(industry: Industry) {
-        viewModel.bufferIndustry(industry)
+        Log.i("Industry", "industry Choosed")
+        selectedIndustry = industry
+        val view = requireActivity().currentFocus
+        val inputMethodManager =
+            requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (view != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+        if (view != null) {
+            view.clearFocus()
+        }
+        viewModel.bufferIndustry()
+
     }
 
     private fun initAdapter() {

@@ -72,6 +72,7 @@ class SearchFragment : Fragment() {
 
         initRecyclerView()
         initClickListener()
+
     }
 
     private fun initObservers() {
