@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectIndustr
 import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectRegionViewModel
 import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectWorkplaceViewModel
 import ru.practicum.android.diploma.presentation.search.viewmodel.SearchViewModel
+import ru.practicum.android.diploma.presentation.util.DataTransfer
 import ru.practicum.android.diploma.presentation.vacancy.viewmodel.VacancyViewModel
 
 val viewModelModule = module {
@@ -50,4 +51,6 @@ val viewModelModule = module {
     viewModel<VacancyViewModel> {
         VacancyViewModel(vacancyInteractor = get(), favouriteInteractor = get())
     }
+
+    factory { DataTransfer }
 }
