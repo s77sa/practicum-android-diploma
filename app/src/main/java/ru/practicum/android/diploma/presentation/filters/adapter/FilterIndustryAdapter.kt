@@ -30,7 +30,7 @@ class FilterIndustryAdapter(val onIndustryClickedCB: (Industry) -> Unit) :
             notifyDataSetChanged()
             onIndustryClickedCB(industries[position])
         }
-        if (selectedIndustry != null && (industries[position].id == selectedIndustry!!.id)) {
+        if (selectedIndustry != null && industries[position].id == selectedIndustry!!.id) {
             industries[position].isChecked = true
         }
 
