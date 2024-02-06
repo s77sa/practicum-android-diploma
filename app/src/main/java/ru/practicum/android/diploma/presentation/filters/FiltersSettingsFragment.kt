@@ -24,6 +24,7 @@ class FiltersSettingsFragment : Fragment() {
     private val viewModel: FiltersSettingsViewModel by viewModel()
     private var country: String? = null
     private var area: String? = null
+    private val compareFilters = true
 
     override fun onCreateView(
 
@@ -34,6 +35,7 @@ class FiltersSettingsFragment : Fragment() {
         _binding = FragmentFiltersSettingsBinding.inflate(inflater, container, false)
         initClickListeners()
         initObservers()
+        initTextChangedListeners()
         viewModel.loadData()
         return binding.root
     }
@@ -52,8 +54,27 @@ class FiltersSettingsFragment : Fragment() {
         }
 
         binding.checkboxNoSalary.setOnClickListener {
-            Log.d(TAG, "checkboxNoSalary.setOnClickListener=${binding.checkboxNoSalary.isChecked}")
             viewModel.saveSalaryCheckBox(binding.checkboxNoSalary.isChecked)
+        }
+
+        binding.workplaceClear.setOnClickListener {
+            (binding.workplaceEditText as TextView).text = ""
+            viewModel.clearWorkplace()
+        }
+        binding.industryClear.setOnClickListener {
+            (binding.industryEditText as TextView).text = ""
+            viewModel.clearIndustry()
+        }
+        binding.salaryClear.setOnClickListener {
+            (binding.salaryEditText as TextView).text = ""
+            viewModel.clearSalary()
+        }
+        binding.bottonSettingsApply.setOnClickListener {
+            viewModel.saveFiltersToSharedPrefs()
+        }
+        binding.bottonSettingsReset.setOnClickListener {
+            (binding.salaryEditText as TextView).text = ""
+            viewModel.resetFilters()
         }
 
         binding.salaryEditText.addTextChangedListener(object : TextWatcher {
@@ -70,21 +91,91 @@ class FiltersSettingsFragment : Fragment() {
     private fun initObservers() {
         viewModel.plainFiltersData.observe(viewLifecycleOwner) {
             if (it != null) {
-                renderCheckbox(it.notShowWithoutSalary)
-                renderExpectedSalary(it.expectedSalary)
+                it.notShowWithoutSalary?.let { it1 -> renderCheckbox(it1) }
+                it.expectedSalary?.let { it1 -> renderExpectedSalary(it1) }
+            } else {
+                renderCheckbox(false)
+                renderExpectedSalary(-1)
             }
         }
-
         viewModel.countryData.observe(viewLifecycleOwner) {
             setCountryValue(it)
         }
-
         viewModel.areaData.observe(viewLifecycleOwner) {
             setAreaValue(it)
         }
-
         viewModel.industryData.observe(viewLifecycleOwner) {
             renderIndustryTextView(it)
+        }
+        viewModel.equalFilter.observe(viewLifecycleOwner) {
+            renderBottonApply(it)
+        }
+        viewModel.changedFilter.observe(viewLifecycleOwner) {
+            Log.d(TAG, "changedFilter=$it")
+            renderBottonReset(it)
+        }
+    }
+
+    private fun initTextChangedListeners() {
+        binding.workplaceEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                showClearBottonWorkplace()
+            }
+
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
+
+        binding.industryEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                showClearBottonIndustry()
+            }
+
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
+
+        binding.salaryEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                showClearBottonSalary()
+            }
+
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
+    }
+
+    private fun showClearBottonWorkplace() {
+        val text: String = (binding.workplaceEditText as TextView).text.toString()
+        if (text.isNotEmpty()) {
+            binding.workplaceForward.visibility = View.GONE
+            binding.workplaceClear.visibility = View.VISIBLE
+        } else {
+            binding.workplaceForward.visibility = View.VISIBLE
+            binding.workplaceClear.visibility = View.GONE
+        }
+    }
+
+    private fun showClearBottonIndustry() {
+        val text: String = (binding.industryEditText as TextView).text.toString()
+        if (text.isNotEmpty()) {
+            binding.industryForward.visibility = View.GONE
+            binding.industryClear.visibility = View.VISIBLE
+        } else {
+            binding.industryForward.visibility = View.VISIBLE
+            binding.industryClear.visibility = View.GONE
+        }
+    }
+
+    private fun showClearBottonSalary() {
+        val text: String = (binding.salaryEditText as TextView).text.toString()
+        if (text.isNotEmpty()) {
+            binding.salaryClear.visibility = View.VISIBLE
+        } else {
+            binding.salaryClear.visibility = View.GONE
         }
     }
 
@@ -132,7 +223,24 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderCheckbox(isChecked: Boolean) {
+        Log.d(TAG, "renderCheckbox = $isChecked")
         binding.checkboxNoSalary.isChecked = isChecked
+    }
+
+    private fun renderBottonApply(show: Boolean) {
+        if (show) {
+            binding.bottonSettingsApply.visibility = View.VISIBLE
+        } else {
+            binding.bottonSettingsApply.visibility = View.GONE
+        }
+    }
+
+    private fun renderBottonReset(show: Boolean) {
+        if (show) {
+            binding.bottonSettingsReset.visibility = View.VISIBLE
+        } else {
+            binding.bottonSettingsReset.visibility = View.GONE
+        }
     }
 
     companion object {
