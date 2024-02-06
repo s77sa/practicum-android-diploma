@@ -93,13 +93,13 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             }
         }
     }
+
     private fun hideViewOnNoSuccess() {
         binding.recyclerFilterIndustry.visibility = GONE
         binding.pbLoading.visibility = GONE
         binding.tvError.visibility = VISIBLE
         binding.ivError.visibility = VISIBLE
     }
-
 
     private fun initListeners() {
         binding.etSearch.addTextChangedListener(textWatcherListener())
