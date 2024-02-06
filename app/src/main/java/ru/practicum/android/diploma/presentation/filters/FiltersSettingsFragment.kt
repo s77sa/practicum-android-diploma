@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.presentation.filters
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,7 @@ class FiltersSettingsFragment : Fragment() {
         _binding = FragmentFiltersSettingsBinding.inflate(inflater, container, false)
         initClickListeners()
         initObservers()
+        initTextChangedListeners()
         viewModel.loadData()
         return binding.root
     }
@@ -52,8 +52,20 @@ class FiltersSettingsFragment : Fragment() {
         }
 
         binding.checkboxNoSalary.setOnClickListener {
-            Log.d(TAG, "checkboxNoSalary.setOnClickListener=${binding.checkboxNoSalary.isChecked}")
             viewModel.saveSalaryCheckBox(binding.checkboxNoSalary.isChecked)
+        }
+
+        binding.workplaceClear.setOnClickListener {
+            (binding.workplaceEditText as TextView).text = ""
+            viewModel.clearWorkplace()
+        }
+        binding.industryClear.setOnClickListener {
+            (binding.industryEditText as TextView).text = ""
+            viewModel.clearIndustry()
+        }
+        binding.salaryClear.setOnClickListener {
+            (binding.salaryEditText as TextView).text = ""
+            viewModel.clearSalary()
         }
 
         binding.salaryEditText.addTextChangedListener(object : TextWatcher {
@@ -85,6 +97,69 @@ class FiltersSettingsFragment : Fragment() {
 
         viewModel.industryData.observe(viewLifecycleOwner) {
             renderIndustryTextView(it)
+        }
+    }
+
+    private fun initTextChangedListeners() {
+        binding.workplaceEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                showClearBottonWorkplace()
+            }
+
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
+
+        binding.industryEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                showClearBottonIndustry()
+            }
+
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
+
+        binding.salaryEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                showClearBottonSalary()
+            }
+
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
+    }
+
+    private fun showClearBottonWorkplace() {
+        val text: String = (binding.workplaceEditText as TextView).text.toString()
+        if (text.isNotEmpty()) {
+            binding.workplaceForward.visibility = View.GONE
+            binding.workplaceClear.visibility = View.VISIBLE
+        } else {
+            binding.workplaceForward.visibility = View.VISIBLE
+            binding.workplaceClear.visibility = View.GONE
+        }
+    }
+
+    private fun showClearBottonIndustry() {
+        val text: String = (binding.industryEditText as TextView).text.toString()
+        if (text.isNotEmpty()) {
+            binding.industryForward.visibility = View.GONE
+            binding.industryClear.visibility = View.VISIBLE
+        } else {
+            binding.industryForward.visibility = View.VISIBLE
+            binding.industryClear.visibility = View.GONE
+        }
+    }
+
+    private fun showClearBottonSalary() {
+        val text: String = (binding.salaryEditText as TextView).text.toString()
+        if (text.isNotEmpty()) {
+            binding.salaryClear.visibility = View.VISIBLE
+        } else {
+            binding.salaryClear.visibility = View.GONE
         }
     }
 

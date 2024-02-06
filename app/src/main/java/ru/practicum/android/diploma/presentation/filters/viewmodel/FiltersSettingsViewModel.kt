@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.domain.models.Area
@@ -33,18 +34,25 @@ class FiltersSettingsViewModel(
         saveData()
     }
 
-    fun clearCountry() {
-        _countryData.postValue(null)
-        saveData()
-    }
-
     fun clearIndustry() {
         _industryData.postValue(null)
         saveData()
     }
 
-    fun clearArea() {
-        areaData.postValue(null)
+    fun clearWorkplace() {
+        _countryData.postValue(null)
+        _areaData.postValue(null)
+        saveData()
+    }
+
+    fun clearSalary() {
+        val plainFilters =
+            PlainFilterSettings(
+                expectedSalary = -1,
+                notShowWithoutSalary = notShowWithoutSalary
+            )
+        _plainFiltersData.value = plainFilters
+        Log.d(TAG, "${_plainFiltersData.value}")
         saveData()
     }
 
