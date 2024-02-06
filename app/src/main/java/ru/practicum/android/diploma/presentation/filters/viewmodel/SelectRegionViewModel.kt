@@ -6,23 +6,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.FilterInteractor
+import ru.practicum.android.diploma.domain.api.RegionInteractor
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.filters.states.RegionSelectionState
 import ru.practicum.android.diploma.presentation.util.Resource
 
 class SelectRegionViewModel(
-    private val filtersInteractor: FilterInteractor,
+    private val regionInteractor: RegionInteractor,
 ) : ViewModel() {
 
-    private val _regionSelectionState = MutableLiveData<RegionSelectionState?>()
-    val regionSelectionState: LiveData<RegionSelectionState?> get() = _regionSelectionState
+    private val regionSelectionState = MutableLiveData<RegionSelectionState>()
+    fun regionSelectionState(): LiveData<RegionSelectionState> = regionSelectionState
 
     private var selectedRegion: String = ""
 
-    private fun getRegions(countryId: String) {
-        _regionSelectionState.value = RegionSelectionState.Loading
+    fun getRegions(countryId: String) {
+        regionSelectionState.value = RegionSelectionState.Loading
         viewModelScope.launch {
-            filtersInteractor.getRegions(countryId).collect { resource ->
+            regionInteractor.getRegions(countryId).collect { resource ->
                 processRegionResult(resource)
             }
         }
@@ -30,7 +31,7 @@ class SelectRegionViewModel(
 
     fun applyRegionFilter(region: Region) {
         viewModelScope.launch {
-            filtersInteractor.applyRegionFilter(region)
+            regionInteractor.applyRegionFilter(region)
             getRegions(region.countryId)
         }
     }
@@ -39,28 +40,29 @@ class SelectRegionViewModel(
         return selectedRegion
     }
 
-    private fun searchRegionByName(regionName: String) {
+    fun searchRegionByName(regionName: String) {
         viewModelScope.launch {
-            filtersInteractor.searchRegionByName(regionName).collect { resource ->
+            regionInteractor.searchRegionByName(regionName).collect { resource ->
                 processRegionResult(resource)
             }
         }
     }
 
-    private suspend fun processRegionResult(resource: Resource<List<Region>>) {
+    fun processRegionResult(resource: Resource<List<Region>>) {
         when (resource) {
             is Resource.Success -> {
                 val regions = resource.data ?: emptyList()
                 if (regions.isNotEmpty()) {
-                    _regionSelectionState.value = RegionSelectionState.Success(regions)
+                    regionSelectionState.value = RegionSelectionState.Success(regions)
                 } else {
-                    _regionSelectionState.value = RegionSelectionState.NoData
+                    regionSelectionState.value = RegionSelectionState.NoData
                 }
             }
 
             is Resource.Error -> {
-                _regionSelectionState.value = RegionSelectionState.Error
+                regionSelectionState.value = RegionSelectionState.Error
             }
         }
     }
 }
+
