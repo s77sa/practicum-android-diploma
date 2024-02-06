@@ -182,8 +182,6 @@ class FiltersSettingsFragment : Fragment() {
     private fun setCountryValue(value: Country?) {
         if (value != null) {
             country = value.name
-        } else {
-            country = "Country=null" // For test
         }
         renderWorkplaceTextView()
     }
@@ -191,8 +189,6 @@ class FiltersSettingsFragment : Fragment() {
     private fun setAreaValue(value: Area?) {
         if (value != null) {
             area = value.name
-        } else {
-            area = "Area=null" // For test
         }
         renderWorkplaceTextView()
     }
@@ -210,8 +206,6 @@ class FiltersSettingsFragment : Fragment() {
     private fun renderIndustryTextView(value: Industry?) {
         if (value != null) {
             (binding.industryEditText as TextView).text = value.name
-        } else {
-            (binding.industryEditText as TextView).text = "Industry=null" // For test
         }
     }
 
