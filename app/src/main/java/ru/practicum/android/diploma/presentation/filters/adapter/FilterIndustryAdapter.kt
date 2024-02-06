@@ -10,7 +10,6 @@ import ru.practicum.android.diploma.presentation.filters.viewholder.FilterIndust
 class FilterIndustryAdapter(val onIndustryClickedCB: (Industry) -> Unit) :
     RecyclerView.Adapter<FilterIndustryViewHolder>() {
     var industries = mutableListOf<Industry>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterIndustryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemIndustryBinding.inflate(layoutInflater, parent, false)
@@ -22,7 +21,6 @@ class FilterIndustryAdapter(val onIndustryClickedCB: (Industry) -> Unit) :
     override fun onBindViewHolder(holder: FilterIndustryViewHolder, position: Int) {
         val industry = industries[position]
         holder.bind(industry)
-
         holder.itemView.setOnClickListener {
             onIndustryClickedCB(industry)
         }
