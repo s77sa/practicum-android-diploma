@@ -13,4 +13,5 @@ class FilterIndustryViewHolder(private val binding: ItemIndustryBinding) :
         binding.tvIndustryName.text = industry.name
         binding.cbSelect.isChecked = industry.isChecked
     }
+
 }
