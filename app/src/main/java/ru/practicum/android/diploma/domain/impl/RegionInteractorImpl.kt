@@ -27,4 +27,3 @@ class RegionInteractorImpl(private val regionRepository: RegionRepository) : Reg
         return regionRepository.clearRegionFilter()
     }
 }
-

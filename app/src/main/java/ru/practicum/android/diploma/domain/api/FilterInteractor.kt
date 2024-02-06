@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.domain.api
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Filter
-import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.util.Resource
 
 interface FilterInteractor {

@@ -5,7 +5,6 @@ import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Filter
-import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.util.Resource
 
 class FilterInteractorImpl(private val filterRepository: FilterRepository) : FilterInteractor {
@@ -21,11 +20,9 @@ class FilterInteractorImpl(private val filterRepository: FilterRepository) : Fil
         TODO(NOT_IMPLEMENTED_YET)
     }
 
-
     override fun applyCountryFilter(country: Country) {
         TODO(NOT_IMPLEMENTED_YET)
     }
-
 
     override fun getSelectedCountry(): Country {
         TODO(NOT_IMPLEMENTED_YET)
@@ -34,7 +31,6 @@ class FilterInteractorImpl(private val filterRepository: FilterRepository) : Fil
     override fun clearCountryFilter() {
         TODO(NOT_IMPLEMENTED_YET)
     }
-
 
     companion object {
         private const val NOT_IMPLEMENTED_YET = "Not yet implemented"
