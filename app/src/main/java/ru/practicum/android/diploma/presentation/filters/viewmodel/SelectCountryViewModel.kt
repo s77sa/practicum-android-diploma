@@ -1,6 +1,40 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
-import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.practicum.android.diploma.domain.api.AreaInteractor
+import ru.practicum.android.diploma.domain.models.Area
+import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.presentation.filters.states.CountrySelectionState
 
-class SelectCountryViewModel(private val context: Context) : ViewModel()
+class SelectCountryViewModel(
+    private val areaInteractor: AreaInteractor,
+) : ViewModel() {
+
+    private val _countrySelectionState = MutableLiveData<CountrySelectionState>()
+    val countrySelectionState: LiveData<CountrySelectionState> get() = _countrySelectionState
+
+    private var selectedCountry: String = ""
+
+    suspend fun getCountries(): List<Area> {
+        _countrySelectionState.value = CountrySelectionState.Loading
+        val (countries, error) = areaInteractor.getCountries()
+        if (countries != null) {
+            if (countries.isEmpty()) {
+                _countrySelectionState.value = CountrySelectionState.NoData
+            } else {
+                _countrySelectionState.value = CountrySelectionState.Success(countries)
+            }
+        } else {
+            _countrySelectionState.value = CountrySelectionState.ServerIssue
+        }
+        return countries ?: emptyList()
+    }
+
+    fun applyCountryFilter(country: Country) {
+        selectedCountry = country.name
+        _countrySelectionState.value = CountrySelectionState.Success(listOf())
+
+    }
+}

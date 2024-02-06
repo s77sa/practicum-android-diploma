@@ -23,6 +23,9 @@ class SelectWorkplaceFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSelectWorkplaceBinding.inflate(inflater, container, false)
+        arguments?.getString(SelectCountryFragment.SELECTED_COUNTRY)?.let { selectedCountry ->
+            binding.countryEditText.setText(selectedCountry)
+        }
         initClickListeners()
         observeViewModel()
         return binding.root
