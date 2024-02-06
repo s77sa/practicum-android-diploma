@@ -6,25 +6,25 @@ import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.util.Resource
 
 class RegionRepositoryImpl : RegionRepository {
+    private val notImplementedMessage = "Not yet implemented"
+
     override fun getRegions(countryId: String): Flow<Resource<List<Region>>> {
-        TODO("Not yet implemented")
+        TODO(notImplementedMessage)
     }
 
     override fun applyRegionFilter(region: Region) {
-        TODO("Not yet implemented")
+        TODO(notImplementedMessage)
     }
 
     override fun searchRegionByName(regionName: String): Flow<Resource<List<Region>>> {
-        TODO("Not yet implemented")
+        TODO(notImplementedMessage)
     }
 
     override fun getSelectedRegion(): Region {
-        TODO("Not yet implemented")
+        TODO(notImplementedMessage)
     }
 
     override fun clearRegionFilter() {
-        TODO("Not yet implemented")
+        TODO(notImplementedMessage)
     }
-
 }
-

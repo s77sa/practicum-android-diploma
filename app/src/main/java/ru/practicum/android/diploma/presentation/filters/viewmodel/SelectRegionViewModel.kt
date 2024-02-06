@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.RegionInteractor
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.filters.states.RegionSelectionState
@@ -65,4 +64,3 @@ class SelectRegionViewModel(
         }
     }
 }
-

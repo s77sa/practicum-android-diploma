@@ -7,7 +7,6 @@ import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.util.Resource
 
 class RegionInteractorImpl(private val regionRepository: RegionRepository) : RegionInteractor {
-
     override fun getRegions(countryId: String): Flow<Resource<List<Region>>> {
         return regionRepository.getRegions(countryId)
     }
