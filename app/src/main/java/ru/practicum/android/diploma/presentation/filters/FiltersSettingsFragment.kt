@@ -226,7 +226,8 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderBottonApply() {
-        val textIsFill = binding.workplaceEditText.text.toString().isNotEmpty() || binding.industryEditText.text.toString().isNotEmpty()
+        val textIsFill = binding.workplaceEditText.text.toString().isNotEmpty()
+            && binding.industryEditText.text.toString().isNotEmpty()
         val isSalaryNotEmpty = binding.salaryEditText.text.toString().isNotEmpty()
         val isCheckboxChecked = binding.checkboxNoSalary.isChecked
 
