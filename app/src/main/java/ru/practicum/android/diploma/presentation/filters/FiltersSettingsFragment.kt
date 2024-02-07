@@ -226,12 +226,11 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderBottonApply() {
-        val isWorkplaceNotEmpty = binding.workplaceEditText.text.toString().isNotEmpty()
-        val isIndustryNotEmpty = binding.industryEditText.text.toString().isNotEmpty()
+        val textIsFill = binding.workplaceEditText.text.toString().isNotEmpty() || binding.industryEditText.text.toString().isNotEmpty()
         val isSalaryNotEmpty = binding.salaryEditText.text.toString().isNotEmpty()
         val isCheckboxChecked = binding.checkboxNoSalary.isChecked
 
-        if (isWorkplaceNotEmpty || isIndustryNotEmpty || isCheckboxChecked || isSalaryNotEmpty) {
+        if (textIsFill || isSalaryNotEmpty || isCheckboxChecked) {
             binding.apply {
                 bottonSettingsSave.visibility = View.VISIBLE
                 bottonSettingsReset.visibility = View.VISIBLE
@@ -243,7 +242,6 @@ class FiltersSettingsFragment : Fragment() {
             }
         }
     }
-
 
     companion object {
         private val TAG = FiltersSettingsFragment::class.java.simpleName
