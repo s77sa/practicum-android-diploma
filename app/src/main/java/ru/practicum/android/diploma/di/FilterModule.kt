@@ -10,15 +10,19 @@ import ru.practicum.android.diploma.data.repository.AreaRepositoryImpl
 import ru.practicum.android.diploma.data.repository.FILTER_STORAGE
 import ru.practicum.android.diploma.data.repository.FilterRepositoryImpl
 import ru.practicum.android.diploma.data.repository.IndustryRepositoryImpl
+import ru.practicum.android.diploma.data.repository.RegionRepositoryImpl
 import ru.practicum.android.diploma.domain.api.AreaInteractor
 import ru.practicum.android.diploma.domain.api.AreaRepository
 import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.api.IndustryRepository
+import ru.practicum.android.diploma.domain.api.RegionInteractor
+import ru.practicum.android.diploma.domain.api.RegionRepository
 import ru.practicum.android.diploma.domain.impl.AreaInteractorImpl
 import ru.practicum.android.diploma.domain.impl.FilterInteractorImpl
 import ru.practicum.android.diploma.domain.impl.IndustryInteractorImpl
+import ru.practicum.android.diploma.domain.impl.RegionInteractorImpl
 
 val filterModule = module {
 
@@ -57,4 +61,13 @@ val filterModule = module {
     single<FilterInteractor> {
         FilterInteractorImpl(filterRepository = get())
     }
+
+    single<RegionInteractor> {
+        RegionInteractorImpl(regionRepository = get())
+    }
+
+    single<RegionRepository> {
+        RegionRepositoryImpl()
+    }
+
 }

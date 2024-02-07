@@ -43,7 +43,7 @@ val viewModelModule = module {
     }
 
     viewModel<SelectWorkplaceViewModel> {
-        SelectWorkplaceViewModel(get())
+        SelectWorkplaceViewModel(get(), get())
     }
 
     single<ExternalNavigatorRepository> { ExternalNavigatorRepositoryImpl(get()) }

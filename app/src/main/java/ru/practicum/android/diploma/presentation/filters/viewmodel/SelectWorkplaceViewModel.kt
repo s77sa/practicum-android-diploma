@@ -4,9 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.domain.api.FilterInteractor
+import ru.practicum.android.diploma.domain.api.RegionInteractor
 import ru.practicum.android.diploma.presentation.filters.states.WorkplaceSelectionState
 
-class SelectWorkplaceViewModel(private val filtersInteractor: FilterInteractor) : ViewModel() {
+class SelectWorkplaceViewModel(
+    private val filtersInteractor: FilterInteractor,
+    private val regionInteractor: RegionInteractor
+) : ViewModel() {
 
     private val _countrySelectionState = MutableLiveData<WorkplaceSelectionState>()
     val countrySelectionState: LiveData<WorkplaceSelectionState> get() = _countrySelectionState
@@ -20,7 +24,7 @@ class SelectWorkplaceViewModel(private val filtersInteractor: FilterInteractor) 
     }
 
     fun getSelectedRegion() {
-        val selectedRegion = filtersInteractor.getSelectedRegion()
+        val selectedRegion = regionInteractor.getSelectedRegion()
         _regionSelectionState.value = WorkplaceSelectionState.RegionFilled(selectedRegion)
     }
 
@@ -30,7 +34,7 @@ class SelectWorkplaceViewModel(private val filtersInteractor: FilterInteractor) 
     }
 
     fun clearSelectedRegion() {
-        filtersInteractor.clearRegionFilter()
+        regionInteractor.clearRegionFilter()
         _regionSelectionState.value = WorkplaceSelectionState.Empty
     }
 }
