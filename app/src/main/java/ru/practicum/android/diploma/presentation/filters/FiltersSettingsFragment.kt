@@ -46,20 +46,16 @@ class FiltersSettingsFragment : Fragment() {
         binding.filterSettingsHeaderBack.setOnClickListener {
             findNavController().popBackStack()
         }
-
         binding.workplaceForward.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectWorkplaceFragment)
         }
-
         binding.industryForward.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectIndustryFragment)
         }
-
         binding.checkboxNoSalary.setOnClickListener {
             viewModel.saveSalaryCheckBox(binding.checkboxNoSalary.isChecked)
             renderBottonApply()
         }
-
         binding.workplaceClear.setOnClickListener {
             (binding.workplaceEditText as TextView).text = ""
             viewModel.clearWorkplace()
@@ -86,14 +82,11 @@ class FiltersSettingsFragment : Fragment() {
             viewModel.resetFilters()
             renderBottonApply()
         }
-
         binding.salaryEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.saveExpectedSalary(s.toString())
             }
-
             override fun afterTextChanged(s: Editable?) = Unit
         })
     }
@@ -260,4 +253,3 @@ class FiltersSettingsFragment : Fragment() {
         private val TAG = FiltersSettingsFragment::class.java.simpleName
     }
 }
-
