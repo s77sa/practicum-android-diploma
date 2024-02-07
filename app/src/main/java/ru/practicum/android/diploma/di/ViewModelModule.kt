@@ -39,7 +39,7 @@ val viewModelModule = module {
     }
 
     viewModel<SelectRegionViewModel> {
-        SelectRegionViewModel(get())
+        SelectRegionViewModel(get(), get())
     }
 
     viewModel<SelectWorkplaceViewModel> {

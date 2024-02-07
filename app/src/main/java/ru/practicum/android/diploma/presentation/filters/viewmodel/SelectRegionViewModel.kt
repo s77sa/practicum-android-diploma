@@ -6,12 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.RegionInteractor
+import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.filters.states.RegionSelectionState
+import ru.practicum.android.diploma.presentation.util.DataTransfer
 import ru.practicum.android.diploma.presentation.util.Resource
 
 class SelectRegionViewModel(
     private val regionInteractor: RegionInteractor,
+    private val dataTransfer: DataTransfer
 ) : ViewModel() {
 
     private val regionSelectionState = MutableLiveData<RegionSelectionState>()
@@ -62,5 +65,9 @@ class SelectRegionViewModel(
                 regionSelectionState.value = RegionSelectionState.Error
             }
         }
+    }
+
+    fun saveRegionFilter(selectedRegion: Area) {
+        dataTransfer.setArea(selectedRegion)
     }
 }
