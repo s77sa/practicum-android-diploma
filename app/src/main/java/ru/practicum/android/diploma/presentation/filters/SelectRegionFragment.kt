@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,6 +30,7 @@ import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectRegionV
 class SelectRegionFragment : Fragment() {
     private var _binding: FragmentSelectRegionBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: SelectRegionViewModel by viewModel {
         parametersOf(
             requireArguments().getString(
@@ -38,6 +38,7 @@ class SelectRegionFragment : Fragment() {
             )
         )
     }
+
     private val adapter = FilterRegionAdapter {
         selectRegion(it)
     }
@@ -110,6 +111,10 @@ class SelectRegionFragment : Fragment() {
             false
         }
 
+        binding.filterSettingsApply.setOnClickListener {
+            selectedRegion?.let { it1 -> viewModel.saveRegionFilter(it1) }
+            findNavController().popBackStack()
+        }
         binding.selectRegionBackArrowImageview.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -146,8 +151,7 @@ class SelectRegionFragment : Fragment() {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             if (!binding.etSearch.text.toString().isNullOrEmpty()) {
-                binding.container.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
-                binding.container.endIconDrawable = requireContext().getDrawable(R.drawable.ic_close)
+                binding.ivClear.setImageResource(R.drawable.ic_close)
                 if (start != before) {
                     searchJob?.cancel()
                     searchJob = viewLifecycleOwner.lifecycleScope.launch {
@@ -156,8 +160,7 @@ class SelectRegionFragment : Fragment() {
                     }
                 }
             } else {
-                binding.container.endIconMode = TextInputLayout.END_ICON_CUSTOM
-                binding.container.endIconDrawable = requireContext().getDrawable(R.drawable.ic_search)
+                binding.ivClear.setImageResource(R.drawable.ic_search)
                 val inputMethodManager =
                     requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)

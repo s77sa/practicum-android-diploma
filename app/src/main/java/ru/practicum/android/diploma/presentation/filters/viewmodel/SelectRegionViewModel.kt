@@ -107,4 +107,8 @@ class SelectRegionViewModel(
         }
 
     }
+
+    fun saveRegionFilter(selectedRegion: Area) {
+        dataTransfer.setArea(selectedRegion)
+    }
 }
