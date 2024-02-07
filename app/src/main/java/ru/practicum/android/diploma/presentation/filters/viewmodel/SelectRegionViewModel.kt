@@ -1,73 +1,110 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
+import android.content.Context
+import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.api.RegionInteractor
+import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.domain.api.AreaInteractor
 import ru.practicum.android.diploma.domain.models.Area
-import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.filters.states.RegionSelectionState
 import ru.practicum.android.diploma.presentation.util.DataTransfer
-import ru.practicum.android.diploma.presentation.util.Resource
 
 class SelectRegionViewModel(
-    private val regionInteractor: RegionInteractor,
+    id: String,
+    private val areaInteractor: AreaInteractor,
+    private val context: Context,
     private val dataTransfer: DataTransfer
 ) : ViewModel() {
+
+    private var countryId = id
 
     private val regionSelectionState = MutableLiveData<RegionSelectionState>()
     fun regionSelectionState(): LiveData<RegionSelectionState> = regionSelectionState
 
     private var selectedRegion: String = ""
 
-    fun getRegions(countryId: String) {
+    private var foundRegions: MutableList<Area>? = null
+    init {
+        getData()
+    }
+
+    fun getData() {
+        getRegions(countryId)
+    }
+
+    fun getRegions(countryId: String?) {
         regionSelectionState.value = RegionSelectionState.Loading
-        viewModelScope.launch {
-            regionInteractor.getRegions(countryId).collect { resource ->
-                processRegionResult(resource)
+        if (countryId != "") {
+            viewModelScope.launch {
+                val regions = countryId?.let { areaInteractor.getCities(it) }
+                if (regions != null) {
+                    processRegionResult(regions.first, regions.second)
+                }
             }
+        } else {
+            getAllRegions()
+        }
+
+    }
+
+    private fun getAllRegions() {
+        viewModelScope.launch {
+            val regions = areaInteractor.getCitiesAll()
+            processRegionResult(regions.first, regions.second)
         }
     }
 
-    fun applyRegionFilter(region: Region) {
-        viewModelScope.launch {
-            regionInteractor.applyRegionFilter(region)
-            getRegions(region.countryId)
+    fun searchRegionByName(text: String) {
+        regionSelectionState.value = RegionSelectionState.Loading
+        val filteredRegions = foundRegions?.filter { it.name.contains(text, ignoreCase = true) }
+        if (filteredRegions!!.isEmpty()) {
+            regionSelectionState.postValue(RegionSelectionState.NoData)
+        } else {
+            regionSelectionState.postValue(RegionSelectionState.Success(filteredRegions))
         }
+
+    }
+
+    fun selectRegion(region: Area) {
+        dataTransfer.setArea(region)
     }
 
     fun getSelectedRegion(): String {
         return selectedRegion
     }
 
-    fun searchRegionByName(regionName: String) {
-        viewModelScope.launch {
-            regionInteractor.searchRegionByName(regionName).collect { resource ->
-                processRegionResult(resource)
-            }
+    fun processRegionResult(found: List<Area>?, errorMessage: String?) {
+        val areaList = mutableListOf<Area>()
+        if (found != null) {
+            areaList.clear()
+            areaList.addAll(found)
         }
-    }
+        when {
+            errorMessage != null -> {
+                if (errorMessage == getString(context, R.string.no_internet)) {
+                    regionSelectionState.postValue(RegionSelectionState.NoInternet)
 
-    fun processRegionResult(resource: Resource<List<Region>>) {
-        when (resource) {
-            is Resource.Success -> {
-                val regions = resource.data ?: emptyList()
-                if (regions.isNotEmpty()) {
-                    regionSelectionState.value = RegionSelectionState.Success(regions)
                 } else {
-                    regionSelectionState.value = RegionSelectionState.NoData
+                    regionSelectionState.postValue(RegionSelectionState.Error)
+
                 }
+
             }
 
-            is Resource.Error -> {
-                regionSelectionState.value = RegionSelectionState.Error
+            areaList.isEmpty() -> {
+                regionSelectionState.postValue(RegionSelectionState.NoData)
+            }
+
+            else -> {
+                foundRegions = areaList
+                regionSelectionState.postValue(RegionSelectionState.Success(areaList))
             }
         }
+
     }
 
-    fun saveRegionFilter(selectedRegion: Area) {
-        dataTransfer.setArea(selectedRegion)
-    }
 }
