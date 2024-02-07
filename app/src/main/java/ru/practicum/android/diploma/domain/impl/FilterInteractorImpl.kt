@@ -1,11 +1,9 @@
 package ru.practicum.android.diploma.domain.impl
 
-import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.FilterRepository
-import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Filter
-import ru.practicum.android.diploma.presentation.util.Resource
+import ru.practicum.android.diploma.domain.models.FilterSettings
 
 class FilterInteractorImpl(private val filterRepository: FilterRepository) : FilterInteractor {
     override fun load(): Filter? {
@@ -16,21 +14,29 @@ class FilterInteractorImpl(private val filterRepository: FilterRepository) : Fil
         filterRepository.write(filter)
     }
 
-    override fun getCountries(): Flow<Resource<List<Country>>> {
-        TODO(NOT_IMPLEMENTED_YET)
+    override fun loadFilterSettings(): FilterSettings? {
+        return filterRepository.loadFilterSettings()
     }
 
-    override fun applyCountryFilter(country: Country) {
-        TODO(NOT_IMPLEMENTED_YET)
+    override fun writeFilterSettings(filter: FilterSettings) {
+        filterRepository.writeFilterSettings(filter)
     }
 
-    override fun getSelectedCountry(): Country {
-        TODO(NOT_IMPLEMENTED_YET)
-    }
-
-    override fun clearCountryFilter() {
-        TODO(NOT_IMPLEMENTED_YET)
-    }
+//    override fun getCountries(): Flow<Resource<List<Country>>> {
+//        TODO(NOT_IMPLEMENTED_YET)
+//    }
+//
+//    override fun applyCountryFilter(country: Country) {
+//        TODO(NOT_IMPLEMENTED_YET)
+//    }
+//
+//    override fun getSelectedCountry(): Country {
+//        TODO(NOT_IMPLEMENTED_YET)
+//    }
+//
+//    override fun clearCountryFilter() {
+//        TODO(NOT_IMPLEMENTED_YET)
+//    }
 
     companion object {
         private const val NOT_IMPLEMENTED_YET = "Not yet implemented"
