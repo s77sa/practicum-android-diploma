@@ -112,7 +112,7 @@ class SelectRegionFragment : Fragment() {
         }
 
         binding.filterSettingsApply.setOnClickListener {
-            selectedRegion?.let { it1 -> viewModel.saveRegionFilter(it1) }
+//            selectedRegion?.let { it1 -> viewModel.saveRegionFilter(it1) }
             findNavController().popBackStack()
         }
         binding.selectRegionBackArrowImageview.setOnClickListener {
