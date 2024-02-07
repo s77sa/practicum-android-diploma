@@ -118,9 +118,9 @@ class SelectRegionFragment : Fragment() {
         binding.selectRegionBackArrowImageview.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.closeIcon.setOnClickListener {
-            binding.etSearch.setText("")
-            viewModel.getData()
+
+        binding.ivClear.setOnClickListener {
+            clearSearch()
         }
 
     }
@@ -173,6 +173,12 @@ class SelectRegionFragment : Fragment() {
         }
 
         override fun afterTextChanged(p0: Editable?) = Unit
+    }
+
+    private fun clearSearch() {
+        binding.etSearch.setText("")
+        binding.ivClear.setImageResource(R.drawable.ic_search)
+        viewModel.getData()
     }
 
     companion object {
