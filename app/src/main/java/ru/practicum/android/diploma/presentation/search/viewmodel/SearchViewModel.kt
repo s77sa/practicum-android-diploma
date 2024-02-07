@@ -35,7 +35,7 @@ class SearchViewModel(
     private var filter: Filter? = null
 
     init {
-        filter = loadFilterSettings()
+        loadFilter()
     }
 
     private fun setPlaceholder(placeholdersSearchEnum: PlaceholdersSearchEnum) {
@@ -56,6 +56,11 @@ class SearchViewModel(
         true
     ) { changedText ->
         searchVacancy(changedText, 0)
+    }
+
+    fun loadFilter() {
+        filter = loadFilterSettings()
+
     }
 
     private fun loadFilterSettings(): Filter? {
