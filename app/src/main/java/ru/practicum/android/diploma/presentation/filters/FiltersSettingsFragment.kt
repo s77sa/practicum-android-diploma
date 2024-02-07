@@ -45,19 +45,15 @@ class FiltersSettingsFragment : Fragment() {
         binding.filterSettingsHeaderBack.setOnClickListener {
             findNavController().popBackStack()
         }
-
         binding.workplaceForward.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectWorkplaceFragment)
         }
-
         binding.industryForward.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectIndustryFragment)
         }
-
         binding.checkboxNoSalary.setOnClickListener {
             viewModel.saveSalaryCheckBox(binding.checkboxNoSalary.isChecked)
         }
-
         binding.workplaceClear.setOnClickListener {
             (binding.workplaceEditText as TextView).text = ""
             viewModel.clearWorkplace()
@@ -72,21 +68,20 @@ class FiltersSettingsFragment : Fragment() {
         }
         binding.bottonSettingsSave.setOnClickListener {
             viewModel.saveFiltersToSharedPrefs()
+            findNavController().popBackStack()
         }
         binding.bottonSettingsReset.setOnClickListener {
             (binding.salaryEditText as TextView).text = ""
             (binding.industryEditText as TextView).text = ""
             (binding.workplaceEditText as TextView).text = ""
             viewModel.resetFilters()
+            renderBottonApply()
         }
-
         binding.salaryEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.saveExpectedSalary(s.toString())
             }
-
             override fun afterTextChanged(s: Editable?) = Unit
         })
     }
@@ -103,20 +98,23 @@ class FiltersSettingsFragment : Fragment() {
         }
         viewModel.countryData.observe(viewLifecycleOwner) {
             setCountryValue(it)
+            renderBottonApply()
         }
         viewModel.areaData.observe(viewLifecycleOwner) {
             setAreaValue(it)
+            renderBottonApply()
         }
         viewModel.industryData.observe(viewLifecycleOwner) {
             renderIndustryTextView(it)
+            renderBottonApply()
         }
         viewModel.equalFilter.observe(viewLifecycleOwner) {
             Log.d(TAG, "Observer compare result=$it")
-            renderBottonApply(it)
+            renderBottonApply()
         }
         viewModel.changedFilter.observe(viewLifecycleOwner) {
             Log.d(TAG, "changedFilter=$it")
-            renderBottonReset(it)
+            renderBottonApply()
         }
     }
 
@@ -188,6 +186,7 @@ class FiltersSettingsFragment : Fragment() {
             country = value.name
         }
         renderWorkplaceTextView()
+        renderBottonApply()
     }
 
     private fun setAreaValue(value: Area?) {
@@ -195,6 +194,7 @@ class FiltersSettingsFragment : Fragment() {
             area = value.name
         }
         renderWorkplaceTextView()
+        renderBottonApply()
     }
 
     private fun renderWorkplaceTextView() {
@@ -221,24 +221,26 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderCheckbox(isChecked: Boolean) {
-        Log.d(TAG, "renderCheckbox = $isChecked")
+        // Log.d(TAG, "renderCheckbox = $isChecked")
         binding.checkboxNoSalary.isChecked = isChecked
     }
 
-    private fun renderBottonApply(show: Boolean) {
-        Log.d(TAG, "renderBottonApply result=$show")
-        if (show) {
-            binding.bottonSettingsSave.visibility = View.VISIBLE
-        } else {
-            binding.bottonSettingsSave.visibility = View.GONE
-        }
-    }
+    private fun renderBottonApply() {
+        val textIsFill = binding.workplaceEditText.text.toString().isNotEmpty()
+            && binding.industryEditText.text.toString().isNotEmpty()
+        val isSalaryNotEmpty = binding.salaryEditText.text.toString().isNotEmpty()
+        val isCheckboxChecked = binding.checkboxNoSalary.isChecked
 
-    private fun renderBottonReset(show: Boolean) {
-        if (show) {
-            binding.bottonSettingsReset.visibility = View.VISIBLE
+        if (textIsFill || isSalaryNotEmpty || isCheckboxChecked) {
+            binding.apply {
+                bottonSettingsSave.visibility = View.VISIBLE
+                bottonSettingsReset.visibility = View.VISIBLE
+            }
         } else {
-            binding.bottonSettingsReset.visibility = View.GONE
+            binding.apply {
+                bottonSettingsSave.visibility = View.GONE
+                bottonSettingsReset.visibility = View.GONE
+            }
         }
     }
 
