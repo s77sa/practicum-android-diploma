@@ -6,18 +6,13 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
@@ -47,8 +42,6 @@ class SelectRegionFragment : Fragment() {
         viewModel.selectRegion(region)
         findNavController().popBackStack()
     }
-
-    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,22 +92,6 @@ class SelectRegionFragment : Fragment() {
     private fun initListeners() {
         binding.etSearch.addTextChangedListener(textWatcherListener())
 
-        binding.etSearch.setOnEditorActionListener { textView, action, keyEvent ->
-            if (action == EditorInfo.IME_ACTION_DONE) {
-                searchJob?.cancel()
-                searchJob = viewLifecycleOwner.lifecycleScope.launch {
-                    delay(SEARCH_DEBOUNCE_DELAY_MILS)
-                    viewModel.searchRegionByName(binding.etSearch.text.toString())
-                }
-                true
-            }
-            false
-        }
-
-        binding.filterSettingsApply.setOnClickListener {
-//            selectedRegion?.let { it1 -> viewModel.saveRegionFilter(it1) }
-            findNavController().popBackStack()
-        }
         binding.selectRegionBackArrowImageview.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -153,18 +130,14 @@ class SelectRegionFragment : Fragment() {
 
     private fun textWatcherListener() = object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
+
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             if (!binding.etSearch.text.toString().isNullOrEmpty()) {
                 binding.ivClear.setImageResource(R.drawable.ic_close)
-                if (start != before) {
-                    searchJob?.cancel()
-                    searchJob = viewLifecycleOwner.lifecycleScope.launch {
-                        delay(SEARCH_DEBOUNCE_DELAY_MILS)
-                        viewModel.searchRegionByName(binding.etSearch.text.toString())
-                    }
-                }
+                viewModel.searchDebounce(binding.etSearch.text.toString())
             } else {
                 binding.ivClear.setImageResource(R.drawable.ic_search)
+
                 val inputMethodManager =
                     requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
