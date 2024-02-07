@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
-import ru.practicum.android.diploma.domain.models.Region
+import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.presentation.filters.adapter.FilterRegionAdapter
 import ru.practicum.android.diploma.presentation.filters.states.RegionSelectionState
 import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectRegionViewModel
@@ -34,8 +34,8 @@ class SelectRegionFragment : Fragment() {
         selectRegion(it)
     }
 
-    private fun selectRegion(region: Region) {
-        viewModel.applyRegionFilter(region)
+    private fun selectRegion(region: Area) {
+        viewModel.selectRegion(region)
         findNavController().popBackStack()
     }
 
@@ -53,6 +53,7 @@ class SelectRegionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getRegions(null)
         binding.recyclerFilterRegion.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerFilterRegion.adapter = adapter
 
@@ -76,6 +77,7 @@ class SelectRegionFragment : Fragment() {
 
                 is RegionSelectionState.Success -> {
                     setPlaceholder(PlaceholdersRegionEnum.SHOW_RESULT)
+                    adapter.regions = it.selectedRegion!!.toMutableList()
                 }
             }
         }

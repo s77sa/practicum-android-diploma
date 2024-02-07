@@ -35,11 +35,11 @@ val viewModelModule = module {
     }
 
     viewModel<SelectIndustryViewModel> {
-        SelectIndustryViewModel(get(), get(), dataTransfer = get())
+        SelectIndustryViewModel(get(), get())
     }
 
     viewModel<SelectRegionViewModel> {
-        SelectRegionViewModel(get())
+        SelectRegionViewModel(get(), get(), get())
     }
 
     viewModel<SelectWorkplaceViewModel> {
@@ -52,5 +52,5 @@ val viewModelModule = module {
         VacancyViewModel(vacancyInteractor = get(), favouriteInteractor = get())
     }
 
-    single { DataTransfer }
+    factory { DataTransfer }
 }
