@@ -226,10 +226,9 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderBottonApply() {
-        if (binding.workplaceEditText.text.toString().isNotEmpty() ||
-            binding.industryEditText.text.toString().isNotEmpty() ||
-            binding.checkboxNoSalary.isChecked ||
-            binding.salaryEditText.text.toString().isNotEmpty()
+        if (!(binding.workplaceEditText.text.toString().isEmpty() && binding.industryEditText.text.toString()
+                .isEmpty() && !binding.checkboxNoSalary.isChecked && binding.salaryEditText.text.toString()
+                .isEmpty())
         ) {
             binding.apply {
                 bottonSettingsSave.visibility = View.VISIBLE
