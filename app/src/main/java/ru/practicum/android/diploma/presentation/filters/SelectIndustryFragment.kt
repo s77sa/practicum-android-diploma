@@ -143,7 +143,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         binding.etSearch.setText("")
         binding.ivClear.setImageResource(R.drawable.ic_search)
         adapter.industries.clear()
-        adapter.selectedIndustry=null
+        adapter.selectedIndustry = null
         adapter.notifyDataSetChanged()
 
     }
