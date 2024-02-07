@@ -78,7 +78,10 @@ class SelectWorkplaceFragment : Fragment() {
         }
 
         binding.selectRegionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_selectWorkplaceFragment_to_selectRegionFragment)
+            findNavController().navigate(
+                R.id.action_selectWorkplaceFragment_to_selectRegionFragment,
+                SelectRegionFragment.createArgs(id = "")
+            )
         }
         binding.clearCountryName.setOnClickListener {
             viewModel.clearSelectedCountry()

@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -19,6 +20,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.domain.models.Area
@@ -29,7 +31,13 @@ import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectRegionV
 class SelectRegionFragment : Fragment() {
     private var _binding: FragmentSelectRegionBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SelectRegionViewModel by viewModel()
+    private val viewModel: SelectRegionViewModel by viewModel {
+        parametersOf(
+            requireArguments().getString(
+                ARGS_ID
+            )
+        )
+    }
     private val adapter = FilterRegionAdapter {
         selectRegion(it)
     }
@@ -78,6 +86,7 @@ class SelectRegionFragment : Fragment() {
                 is RegionSelectionState.Success -> {
                     setPlaceholder(PlaceholdersRegionEnum.SHOW_RESULT)
                     adapter.regions = it.selectedRegion!!.toMutableList()
+                    adapter.notifyDataSetChanged()
                 }
             }
         }
@@ -94,7 +103,6 @@ class SelectRegionFragment : Fragment() {
                 searchJob?.cancel()
                 searchJob = viewLifecycleOwner.lifecycleScope.launch {
                     delay(SEARCH_DEBOUNCE_DELAY_MILS)
-
                     viewModel.searchRegionByName(binding.etSearch.text.toString())
                 }
                 true
@@ -144,7 +152,6 @@ class SelectRegionFragment : Fragment() {
                     searchJob?.cancel()
                     searchJob = viewLifecycleOwner.lifecycleScope.launch {
                         delay(SEARCH_DEBOUNCE_DELAY_MILS)
-
                         viewModel.searchRegionByName(binding.etSearch.text.toString())
                     }
                 }
@@ -154,7 +161,7 @@ class SelectRegionFragment : Fragment() {
                 val inputMethodManager =
                     requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
-                viewModel.getRegions("")
+                viewModel.getData()
             }
         }
 
@@ -165,5 +172,10 @@ class SelectRegionFragment : Fragment() {
         const val VISIBLE = View.VISIBLE
         const val GONE = View.GONE
         const val SEARCH_DEBOUNCE_DELAY_MILS = 2000L
+        private const val ARGS_ID = "id"
+        fun createArgs(id: String): Bundle =
+            bundleOf(
+                ARGS_ID to id
+            )
     }
 }

@@ -38,8 +38,8 @@ val viewModelModule = module {
         SelectIndustryViewModel(get(), get())
     }
 
-    viewModel<SelectRegionViewModel> {
-        SelectRegionViewModel(get(), get(), get())
+    viewModel<SelectRegionViewModel> { (id: String) ->
+        SelectRegionViewModel(id, get(), get(), get())
     }
 
     viewModel<SelectWorkplaceViewModel> {

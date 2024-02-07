@@ -15,23 +15,39 @@ import ru.practicum.android.diploma.presentation.filters.states.RegionSelectionS
 import ru.practicum.android.diploma.presentation.util.DataTransfer
 
 class SelectRegionViewModel(
+    id: String,
     private val areaInteractor: AreaInteractor,
     private val context: Context,
     private val dataTransfer: DataTransfer
 ) : ViewModel() {
+
+    private var countryId = id
+
 
     private val regionSelectionState = MutableLiveData<RegionSelectionState>()
     fun regionSelectionState(): LiveData<RegionSelectionState> = regionSelectionState
 
     private var selectedRegion: String = ""
 
+    private var foundRegions: MutableList<Area>? = null
+
+    init {
+        getData()
+    }
+
+    fun getData() {
+        getRegions(countryId)
+    }
+
     fun getRegions(countryId: String?) {
         regionSelectionState.value = RegionSelectionState.Loading
-        if (countryId != null) {
+        if (countryId != "") {
             viewModelScope.launch {
-                val regions = areaInteractor.getCities(countryId)
+                val regions = countryId?.let { areaInteractor.getCities(it) }
                 Log.i("Region", "getRegions $regions")
-                processRegionResult(regions.first, regions.second)
+                if (regions != null) {
+                    processRegionResult(regions.first, regions.second)
+                }
             }
         } else {
             getAllRegions()
@@ -47,29 +63,37 @@ class SelectRegionViewModel(
         }
     }
 
-    fun applyRegionFilter(region: Area) {
+    fun searchRegionByName(text: String) {
+        regionSelectionState.value = RegionSelectionState.Loading
+        val filteredRegions = foundRegions?.filter { it.name.contains(text, ignoreCase = true) }
+        Log.i("Region", "filteredRegions $filteredRegions")
+        if (filteredRegions!!.isEmpty()) {
+            regionSelectionState.postValue(RegionSelectionState.NoData)
+        } else {
+            regionSelectionState.postValue(RegionSelectionState.Success(filteredRegions))
+        }
 
     }
 
+
     fun selectRegion(region: Area) {
         dataTransfer.setArea(region)
+        Log.i("Region", "selectRegion $region")
     }
 
     fun getSelectedRegion(): String {
         return selectedRegion
     }
 
-    fun searchRegionByName(regionName: String) {
-
-    }
-
     fun processRegionResult(found: List<Area>?, errorMessage: String?) {
 
         val areaList = mutableListOf<Area>()
+
         if (found != null) {
             areaList.clear()
             areaList.addAll(found)
         }
+        Log.i("Region", "areaList $areaList")
         when {
             errorMessage != null -> {
                 if (errorMessage == getString(context, R.string.no_internet)) {
@@ -87,6 +111,8 @@ class SelectRegionViewModel(
             }
 
             else -> {
+                foundRegions = areaList
+                Log.i("Region", "foundRegions $foundRegions")
                 regionSelectionState.postValue(RegionSelectionState.Success(areaList))
             }
         }
