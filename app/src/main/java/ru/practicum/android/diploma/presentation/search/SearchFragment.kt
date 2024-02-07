@@ -47,6 +47,7 @@ class SearchFragment : Fragment() {
     private var lastSearchText = ""
     private var newSearchText = ""
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,6 +67,7 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -263,6 +265,7 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.loadFilter()
         if (vacancies.size > 0) {
             setPlaceholder(PlaceholdersSearchEnum.SHOW_RESULT)
         } else {
