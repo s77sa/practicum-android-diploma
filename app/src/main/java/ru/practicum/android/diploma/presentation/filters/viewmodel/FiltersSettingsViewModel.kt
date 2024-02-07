@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.domain.models.FilterSettings
 import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.domain.models.PlainFilterSettings
 import ru.practicum.android.diploma.presentation.util.DataTransfer
+import ru.practicum.android.diploma.presentation.util.FiltersCompare
 
 class FiltersSettingsViewModel(
     private val filterInteractor: FilterInteractor
@@ -36,21 +37,32 @@ class FiltersSettingsViewModel(
     private var filterSettings: FilterSettings? = null
 
     fun loadFromShared() {
-        val filter = filterInteractor.loadFilterSettings()
-//        if (filter != null) {
-//            _areaData.value = filter.area?.let {
-//                Area(
-//                    id = "",
-//                    name = it,
-//                    null,
-//                    null
-//                )
-//            }
-//        }
+        filterSettings = filterInteractor.loadFilterSettings()
+        writeToLiveData()
     }
 
-    fun saveToShared() {
+    private fun writeToLiveData() {
+        _countryData.value = filterSettings?.country
+        _areaData.value = filterSettings?.area
+        _industryData.value = filterSettings?.industry
+        _plainFiltersData.value = filterSettings?.plainFilterSettings
+    }
 
+    private fun compareFilters() {
+        val newFilter: FilterSettings = prepareFilterSettings()
+        filterSettings?.let {
+            _equalFilter.value = FiltersCompare.compareFilterSettings(newFilter, it)
+            Log.d(TAG, "Compare Filters result=${_equalFilter.value}")
+        }
+    }
+
+    private fun prepareFilterSettings(): FilterSettings {
+        return FilterSettings(
+            country = _countryData.value,
+            area = _areaData.value,
+            industry = _industryData.value,
+            plainFilterSettings = _plainFiltersData.value
+        )
     }
 
     private fun checkChangedFilters() {
@@ -74,6 +86,9 @@ class FiltersSettingsViewModel(
 
     fun saveFiltersToSharedPrefs() {
         Log.d(TAG, "saveFiltersToSharedPrefs")
+        filterInteractor.writeFilterSettings(prepareFilterSettings())
+        loadFromShared()
+        saveData()
     }
 
     fun saveSalaryCheckBox(isChecked: Boolean) {
@@ -130,6 +145,7 @@ class FiltersSettingsViewModel(
         DataTransfer.setIndustry(_industryData.value)
         DataTransfer.setArea(_areaData.value)
         checkChangedFilters()
+        compareFilters()
     }
 
     companion object {

@@ -70,7 +70,7 @@ class FiltersSettingsFragment : Fragment() {
             (binding.salaryEditText as TextView).text = ""
             viewModel.clearSalary()
         }
-        binding.bottonSettingsApply.setOnClickListener {
+        binding.bottonSettingsSave.setOnClickListener {
             viewModel.saveFiltersToSharedPrefs()
         }
         binding.bottonSettingsReset.setOnClickListener {
@@ -111,6 +111,7 @@ class FiltersSettingsFragment : Fragment() {
             renderIndustryTextView(it)
         }
         viewModel.equalFilter.observe(viewLifecycleOwner) {
+            Log.d(TAG, "Observer compare result=$it")
             renderBottonApply(it)
         }
         viewModel.changedFilter.observe(viewLifecycleOwner) {
@@ -225,10 +226,11 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderBottonApply(show: Boolean) {
+        Log.d(TAG, "renderBottonApply result=$show")
         if (show) {
-            binding.bottonSettingsApply.visibility = View.VISIBLE
+            binding.bottonSettingsSave.visibility = View.VISIBLE
         } else {
-            binding.bottonSettingsApply.visibility = View.GONE
+            binding.bottonSettingsSave.visibility = View.GONE
         }
     }
 
