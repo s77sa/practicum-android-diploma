@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,7 +22,6 @@ class SelectRegionViewModel(
 
     private var countryId = id
 
-
     private val regionSelectionState = MutableLiveData<RegionSelectionState>()
     fun regionSelectionState(): LiveData<RegionSelectionState> = regionSelectionState
 
@@ -44,7 +42,6 @@ class SelectRegionViewModel(
         if (countryId != "") {
             viewModelScope.launch {
                 val regions = countryId?.let { areaInteractor.getCities(it) }
-                Log.i("Region", "getRegions $regions")
                 if (regions != null) {
                     processRegionResult(regions.first, regions.second)
                 }
@@ -58,7 +55,6 @@ class SelectRegionViewModel(
     private fun getAllRegions() {
         viewModelScope.launch {
             val regions = areaInteractor.getCitiesAll()
-            Log.i("Region", "getRegions $regions")
             processRegionResult(regions.first, regions.second)
         }
     }
@@ -66,7 +62,6 @@ class SelectRegionViewModel(
     fun searchRegionByName(text: String) {
         regionSelectionState.value = RegionSelectionState.Loading
         val filteredRegions = foundRegions?.filter { it.name.contains(text, ignoreCase = true) }
-        Log.i("Region", "filteredRegions $filteredRegions")
         if (filteredRegions!!.isEmpty()) {
             regionSelectionState.postValue(RegionSelectionState.NoData)
         } else {
@@ -75,10 +70,8 @@ class SelectRegionViewModel(
 
     }
 
-
     fun selectRegion(region: Area) {
         dataTransfer.setArea(region)
-        Log.i("Region", "selectRegion $region")
     }
 
     fun getSelectedRegion(): String {
@@ -86,14 +79,11 @@ class SelectRegionViewModel(
     }
 
     fun processRegionResult(found: List<Area>?, errorMessage: String?) {
-
         val areaList = mutableListOf<Area>()
-
         if (found != null) {
             areaList.clear()
             areaList.addAll(found)
         }
-        Log.i("Region", "areaList $areaList")
         when {
             errorMessage != null -> {
                 if (errorMessage == getString(context, R.string.no_internet)) {
@@ -112,7 +102,6 @@ class SelectRegionViewModel(
 
             else -> {
                 foundRegions = areaList
-                Log.i("Region", "foundRegions $foundRegions")
                 regionSelectionState.postValue(RegionSelectionState.Success(areaList))
             }
         }
