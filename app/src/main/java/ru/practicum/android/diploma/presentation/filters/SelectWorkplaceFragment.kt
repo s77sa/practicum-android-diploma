@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,6 +30,13 @@ class SelectWorkplaceFragment : Fragment() {
         initClickListeners()
         observeViewModel()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val selectedCountry = arguments?.getString(SelectCountryFragment.SELECTED_COUNTRY)
+        binding.filterSettingsApply.isVisible = !selectedCountry.isNullOrEmpty()
     }
 
     private fun observeViewModel() {

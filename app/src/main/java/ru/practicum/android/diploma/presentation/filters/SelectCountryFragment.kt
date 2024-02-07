@@ -85,7 +85,8 @@ class SelectCountryFragment : Fragment() {
     private fun navigateToSelectWorkplaceFragment(selectedCountry: String) {
         val bundle = Bundle()
         bundle.putString(SELECTED_COUNTRY, selectedCountry)
-        findNavController().navigate(R.id.action_selectCountryFragment_to_selectWorkplaceFragment, bundle)
+        findNavController().navigateUp()
+        findNavController().navigate(R.id.selectWorkplaceFragment, bundle)
     }
 
     private fun initListeners() {
