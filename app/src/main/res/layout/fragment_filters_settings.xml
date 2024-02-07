@@ -224,7 +224,7 @@
         android:paddingVertical="@dimen/dp_20"
         android:text="@string/filter_settings_apply"
         android:textAllCaps="false"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorPrimary"
         android:textSize="@dimen/sp_16"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bottonSettingsReset"
@@ -243,8 +243,9 @@
         android:text="@string/filter_settings_reset"
         android:textColor="@color/yp_red"
         android:textSize="@dimen/sp_16"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+

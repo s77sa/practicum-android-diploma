@@ -25,6 +25,7 @@ class FiltersSettingsFragment : Fragment() {
     private var country: String? = null
     private var area: String? = null
     private val compareFilters = true
+    private var hasFilterSettings = false
 
     override fun onCreateView(
 
@@ -56,28 +57,34 @@ class FiltersSettingsFragment : Fragment() {
 
         binding.checkboxNoSalary.setOnClickListener {
             viewModel.saveSalaryCheckBox(binding.checkboxNoSalary.isChecked)
+            renderBottonApply()
         }
 
         binding.workplaceClear.setOnClickListener {
             (binding.workplaceEditText as TextView).text = ""
             viewModel.clearWorkplace()
+            renderBottonApply()
         }
         binding.industryClear.setOnClickListener {
             (binding.industryEditText as TextView).text = ""
             viewModel.clearIndustry()
+            renderBottonApply()
         }
         binding.salaryClear.setOnClickListener {
             (binding.salaryEditText as TextView).text = ""
             viewModel.clearSalary()
+            renderBottonApply()
         }
         binding.bottonSettingsSave.setOnClickListener {
             viewModel.saveFiltersToSharedPrefs()
+            findNavController().popBackStack()
         }
         binding.bottonSettingsReset.setOnClickListener {
             (binding.salaryEditText as TextView).text = ""
             (binding.industryEditText as TextView).text = ""
             (binding.workplaceEditText as TextView).text = ""
             viewModel.resetFilters()
+            renderBottonApply()
         }
 
         binding.salaryEditText.addTextChangedListener(object : TextWatcher {
@@ -103,20 +110,23 @@ class FiltersSettingsFragment : Fragment() {
         }
         viewModel.countryData.observe(viewLifecycleOwner) {
             setCountryValue(it)
+            renderBottonApply()
         }
         viewModel.areaData.observe(viewLifecycleOwner) {
             setAreaValue(it)
+            renderBottonApply()
         }
         viewModel.industryData.observe(viewLifecycleOwner) {
             renderIndustryTextView(it)
+            renderBottonApply()
         }
         viewModel.equalFilter.observe(viewLifecycleOwner) {
             Log.d(TAG, "Observer compare result=$it")
-            renderBottonApply(it)
+            renderBottonApply()
         }
         viewModel.changedFilter.observe(viewLifecycleOwner) {
             Log.d(TAG, "changedFilter=$it")
-            renderBottonReset(it)
+            renderBottonApply()
         }
     }
 
@@ -188,6 +198,7 @@ class FiltersSettingsFragment : Fragment() {
             country = value.name
         }
         renderWorkplaceTextView()
+        renderBottonApply()
     }
 
     private fun setAreaValue(value: Area?) {
@@ -195,6 +206,7 @@ class FiltersSettingsFragment : Fragment() {
             area = value.name
         }
         renderWorkplaceTextView()
+        renderBottonApply()
     }
 
     private fun renderWorkplaceTextView() {
@@ -221,24 +233,26 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderCheckbox(isChecked: Boolean) {
-        Log.d(TAG, "renderCheckbox = $isChecked")
+        // Log.d(TAG, "renderCheckbox = $isChecked")
         binding.checkboxNoSalary.isChecked = isChecked
     }
 
-    private fun renderBottonApply(show: Boolean) {
-        Log.d(TAG, "renderBottonApply result=$show")
-        if (show) {
-            binding.bottonSettingsSave.visibility = View.VISIBLE
+    private fun renderBottonApply() {
+        if (binding.workplaceEditText.text.toString().isNotEmpty() ||
+            binding.industryEditText.text.toString().isNotEmpty() ||
+            binding.checkboxNoSalary.isChecked ||
+            binding.salaryEditText.text.toString().isNotEmpty() ||
+            hasFilterSettings
+        ) {
+            binding.apply {
+                bottonSettingsSave.visibility = View.VISIBLE
+                bottonSettingsReset.visibility = View.VISIBLE
+            }
         } else {
-            binding.bottonSettingsSave.visibility = View.GONE
-        }
-    }
-
-    private fun renderBottonReset(show: Boolean) {
-        if (show) {
-            binding.bottonSettingsReset.visibility = View.VISIBLE
-        } else {
-            binding.bottonSettingsReset.visibility = View.GONE
+            binding.apply {
+                bottonSettingsSave.visibility = View.GONE
+                bottonSettingsReset.visibility = View.GONE
+            }
         }
     }
 
@@ -246,3 +260,4 @@ class FiltersSettingsFragment : Fragment() {
         private val TAG = FiltersSettingsFragment::class.java.simpleName
     }
 }
+
