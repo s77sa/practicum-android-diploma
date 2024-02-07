@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.SearchInteractor
 import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.Vacancy
@@ -18,7 +19,8 @@ import ru.practicum.android.diploma.presentation.util.debounce
 
 class SearchViewModel(
     private val searchInteractor: SearchInteractor,
-    private val context: Context
+    private val context: Context,
+    private val filterInteractor: FilterInteractor,
 ) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchState>()
@@ -30,6 +32,11 @@ class SearchViewModel(
     private var isNextPageLoading = true
     private var page: Int = 0
     private var pages = 1
+    private var filter: Filter? = null
+
+    init {
+        filter = loadFilterSettings()
+    }
 
     private fun setPlaceholder(placeholdersSearchEnum: PlaceholdersSearchEnum) {
         placeholderStatusMutable.value = placeholdersSearchEnum
@@ -51,6 +58,29 @@ class SearchViewModel(
         searchVacancy(changedText, 0)
     }
 
+    private fun loadFilterSettings(): Filter? {
+        val settings = filterInteractor.loadFilterSettings()
+        if (settings != null) {
+            return settings.plainFilterSettings?.notShowWithoutSalary?.let {
+                Filter(
+                    area = settings.area?.id,
+                    pageLimit = 20,
+                    showSalary = it,
+                    industry = settings.industry?.id,
+                    salary = settings.plainFilterSettings.expectedSalary
+                )
+            }
+        } else {
+            return Filter(
+                area = null,
+                pageLimit = 20,
+                showSalary = false,
+                industry = null,
+                salary = null
+            )
+        }
+    }
+
     private fun searchVacancy(changedText: String, page: Int) {
         if (changedText.isNotEmpty()) {
             stateLiveData.postValue(SearchState.Loading)
@@ -63,12 +93,7 @@ class SearchViewModel(
                 searchInteractor
                     .searchVacancies(
                         changedText,
-                        Filter(
-                            area = "113",
-                            showSalary = true,
-                            industry = null,
-                            salary = 100_000,
-                        ),
+                        filter!!,
                         page = page
                     )
                     .collect { pair ->
