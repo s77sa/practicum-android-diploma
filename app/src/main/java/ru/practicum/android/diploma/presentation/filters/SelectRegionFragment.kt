@@ -118,6 +118,10 @@ class SelectRegionFragment : Fragment() {
         binding.selectRegionBackArrowImageview.setOnClickListener {
             findNavController().popBackStack()
         }
+        binding.closeIcon.setOnClickListener {
+            binding.etSearch.setText("")
+            viewModel.getData()
+        }
 
     }
 
