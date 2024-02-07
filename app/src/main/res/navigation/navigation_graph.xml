@@ -38,8 +38,7 @@
         android:id="@+id/vacancyFragment"
         android:name="ru.practicum.android.diploma.presentation.vacancy.VacancyFragment"
         android:label="VacancyFragment"
-        tools:layout="@layout/fragment_vacancy">
-    </fragment>
+        tools:layout="@layout/fragment_vacancy"></fragment>
 
 
     <fragment
@@ -66,6 +65,10 @@
         <action
             android:id="@+id/action_selectCountryFragment_to_selectWorkplaceFragment"
             app:destination="@id/selectWorkplaceFragment" />
+        <argument
+            android:name="selectedCountry"
+            android:defaultValue=""
+            app:argType="string" />
     </fragment>
 
     <fragment
