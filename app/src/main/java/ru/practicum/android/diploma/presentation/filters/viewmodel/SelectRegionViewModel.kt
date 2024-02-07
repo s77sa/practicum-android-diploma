@@ -28,7 +28,6 @@ class SelectRegionViewModel(
     private var selectedRegion: String = ""
 
     private var foundRegions: MutableList<Area>? = null
-
     init {
         getData()
     }
