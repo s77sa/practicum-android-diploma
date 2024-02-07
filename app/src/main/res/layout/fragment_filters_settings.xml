@@ -52,6 +52,7 @@
             android:background="@android:color/transparent"
             android:focusable="false"
             android:fontFamily="@font/ys_display_regular"
+            android:maxLines="1"
             android:textAlignment="viewStart"
             android:textSize="@dimen/sp_16"
             app:boxBackgroundColor="@android:color/transparent" />
@@ -112,6 +113,7 @@
             android:background="@android:color/transparent"
             android:focusable="false"
             android:fontFamily="@font/ys_display_regular"
+            android:maxLines="1"
             android:textAlignment="viewStart"
             android:textSize="@dimen/sp_16"
             app:boxBackgroundColor="@android:color/transparent" />

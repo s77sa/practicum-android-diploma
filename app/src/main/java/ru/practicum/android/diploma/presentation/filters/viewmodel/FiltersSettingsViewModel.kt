@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.FilterSettings
@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.domain.models.PlainFilterSettings
 import ru.practicum.android.diploma.presentation.util.DataTransfer
 
 class FiltersSettingsViewModel(
-    private val context: Context
+    private val filterInteractor: FilterInteractor
 ) : ViewModel() {
 
     private val _countryData = MutableLiveData<Country?>()
@@ -34,6 +34,24 @@ class FiltersSettingsViewModel(
     val changedFilter get() = _changedFilter
 
     private var filterSettings: FilterSettings? = null
+
+    fun loadFromShared(){
+        val filter = filterInteractor.load()
+//        if (filter != null) {
+//            _areaData.value = filter.area?.let {
+//                Area(
+//                    id = "",
+//                    name = it,
+//                    null,
+//                    null
+//                )
+//            }
+//        }
+    }
+
+    fun saveToShared(){
+
+    }
 
     private fun checkChangedFilters() {
         var value = false

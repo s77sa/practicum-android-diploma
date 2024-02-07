@@ -37,6 +37,7 @@ class FiltersSettingsFragment : Fragment() {
         initObservers()
         initTextChangedListeners()
         viewModel.loadData()
+        viewModel.loadFromShared()
         return binding.root
     }
 
@@ -74,6 +75,8 @@ class FiltersSettingsFragment : Fragment() {
         }
         binding.bottonSettingsReset.setOnClickListener {
             (binding.salaryEditText as TextView).text = ""
+            (binding.industryEditText as TextView).text = ""
+            (binding.workplaceEditText as TextView).text = ""
             viewModel.resetFilters()
         }
 
