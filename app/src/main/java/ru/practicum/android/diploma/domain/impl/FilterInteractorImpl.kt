@@ -5,6 +5,7 @@ import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Filter
+import ru.practicum.android.diploma.domain.models.FilterSettings
 import ru.practicum.android.diploma.presentation.util.Resource
 
 class FilterInteractorImpl(private val filterRepository: FilterRepository) : FilterInteractor {
@@ -14,6 +15,14 @@ class FilterInteractorImpl(private val filterRepository: FilterRepository) : Fil
 
     override fun write(filter: Filter) {
         filterRepository.write(filter)
+    }
+
+    override fun loadFilterSettings(): FilterSettings? {
+        return filterRepository.loadFilterSettings()
+    }
+
+    override fun writeFilterSettings(filter: FilterSettings) {
+        filterRepository.writeFilterSettings(filter)
     }
 
     override fun getCountries(): Flow<Resource<List<Country>>> {
