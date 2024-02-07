@@ -11,7 +11,9 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.api.IndustryInteractor
 import ru.practicum.android.diploma.domain.models.FilterIndustryStates
 import ru.practicum.android.diploma.domain.models.Industry
+import ru.practicum.android.diploma.presentation.filters.SelectIndustryFragment
 import ru.practicum.android.diploma.presentation.util.DataTransfer
+import ru.practicum.android.diploma.presentation.util.debounce
 
 class SelectIndustryViewModel(
     private val industryInteractor: IndustryInteractor,
@@ -20,8 +22,21 @@ class SelectIndustryViewModel(
 ) : ViewModel() {
 
     private var selectedIndustry: Industry? = null
+    private var foundIndustry: MutableList<Industry>? = null
     private var stateLiveData = MutableLiveData<FilterIndustryStates>()
     fun getState(): LiveData<FilterIndustryStates> = stateLiveData
+
+    fun searchDebounce(changedText: String) {
+        industrySearchDebounce(changedText)
+    }
+
+    private val industrySearchDebounce = debounce<String>(
+        SelectIndustryFragment.SEARCH_DEBOUNCE_DELAY_MILS,
+        viewModelScope,
+        true
+    ) { changedText ->
+        filter(changedText)
+    }
 
     fun getIndustries() {
         stateLiveData.postValue(FilterIndustryStates.Loading)
@@ -35,30 +50,13 @@ class SelectIndustryViewModel(
     fun filter(s: String) {
         stateLiveData.postValue(FilterIndustryStates.Loading)
         viewModelScope.launch {
-            val result = industryInteractor.getIndustries()
-            val industryList = mutableListOf<Industry>()
-            if (result.first != null) {
-                industryList.clear()
-                industryList.addAll(result.first!!.filter { it.name.contains(s, ignoreCase = true) })
+            val filteredIndustry = foundIndustry?.filter { it.name.contains(s, ignoreCase = true) }
+            if (filteredIndustry!!.isEmpty()) {
+                stateLiveData.postValue(FilterIndustryStates.Empty)
+            } else {
+                stateLiveData.postValue(FilterIndustryStates.Success(filteredIndustry))
             }
-            when {
-                result.second != null -> {
-                    if (result.second == getString(context, R.string.no_internet)) {
-                        stateLiveData.postValue(FilterIndustryStates.ConnectionError)
 
-                    } else {
-                        stateLiveData.postValue(FilterIndustryStates.ServerError)
-                    }
-                }
-
-                industryList.isEmpty() -> {
-                    stateLiveData.postValue(FilterIndustryStates.Empty)
-                }
-
-                else -> {
-                    stateLiveData.postValue(FilterIndustryStates.Success(industryList))
-                }
-            }
         }
     }
 
@@ -101,6 +99,7 @@ class SelectIndustryViewModel(
             }
 
             else -> {
+                foundIndustry = industryList
                 stateLiveData.postValue(FilterIndustryStates.Success(industryList))
             }
         }

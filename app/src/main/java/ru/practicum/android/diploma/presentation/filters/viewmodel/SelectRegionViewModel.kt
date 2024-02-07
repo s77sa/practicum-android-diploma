@@ -10,8 +10,10 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.api.AreaInteractor
 import ru.practicum.android.diploma.domain.models.Area
+import ru.practicum.android.diploma.presentation.filters.SelectRegionFragment.Companion.SEARCH_DEBOUNCE_DELAY_MILS
 import ru.practicum.android.diploma.presentation.filters.states.RegionSelectionState
 import ru.practicum.android.diploma.presentation.util.DataTransfer
+import ru.practicum.android.diploma.presentation.util.debounce
 
 class SelectRegionViewModel(
     id: String,
@@ -28,12 +30,25 @@ class SelectRegionViewModel(
     private var selectedRegion: String = ""
 
     private var foundRegions: MutableList<Area>? = null
+
     init {
         getData()
     }
 
     fun getData() {
         getRegions(countryId)
+    }
+
+    fun searchDebounce(changedText: String) {
+        regionSearchDebounce(changedText)
+    }
+
+    private val regionSearchDebounce = debounce<String>(
+        SEARCH_DEBOUNCE_DELAY_MILS,
+        viewModelScope,
+        true
+    ) { changedText ->
+        searchRegionByName(changedText)
     }
 
     fun getRegions(countryId: String?) {
@@ -48,7 +63,6 @@ class SelectRegionViewModel(
         } else {
             getAllRegions()
         }
-
     }
 
     private fun getAllRegions() {
@@ -60,11 +74,14 @@ class SelectRegionViewModel(
 
     fun searchRegionByName(text: String) {
         regionSelectionState.value = RegionSelectionState.Loading
-        val filteredRegions = foundRegions?.filter { it.name.contains(text, ignoreCase = true) }
-        if (filteredRegions!!.isEmpty()) {
-            regionSelectionState.postValue(RegionSelectionState.NoData)
-        } else {
-            regionSelectionState.postValue(RegionSelectionState.Success(filteredRegions))
+        viewModelScope.launch {
+            val filteredRegions = foundRegions?.filter { it.name.contains(text, ignoreCase = true) }
+            if (filteredRegions!!.isEmpty()) {
+                regionSelectionState.postValue(RegionSelectionState.NoData)
+            } else {
+                regionSelectionState.postValue(RegionSelectionState.Success(filteredRegions))
+            }
+
         }
 
     }
