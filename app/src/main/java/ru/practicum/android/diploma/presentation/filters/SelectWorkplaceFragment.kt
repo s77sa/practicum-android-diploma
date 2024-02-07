@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -16,7 +17,8 @@ class SelectWorkplaceFragment : Fragment() {
     private var _binding: FragmentSelectWorkplaceBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SelectWorkplaceViewModel by viewModel()
-
+    private var isCountryButtonVisible = false
+    private var isRegionButtonVisible = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,6 +31,13 @@ class SelectWorkplaceFragment : Fragment() {
         initClickListeners()
         observeViewModel()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.selectRegionButton.isVisible = isRegionButtonVisible
+        binding.clearRegion.isVisible = isRegionButtonVisible
+        updateButtonsVisibility()
     }
 
     private fun observeViewModel() {
@@ -81,12 +90,35 @@ class SelectWorkplaceFragment : Fragment() {
             findNavController().navigate(R.id.action_selectWorkplaceFragment_to_selectRegionFragment)
         }
         binding.clearCountryName.setOnClickListener {
-            viewModel.clearSelectedCountry()
+            clearCountryField()
         }
 
         binding.clearRegion.setOnClickListener {
-            viewModel.clearSelectedRegion()
+            clearRegionField()
         }
+    }
+
+    private fun clearRegionField() {
+        isRegionButtonVisible = false
+        binding.regionEditText.text = null
+        updateButtonsVisibility()
+    }
+
+    private fun clearCountryField() {
+        isCountryButtonVisible = false
+        binding.countryEditText.text = null
+        updateButtonsVisibility()
+    }
+
+    private fun updateButtonsVisibility() {
+        val selectedCountry = arguments?.getString(SelectCountryFragment.SELECTED_COUNTRY)
+        val isCountryFieldEmpty = binding.countryEditText.text.isNullOrEmpty()
+        binding.clearCountryName.isVisible = !selectedCountry.isNullOrEmpty() && !isCountryFieldEmpty
+        binding.selectCountryBottom.isVisible = selectedCountry.isNullOrEmpty() || isCountryFieldEmpty
+
+        val isRegionFieldEmpty = binding.regionEditText.text.isNullOrEmpty()
+        binding.clearRegion.isVisible = !isRegionFieldEmpty
+        binding.selectRegionButton.isVisible = isRegionFieldEmpty
     }
 
     override fun onDestroyView() {
