@@ -46,8 +46,6 @@ class SearchFragment : Fragment() {
     private var isNeedAddItems = true
     private var lastSearchText = ""
     private var newSearchText = ""
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,7 +65,6 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
