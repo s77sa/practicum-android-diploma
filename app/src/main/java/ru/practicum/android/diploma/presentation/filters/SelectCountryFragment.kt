@@ -9,14 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectCountryBinding
+import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.filters.adapter.FilterCountryAdapter
 import ru.practicum.android.diploma.presentation.filters.states.CountrySelectionState
 import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectCountryViewModel
-import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.domain.models.Country
 
 class SelectCountryFragment : Fragment() {
     private var _binding: FragmentSelectCountryBinding? = null
@@ -59,6 +59,7 @@ class SelectCountryFragment : Fragment() {
                         }
                         false
                     }
+
                     is CountrySelectionState.ServerIssue,
                     is CountrySelectionState.NoData -> false
                 }
@@ -86,6 +87,7 @@ class SelectCountryFragment : Fragment() {
         bundle.putString(SELECTED_COUNTRY, selectedCountry)
         findNavController().navigate(R.id.action_selectCountryFragment_to_selectWorkplaceFragment, bundle)
     }
+
     private fun initListeners() {
         binding.selectCountryBackArrowImageview.setOnClickListener {
             findNavController().popBackStack()
@@ -96,6 +98,7 @@ class SelectCountryFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         const val SELECTED_COUNTRY = "selectedCountry"
     }

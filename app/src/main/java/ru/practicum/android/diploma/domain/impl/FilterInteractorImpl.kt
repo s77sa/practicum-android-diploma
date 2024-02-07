@@ -23,19 +23,19 @@ class FilterInteractorImpl(private val filterRepository: FilterRepository) : Fil
     }
 
 //    override fun getCountries(): Flow<Resource<List<Country>>> {
-//        TODO(NOT_IMPLEMENTED_YET)
+//        TO DO(NOT_IMPLEMENTED_YET)
 //    }
 //
 //    override fun applyCountryFilter(country: Country) {
-//        TODO(NOT_IMPLEMENTED_YET)
+//        TO DO(NOT_IMPLEMENTED_YET)
 //    }
 //
 //    override fun getSelectedCountry(): Country {
-//        TODO(NOT_IMPLEMENTED_YET)
+//        TO DO(NOT_IMPLEMENTED_YET)
 //    }
 //
 //    override fun clearCountryFilter() {
-//        TODO(NOT_IMPLEMENTED_YET)
+//        TO DO(NOT_IMPLEMENTED_YET)
 //    }
 
     companion object {

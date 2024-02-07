@@ -35,8 +35,8 @@ class FiltersSettingsViewModel(
 
     private var filterSettings: FilterSettings? = null
 
-    fun loadFromShared(){
-        val filter = filterInteractor.load()
+    fun loadFromShared() {
+        val filter = filterInteractor.loadFilterSettings()
 //        if (filter != null) {
 //            _areaData.value = filter.area?.let {
 //                Area(
@@ -49,7 +49,7 @@ class FiltersSettingsViewModel(
 //        }
     }
 
-    fun saveToShared(){
+    fun saveToShared() {
 
     }
 
