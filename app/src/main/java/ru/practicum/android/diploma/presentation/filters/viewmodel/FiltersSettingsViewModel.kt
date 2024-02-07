@@ -147,6 +147,9 @@ class FiltersSettingsViewModel(
         checkChangedFilters()
         compareFilters()
     }
+    fun applyFilterSettings(filter: FilterSettings) {
+        filterInteractor.writeFilterSettings(filter)
+    }
 
     companion object {
         private val TAG = FiltersSettingsViewModel::class.java.simpleName

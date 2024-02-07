@@ -15,8 +15,10 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFiltersSettingsBinding
 import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.domain.models.FilterSettings
 import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FiltersSettingsViewModel
+import ru.practicum.android.diploma.presentation.util.DataTransfer
 
 class FiltersSettingsFragment : Fragment() {
     private var _binding: FragmentFiltersSettingsBinding? = null
@@ -66,8 +68,15 @@ class FiltersSettingsFragment : Fragment() {
             (binding.salaryEditText as TextView).text = ""
             viewModel.clearSalary()
         }
+
         binding.bottonSettingsSave.setOnClickListener {
-            viewModel.saveFiltersToSharedPrefs()
+            val country = DataTransfer.getCountry()
+            val area = DataTransfer.getArea()
+            val industry = DataTransfer.getIndustry()
+            val plainFilterSettings = DataTransfer.getPlainFilters()
+
+            val filterSettings = FilterSettings(country, area, industry, plainFilterSettings)
+            viewModel.applyFilterSettings(filterSettings)
             findNavController().popBackStack()
         }
         binding.bottonSettingsReset.setOnClickListener {
@@ -82,6 +91,7 @@ class FiltersSettingsFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.saveExpectedSalary(s.toString())
             }
+
             override fun afterTextChanged(s: Editable?) = Unit
         })
     }
