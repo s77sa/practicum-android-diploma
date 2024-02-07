@@ -25,7 +25,6 @@ class FiltersSettingsFragment : Fragment() {
     private var country: String? = null
     private var area: String? = null
     private val compareFilters = true
-    private var hasFilterSettings = false
 
     override fun onCreateView(
 
@@ -54,22 +53,18 @@ class FiltersSettingsFragment : Fragment() {
         }
         binding.checkboxNoSalary.setOnClickListener {
             viewModel.saveSalaryCheckBox(binding.checkboxNoSalary.isChecked)
-            renderBottonApply()
         }
         binding.workplaceClear.setOnClickListener {
             (binding.workplaceEditText as TextView).text = ""
             viewModel.clearWorkplace()
-            renderBottonApply()
         }
         binding.industryClear.setOnClickListener {
             (binding.industryEditText as TextView).text = ""
             viewModel.clearIndustry()
-            renderBottonApply()
         }
         binding.salaryClear.setOnClickListener {
             (binding.salaryEditText as TextView).text = ""
             viewModel.clearSalary()
-            renderBottonApply()
         }
         binding.bottonSettingsSave.setOnClickListener {
             viewModel.saveFiltersToSharedPrefs()
@@ -234,8 +229,7 @@ class FiltersSettingsFragment : Fragment() {
         if (binding.workplaceEditText.text.toString().isNotEmpty() ||
             binding.industryEditText.text.toString().isNotEmpty() ||
             binding.checkboxNoSalary.isChecked ||
-            binding.salaryEditText.text.toString().isNotEmpty() ||
-            hasFilterSettings
+            binding.salaryEditText.text.toString().isNotEmpty()
         ) {
             binding.apply {
                 bottonSettingsSave.visibility = View.VISIBLE
