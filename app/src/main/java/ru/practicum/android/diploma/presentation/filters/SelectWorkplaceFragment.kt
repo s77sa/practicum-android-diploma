@@ -119,6 +119,8 @@ class SelectWorkplaceFragment : Fragment() {
         val isRegionFieldEmpty = binding.regionEditText.text.isNullOrEmpty()
         binding.clearRegion.isVisible = !isRegionFieldEmpty
         binding.selectRegionButton.isVisible = isRegionFieldEmpty
+
+        binding.filterSettingsApply.isVisible = !isCountryFieldEmpty
     }
 
     override fun onDestroyView() {
