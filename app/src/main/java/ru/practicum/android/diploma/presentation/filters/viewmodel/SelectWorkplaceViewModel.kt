@@ -3,16 +3,14 @@ package ru.practicum.android.diploma.presentation.filters.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.practicum.android.diploma.domain.api.FilterInteractor
-import ru.practicum.android.diploma.domain.api.RegionInteractor
+import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.filters.states.WorkplaceSelectionState
 import ru.practicum.android.diploma.presentation.util.DataTransfer
 
 class SelectWorkplaceViewModel(
-    private val filtersInteractor: FilterInteractor,
-    private val regionInteractor: RegionInteractor,
+    private val dataTransfer: DataTransfer,
 ) : ViewModel() {
 
     private val _countrySelectionState = MutableLiveData<WorkplaceSelectionState>()
@@ -24,39 +22,49 @@ class SelectWorkplaceViewModel(
     private val _countryData = MutableLiveData<Country>()
     val countryData get() = _countryData
 
-    fun setCountryData(value: Country?) {
-        DataTransfer.setCountry(value)
-    }
-
     fun getCountryData() {
-        _countryData.value = DataTransfer.getCountry()
+        _countryData.value = dataTransfer.getCountry()
     }
 
-    fun getSelectedCountry() {
-        val selectedCountry = filtersInteractor.getSelectedCountry()
-        _countrySelectionState.value = WorkplaceSelectionState.CountryFilled(selectedCountry)
+    fun saveCountry(country: Country?) {
+        dataTransfer.setCountry(country)
     }
 
-    fun getSelectedRegion() {
-        val selectedRegion = regionInteractor.getSelectedRegion()
-        _regionSelectionState.value = WorkplaceSelectionState.RegionFilled(selectedRegion)
+    fun saveRegion(region: Area?) {
+        dataTransfer.setArea(region)
     }
 
     fun clearSelectedCountry() {
-        DataTransfer.setCountry(null)
+        dataTransfer.setCountry(null)
         _countrySelectionState.value = WorkplaceSelectionState.Empty
     }
 
     fun clearSelectedRegion() {
-        DataTransfer.setArea(null)
+        dataTransfer.setArea(null)
         _regionSelectionState.value = WorkplaceSelectionState.Empty
     }
 
     fun loadData() {
-        val areaData = DataTransfer.getArea()
-        val countryData = DataTransfer.getCountry()
+        val areaData = dataTransfer.getArea()
+        val countryData = dataTransfer.getCountry()
         if (areaData != null) {
-            _regionSelectionState.value = WorkplaceSelectionState.RegionFilled(Region(areaData.id, areaData.name))
+            if (areaData.country != null) {
+                _regionSelectionState.value = WorkplaceSelectionState.RegionFilled(
+                    Region(
+                        areaData.id,
+                        areaData.name,
+                        areaData.country.id,
+                        areaData.country.name
+                    )
+                )
+            } else {
+                _regionSelectionState.value = WorkplaceSelectionState.RegionFilled(
+                    Region(
+                        areaData.id,
+                        areaData.name,
+                    )
+                )
+            }
         }
         if (countryData != null) {
             _countrySelectionState.value =

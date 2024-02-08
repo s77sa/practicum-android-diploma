@@ -31,7 +31,7 @@ val viewModelModule = module {
     }
 
     viewModel<SelectCountryViewModel> {
-        SelectCountryViewModel(get())
+        SelectCountryViewModel(get(), get())
     }
 
     viewModel<SelectIndustryViewModel> {
@@ -42,7 +42,7 @@ val viewModelModule = module {
     }
 
     viewModel<SelectWorkplaceViewModel> {
-        SelectWorkplaceViewModel(get(), get())
+        SelectWorkplaceViewModel(get())
     }
 
     single<ExternalNavigatorRepository> { ExternalNavigatorRepositoryImpl(get()) }

@@ -11,12 +11,11 @@ import ru.practicum.android.diploma.presentation.util.DataTransfer
 
 class SelectCountryViewModel(
     private val areaInteractor: AreaInteractor,
+    private val dataTransfer: DataTransfer
 ) : ViewModel() {
 
     private val _countrySelectionState = MutableLiveData<CountrySelectionState>()
     val countrySelectionState: LiveData<CountrySelectionState> get() = _countrySelectionState
-
-    private var selectedCountry: String = ""
 
     suspend fun getCountries(): List<Area> {
         _countrySelectionState.value = CountrySelectionState.Loading
@@ -34,9 +33,6 @@ class SelectCountryViewModel(
     }
 
     fun applyCountryFilter(country: Country) {
-        selectedCountry = country.name
-        DataTransfer.setCountry(country)
-        _countrySelectionState.value = CountrySelectionState.Success(listOf())
-
+        dataTransfer.setCountry(country)
     }
 }
