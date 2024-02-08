@@ -76,8 +76,8 @@ class SelectWorkplaceFragment : Fragment() {
 
             is WorkplaceSelectionState.RegionFilled -> {
                 binding.clearRegion.visibility = View.VISIBLE
+                binding.selectRegionButton.isVisible = false
                 binding.regionEditText.setText(state.region.name)
-                binding.filterSettingsApply.isVisible = true
             }
 
             else -> {}
@@ -92,7 +92,8 @@ class SelectWorkplaceFragment : Fragment() {
 
             is WorkplaceSelectionState.CountryFilled -> {
                 binding.clearCountryName.visibility = View.VISIBLE
-
+                binding.countryEditText.setText(state.country.name)
+                binding.filterSettingsApply.isVisible = true
             }
 
             else -> {}
@@ -102,6 +103,7 @@ class SelectWorkplaceFragment : Fragment() {
     private fun initClickListeners() {
         binding.selectWorkplaceBack.setOnClickListener {
             viewModel.clearSelectedRegion()
+            viewModel.clearSelectedCountry()
             findNavController().popBackStack()
         }
         binding.selectCountryBottom.setOnClickListener {
@@ -149,14 +151,14 @@ class SelectWorkplaceFragment : Fragment() {
     private fun clearCountryField() {
         isCountryButtonVisible = false
         binding.countryEditText.text = null
+        viewModel.clearSelectedCountry()
         updateButtonsVisibility()
     }
 
     private fun updateButtonsVisibility() {
-        val selectedCountry = arguments?.getString(SELECTED_COUNTRY)
         val isCountryFieldEmpty = binding.countryEditText.text.isNullOrEmpty()
-        binding.clearCountryName.isVisible = !selectedCountry.isNullOrEmpty() && !isCountryFieldEmpty
-        binding.selectCountryBottom.isVisible = selectedCountry.isNullOrEmpty() || isCountryFieldEmpty
+        binding.clearCountryName.isVisible = !isCountryFieldEmpty
+        binding.selectCountryBottom.isVisible = isCountryFieldEmpty
 
         val isRegionFieldEmpty = binding.regionEditText.text.isNullOrEmpty()
         binding.clearRegion.isVisible = !isRegionFieldEmpty
