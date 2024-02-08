@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectCountryBinding
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.filters.adapter.FilterCountryAdapter
@@ -73,8 +72,7 @@ class SelectCountryFragment : Fragment() {
 
     private fun initRecyclerView() {
         countryAdapter = FilterCountryAdapter { country ->
-            viewModel.applyCountryFilter(country)
-            navigateToSelectWorkplaceFragment(country.name)
+            selectCountry(country)
         }
         binding.recyclerFilterCountry.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -82,17 +80,15 @@ class SelectCountryFragment : Fragment() {
         }
     }
 
-    private fun navigateToSelectWorkplaceFragment(selectedCountry: String) {
-        val bundle = Bundle()
-        bundle.putString(SELECTED_COUNTRY, selectedCountry)
-        findNavController().navigateUp()
-        findNavController().navigate(R.id.selectWorkplaceFragment, bundle)
-    }
-
     private fun initListeners() {
         binding.selectCountryBackArrowImageview.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    private fun selectCountry(country: Country) {
+        viewModel.applyCountryFilter(country)
+        findNavController().popBackStack()
     }
 
     override fun onDestroyView() {
