@@ -45,6 +45,18 @@ class FiltersSettingsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val selectedCountry = arguments?.getString(SelectWorkplaceFragment.SELECTED_COUNTRY)
+        val selectedRegion = arguments?.getString(SelectWorkplaceFragment.SELECTED_REGION)
+        val combinedText = if (!selectedRegion.isNullOrEmpty()) {
+            "$selectedCountry, $selectedRegion"
+        } else {
+            selectedCountry.orEmpty()
+        }
+        binding.workplaceEditText.setText(combinedText)
+    }
+
     private fun initClickListenersNav() {
         binding.filterSettingsHeaderBack.setOnClickListener {
             findNavController().popBackStack()

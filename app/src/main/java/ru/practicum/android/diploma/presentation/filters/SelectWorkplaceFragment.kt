@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.R.id.action_selectWorkplaceFragment_to_settingsFiltersFragment
 import ru.practicum.android.diploma.databinding.FragmentSelectWorkplaceBinding
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.filters.states.WorkplaceSelectionState
@@ -27,7 +29,7 @@ class SelectWorkplaceFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSelectWorkplaceBinding.inflate(inflater, container, false)
-        arguments?.getString(SelectCountryFragment.SELECTED_COUNTRY)?.let { selectedCountry ->
+        arguments?.getString(SELECTED_COUNTRY)?.let { selectedCountry ->
             binding.countryEditText.setText(selectedCountry)
         }
         initClickListeners()
@@ -95,7 +97,7 @@ class SelectWorkplaceFragment : Fragment() {
 
     private fun initClickListeners() {
         binding.selectWorkplaceBack.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(action_selectWorkplaceFragment_to_settingsFiltersFragment)
         }
         binding.selectCountryBottom.setOnClickListener {
             findNavController().navigate(R.id.action_selectWorkplaceFragment_to_selectCountryFragment)
@@ -114,6 +116,22 @@ class SelectWorkplaceFragment : Fragment() {
         binding.clearRegion.setOnClickListener {
             clearRegionField()
         }
+        binding.filterSettingsApply.setOnClickListener {
+            navigateToFiltersSettingsFragment()
+        }
+    }
+
+    private fun navigateToFiltersSettingsFragment() {
+        val selectedCountry = binding.countryEditText.text.toString()
+        val selectedRegion = binding.regionEditText.text.toString()
+        val bundle = bundleOf(
+            SELECTED_COUNTRY to selectedCountry,
+            SELECTED_REGION to selectedRegion
+        )
+        findNavController().navigate(
+            action_selectWorkplaceFragment_to_settingsFiltersFragment,
+            bundle
+        )
     }
 
     private fun clearRegionField() {
@@ -129,7 +147,7 @@ class SelectWorkplaceFragment : Fragment() {
     }
 
     private fun updateButtonsVisibility() {
-        val selectedCountry = arguments?.getString(SelectCountryFragment.SELECTED_COUNTRY)
+        val selectedCountry = arguments?.getString(SELECTED_COUNTRY)
         val isCountryFieldEmpty = binding.countryEditText.text.isNullOrEmpty()
         binding.clearCountryName.isVisible = !selectedCountry.isNullOrEmpty() && !isCountryFieldEmpty
         binding.selectCountryBottom.isVisible = selectedCountry.isNullOrEmpty() || isCountryFieldEmpty
@@ -144,5 +162,10 @@ class SelectWorkplaceFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val SELECTED_COUNTRY = "selectedCountry"
+        const val SELECTED_REGION = "selectedRegion"
     }
 }
