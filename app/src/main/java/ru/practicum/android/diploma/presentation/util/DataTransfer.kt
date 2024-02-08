@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.util
 
+import android.util.Log
 import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Industry
@@ -19,6 +20,7 @@ object DataTransfer {
 
     fun setIndustry(industryValue: Industry?) {
         industry = industryValue
+        Log.i(TAG, " Установлен industry=${industry?.name}")
     }
 
     fun getArea(): Area? {
@@ -27,6 +29,7 @@ object DataTransfer {
 
     fun setArea(areaValue: Area?) {
         area = areaValue
+        Log.i(TAG, " Установлен area=${area?.name}")
     }
 
     fun getCountry(): Country? {
@@ -35,6 +38,7 @@ object DataTransfer {
 
     fun setCountry(countryValue: Country?) {
         country = countryValue
+        Log.i(TAG, " Установлен country=${country?.name}")
     }
 
     fun getPlainFilters(): PlainFilterSettings? {
@@ -43,6 +47,6 @@ object DataTransfer {
 
     fun setPlainFilters(plainFilter: PlainFilterSettings?) {
         plainFilterSettings = plainFilter
+        Log.i(TAG, " Установлен industry=${plainFilterSettings?.expectedSalary}")
     }
-
 }

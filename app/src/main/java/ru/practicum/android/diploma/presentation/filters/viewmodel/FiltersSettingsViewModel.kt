@@ -48,7 +48,7 @@ class FiltersSettingsViewModel(
         _plainFiltersData.value = filterSettings?.plainFilterSettings
     }
 
-    private fun compareFilters() {
+    fun compareFilters() {
         val newFilter: FilterSettings = prepareFilterSettings()
         filterSettings?.let {
             _equalFilter.value = FiltersCompare.compareFilterSettings(newFilter, it)
@@ -96,7 +96,8 @@ class FiltersSettingsViewModel(
             expectedSalary = _plainFiltersData.value?.expectedSalary,
             notShowWithoutSalary = isChecked
         )
-        saveData()
+        DataTransfer.setPlainFilters(_plainFiltersData.value)
+        compareFilters()
     }
 
     fun clearIndustry() {
@@ -128,7 +129,8 @@ class FiltersSettingsViewModel(
                     notShowWithoutSalary = _plainFiltersData.value?.notShowWithoutSalary
                 )
         }
-        saveData()
+        DataTransfer.setPlainFilters(_plainFiltersData.value)
+        compareFilters()
     }
 
     fun loadData() {
@@ -147,6 +149,7 @@ class FiltersSettingsViewModel(
         checkChangedFilters()
         compareFilters()
     }
+
     fun applyFilterSettings(filter: FilterSettings) {
         filterInteractor.writeFilterSettings(filter)
     }
