@@ -9,7 +9,7 @@ object AreaSettingsConverter {
             id = area.id,
             name = area.name,
             parentId = area.name,
-            country = map(area)
+            country = null
         )
     }
 
@@ -18,7 +18,7 @@ object AreaSettingsConverter {
             id = area.id,
             name = area.name,
             parentId = area.parentId,
-            country = map(area)
+            country = null
         )
     }
 }
