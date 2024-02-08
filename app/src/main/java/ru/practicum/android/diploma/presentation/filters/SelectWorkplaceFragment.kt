@@ -40,7 +40,6 @@ class SelectWorkplaceFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-//        dataTransfer
         viewModel.loadData()
     }
 
@@ -94,6 +93,7 @@ class SelectWorkplaceFragment : Fragment() {
                         name = state.region.countryName
                     )
                 }
+                updateButtonsVisibility()
             }
 
             else -> {}
@@ -112,6 +112,7 @@ class SelectWorkplaceFragment : Fragment() {
                 binding.selectCountryBottom.isVisible = false
                 binding.countryEditText.setText(state.country.name)
                 binding.filterSettingsApply.isVisible = true
+
 
             }
 
@@ -141,6 +142,7 @@ class SelectWorkplaceFragment : Fragment() {
         }
         binding.clearCountryName.setOnClickListener {
             clearCountryField()
+            clearRegionField()
         }
 
         binding.clearRegion.setOnClickListener {
@@ -156,6 +158,7 @@ class SelectWorkplaceFragment : Fragment() {
         viewModel.saveCountry(country)
         viewModel.saveRegion(region)
     }
+
     private fun clearRegionField() {
         region = null
         isRegionButtonVisible = false
