@@ -254,6 +254,11 @@ class FiltersSettingsFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadData()
+    }
+
     companion object {
         private val TAG = FiltersSettingsFragment::class.java.simpleName
     }

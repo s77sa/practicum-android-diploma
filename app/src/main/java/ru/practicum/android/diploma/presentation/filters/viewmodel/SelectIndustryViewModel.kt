@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,6 +22,7 @@ class SelectIndustryViewModel(
     private val dataTransfer: DataTransfer
 ) : ViewModel() {
 
+    private val TAG = SelectIndustryViewModel::class.java.simpleName
     private var selectedIndustry: Industry? = null
     private var foundIndustry: MutableList<Industry>? = null
     private var stateLiveData = MutableLiveData<FilterIndustryStates>()
@@ -74,6 +76,7 @@ class SelectIndustryViewModel(
 
     fun saveIndustryFilter(selectedIndustry: Industry) {
         dataTransfer.setIndustry(selectedIndustry)
+        Log.d(TAG, "saveIndustryFilter selectedIndustry=${selectedIndustry.name}")
     }
 
     private fun processResult(found: List<Industry>?, errorMessage: String?) {

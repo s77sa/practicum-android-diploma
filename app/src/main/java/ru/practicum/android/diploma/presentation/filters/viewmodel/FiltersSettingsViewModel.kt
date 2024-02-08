@@ -128,7 +128,7 @@ class FiltersSettingsViewModel(
                     notShowWithoutSalary = _plainFiltersData.value?.notShowWithoutSalary
                 )
         }
-        saveData()
+        DataTransfer.setPlainFilters(_plainFiltersData.value)
     }
 
     fun loadData() {
