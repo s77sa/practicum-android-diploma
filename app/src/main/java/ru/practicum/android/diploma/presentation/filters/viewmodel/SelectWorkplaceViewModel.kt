@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.RegionInteractor
 import ru.practicum.android.diploma.domain.models.Region
+import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.filters.states.WorkplaceSelectionState
 import ru.practicum.android.diploma.presentation.util.DataTransfer
 
@@ -20,6 +21,17 @@ class SelectWorkplaceViewModel(
 
     private val _regionSelectionState = MutableLiveData<WorkplaceSelectionState>()
     val regionSelectionState: LiveData<WorkplaceSelectionState> get() = _regionSelectionState
+
+    private val _countryData = MutableLiveData<Country>()
+    val countryData get() = _countryData
+
+    fun setCountryData(value: Country?) {
+        DataTransfer.setCountry(value)
+    }
+
+    fun getCountryData() {
+        _countryData.value = DataTransfer.getCountry()
+    }
 
     fun getSelectedCountry() {
         val selectedCountry = filtersInteractor.getSelectedCountry()
