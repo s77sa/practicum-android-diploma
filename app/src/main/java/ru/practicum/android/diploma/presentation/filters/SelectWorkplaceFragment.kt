@@ -77,6 +77,7 @@ class SelectWorkplaceFragment : Fragment() {
 
             is WorkplaceSelectionState.RegionFilled -> {
                 binding.clearRegion.visibility = View.VISIBLE
+                binding.selectRegionButton.isVisible = false
                 binding.regionEditText.setText(state.region.name)
                 binding.filterSettingsApply.isVisible = true
             }
@@ -93,6 +94,8 @@ class SelectWorkplaceFragment : Fragment() {
 
             is WorkplaceSelectionState.CountryFilled -> {
                 binding.clearCountryName.visibility = View.VISIBLE
+                binding.countryEditText.setText(state.country.name)
+                binding.filterSettingsApply.isVisible = true
                 country = state.country
 
 
@@ -105,6 +108,7 @@ class SelectWorkplaceFragment : Fragment() {
     private fun initClickListeners() {
         binding.selectWorkplaceBack.setOnClickListener {
             viewModel.clearSelectedRegion()
+            viewModel.clearSelectedCountry()
             findNavController().popBackStack()
         }
         binding.selectCountryBottom.setOnClickListener {

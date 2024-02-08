@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.presentation.util.DataTransfer
 
 class SelectWorkplaceViewModel(
     private val filtersInteractor: FilterInteractor,
-    private val regionInteractor: RegionInteractor
+    private val regionInteractor: RegionInteractor,
 ) : ViewModel() {
 
     private val _countrySelectionState = MutableLiveData<WorkplaceSelectionState>()
@@ -54,8 +54,13 @@ class SelectWorkplaceViewModel(
 
     fun loadData() {
         val areaData = DataTransfer.getArea()
+        val countryData = DataTransfer.getCountry()
         if (areaData != null) {
             _regionSelectionState.value = WorkplaceSelectionState.RegionFilled(Region(areaData.id, areaData.name))
+        }
+        if (countryData != null) {
+            _countrySelectionState.value =
+                WorkplaceSelectionState.CountryFilled(Country(countryData.id, countryData.name))
         }
     }
 }
