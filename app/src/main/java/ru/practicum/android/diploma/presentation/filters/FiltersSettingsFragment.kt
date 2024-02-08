@@ -33,7 +33,7 @@ class FiltersSettingsFragment : Fragment() {
 
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFiltersSettingsBinding.inflate(inflater, container, false)
         initClickListeners()
@@ -42,6 +42,18 @@ class FiltersSettingsFragment : Fragment() {
         viewModel.loadData()
         viewModel.loadFromShared()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val selectedCountry = arguments?.getString(SelectWorkplaceFragment.SELECTED_COUNTRY)
+        val selectedRegion = arguments?.getString(SelectWorkplaceFragment.SELECTED_REGION)
+        val combinedText = if (!selectedRegion.isNullOrEmpty()) {
+            "$selectedCountry, $selectedRegion"
+        } else {
+            selectedCountry.orEmpty()
+        }
+        binding.workplaceEditText.setText(combinedText)
     }
 
     private fun initClickListeners() {
