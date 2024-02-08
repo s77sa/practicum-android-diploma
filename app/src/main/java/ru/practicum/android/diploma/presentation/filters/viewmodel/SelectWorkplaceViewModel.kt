@@ -57,6 +57,9 @@ class SelectWorkplaceViewModel(
         val countryData = DataTransfer.getCountry()
         if (areaData != null) {
             _regionSelectionState.value = WorkplaceSelectionState.RegionFilled(Region(areaData.id, areaData.name))
+            if (countryData != null) {
+                _countrySelectionState.value = WorkplaceSelectionState.CountryFilled(Country(countryData.id, countryData.name))
+            }
         }
         if (countryData != null) {
             _countrySelectionState.value =
