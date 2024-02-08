@@ -95,7 +95,6 @@ class SelectWorkplaceFragment : Fragment() {
                 binding.clearCountryName.visibility = View.VISIBLE
                 country = state.country
 
-
             }
 
             else -> {}
