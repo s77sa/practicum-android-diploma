@@ -49,7 +49,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         initAdapter()
     }
 
-    fun initStates(data: FilterIndustryStates) {
+    private fun initStates(data: FilterIndustryStates) {
         when (data) {
             FilterIndustryStates.ConnectionError -> {
                 hideViewOnNoSuccess()
@@ -91,8 +91,6 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 binding.tvError.setText(R.string.no_such_industry)
                 binding.ivError.setImageResource(R.drawable.il_angry_cat)
             }
-
-            else -> {}
         }
     }
 
