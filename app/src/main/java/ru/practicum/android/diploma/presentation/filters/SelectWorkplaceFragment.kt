@@ -50,7 +50,6 @@ class SelectWorkplaceFragment : Fragment() {
         updateButtonsVisibility()
     }
 
-
     private fun observeViewModel() {
         viewModel.countrySelectionState.observe(viewLifecycleOwner) { state ->
             handleCountrySelectionState(state)
