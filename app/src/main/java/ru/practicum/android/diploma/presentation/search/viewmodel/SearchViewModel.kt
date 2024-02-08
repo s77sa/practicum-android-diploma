@@ -63,27 +63,19 @@ class SearchViewModel(
 
     }
 
-    private fun loadFilterSettings(): Filter? {
+    private fun loadFilterSettings(): Filter {
         val settings = filterInteractor.loadFilterSettings()
-        if (settings != null) {
-            return settings.plainFilterSettings?.notShowWithoutSalary?.let {
-                Filter(
-                    area = settings.area?.id,
-                    pageLimit = 20,
-                    showSalary = it,
-                    industry = settings.industry?.id,
-                    salary = settings.plainFilterSettings.expectedSalary
-                )
-            }
-        } else {
-            return Filter(
-                area = null,
-                pageLimit = 20,
-                showSalary = false,
-                industry = null,
-                salary = null
-            )
-        }
+        val showSalary = settings?.plainFilterSettings?.notShowWithoutSalary ?: false
+        val area = settings?.area?.id
+        val industry = settings?.industry?.id
+        val salary = settings?.plainFilterSettings?.expectedSalary
+        return Filter(
+            area = area,
+            pageLimit = 20,
+            showSalary = showSalary,
+            industry = industry,
+            salary = salary
+        )
     }
 
     private fun searchVacancy(changedText: String, page: Int) {
