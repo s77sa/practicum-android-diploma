@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.domain.api.AreaInteractor
 import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.filters.states.CountrySelectionState
+import ru.practicum.android.diploma.presentation.util.DataTransfer
 
 class SelectCountryViewModel(
     private val areaInteractor: AreaInteractor,
@@ -34,6 +35,7 @@ class SelectCountryViewModel(
 
     fun applyCountryFilter(country: Country) {
         selectedCountry = country.name
+        DataTransfer.setCountry(country)
         _countrySelectionState.value = CountrySelectionState.Success(listOf())
 
     }
