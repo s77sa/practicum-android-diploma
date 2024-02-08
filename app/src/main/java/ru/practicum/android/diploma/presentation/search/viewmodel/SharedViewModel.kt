@@ -6,4 +6,3 @@ import androidx.lifecycle.ViewModel
 class SharedViewModel : ViewModel() {
     val isFilterOn: MutableLiveData<Boolean> = MutableLiveData(false)
 }
-
