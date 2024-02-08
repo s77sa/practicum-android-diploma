@@ -101,7 +101,8 @@ class SelectWorkplaceFragment : Fragment() {
 
     private fun initClickListeners() {
         binding.selectWorkplaceBack.setOnClickListener {
-            findNavController().navigate(action_selectWorkplaceFragment_to_settingsFiltersFragment)
+            viewModel.clearSelectedRegion()
+            findNavController().popBackStack()
         }
         binding.selectCountryBottom.setOnClickListener {
             findNavController().navigate(R.id.action_selectWorkplaceFragment_to_selectCountryFragment)
@@ -141,6 +142,7 @@ class SelectWorkplaceFragment : Fragment() {
     private fun clearRegionField() {
         isRegionButtonVisible = false
         binding.regionEditText.text = null
+        viewModel.clearSelectedRegion()
         updateButtonsVisibility()
     }
 

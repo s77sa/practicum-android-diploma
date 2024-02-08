@@ -48,7 +48,7 @@ class SelectWorkplaceViewModel(
     }
 
     fun clearSelectedRegion() {
-        regionInteractor.clearRegionFilter()
+        DataTransfer.setArea(null)
         _regionSelectionState.value = WorkplaceSelectionState.Empty
     }
 
