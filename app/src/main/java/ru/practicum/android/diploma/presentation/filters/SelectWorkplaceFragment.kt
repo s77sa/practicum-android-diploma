@@ -40,6 +40,7 @@ class SelectWorkplaceFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.getCountryData()
+        viewModel.loadData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,10 +50,6 @@ class SelectWorkplaceFragment : Fragment() {
         updateButtonsVisibility()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadData()
-    }
 
     private fun observeViewModel() {
         viewModel.countrySelectionState.observe(viewLifecycleOwner) { state ->
