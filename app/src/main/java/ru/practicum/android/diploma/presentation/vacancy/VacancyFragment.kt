@@ -22,6 +22,8 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.util.SalaryUtils
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 import ru.practicum.android.diploma.presentation.vacancy.viewmodel.VacancyViewModel
+import ru.practicum.android.diploma.presentation.vacancy.viewmodel.formatSkillsList
+import ru.practicum.android.diploma.presentation.vacancy.viewmodel.getHMLDescription
 
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
@@ -173,6 +175,7 @@ class VacancyFragment : Fragment() {
             binding.wvKeySkills.loadDataWithBaseURL(
                 null,
                 formatVacancyHTML.formatSkillsList(vacancy.skills),
+
                 "text/html",
                 "utf-8",
                 null
