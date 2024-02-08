@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -19,6 +20,7 @@ import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.FilterSettings
 import ru.practicum.android.diploma.domain.models.Industry
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FiltersSettingsViewModel
+import ru.practicum.android.diploma.presentation.search.viewmodel.SharedViewModel
 import ru.practicum.android.diploma.presentation.util.DataTransfer
 
 class FiltersSettingsFragment : Fragment() {
@@ -28,6 +30,7 @@ class FiltersSettingsFragment : Fragment() {
     private var country: String? = null
     private var area: String? = null
     private val compareFilters = true
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
 
@@ -59,7 +62,7 @@ class FiltersSettingsFragment : Fragment() {
 
     private fun initClickListenersNav() {
         binding.filterSettingsHeaderBack.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.action_settingsFiltersFragment_to_searchFragment)
         }
         binding.workplaceForward.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectWorkplaceFragment)
@@ -94,17 +97,19 @@ class FiltersSettingsFragment : Fragment() {
             val area = DataTransfer.getArea()
             val industry = DataTransfer.getIndustry()
             val plainFilterSettings = DataTransfer.getPlainFilters()
-
             val filterSettings = FilterSettings(country, area, industry, plainFilterSettings)
             viewModel.applyFilterSettings(filterSettings)
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.action_settingsFiltersFragment_to_searchFragment)
+            sharedViewModel.isFilterOn.value = true
         }
         binding.bottonSettingsReset.setOnClickListener {
             (binding.salaryEditText as TextView).text = ""
             (binding.industryEditText as TextView).text = ""
             (binding.workplaceEditText as TextView).text = ""
             viewModel.resetFilters()
+            sharedViewModel.isFilterOn.value = false
         }
+
         binding.salaryEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -247,7 +252,6 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderCheckbox(isChecked: Boolean) {
-        // Log.d(TAG, "renderCheckbox = $isChecked")
         binding.checkboxNoSalary.isChecked = isChecked
     }
 
