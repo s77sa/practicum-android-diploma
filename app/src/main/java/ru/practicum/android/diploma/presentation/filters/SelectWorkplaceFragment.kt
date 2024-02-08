@@ -42,6 +42,11 @@ class SelectWorkplaceFragment : Fragment() {
         updateButtonsVisibility()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadData()
+    }
+
     private fun observeViewModel() {
         viewModel.countrySelectionState.observe(viewLifecycleOwner) { state ->
             handleCountrySelectionState(state)
@@ -60,6 +65,8 @@ class SelectWorkplaceFragment : Fragment() {
 
             is WorkplaceSelectionState.RegionFilled -> {
                 binding.clearRegion.visibility = View.VISIBLE
+                binding.regionEditText.setText(state.region.name)
+                binding.filterSettingsApply.isVisible = true
             }
 
             else -> {}
@@ -74,6 +81,7 @@ class SelectWorkplaceFragment : Fragment() {
 
             is WorkplaceSelectionState.CountryFilled -> {
                 binding.clearCountryName.visibility = View.VISIBLE
+
             }
 
             else -> {}
