@@ -18,7 +18,6 @@ import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.FilterSettings
 import ru.practicum.android.diploma.domain.models.Industry
-import ru.practicum.android.diploma.domain.models.PlainFilterSettings
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FiltersSettingsViewModel
 import ru.practicum.android.diploma.presentation.util.DataTransfer
 
