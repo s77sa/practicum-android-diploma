@@ -37,6 +37,7 @@ class FiltersSettingsFragment : Fragment() {
     ): View {
         _binding = FragmentFiltersSettingsBinding.inflate(inflater, container, false)
         initClickListeners()
+        initClickListenersNav()
         initObservers()
         initTextChangedListeners()
         viewModel.loadData()
@@ -44,7 +45,7 @@ class FiltersSettingsFragment : Fragment() {
         return binding.root
     }
 
-    private fun initClickListeners() {
+    private fun initClickListenersNav() {
         binding.filterSettingsHeaderBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -54,6 +55,9 @@ class FiltersSettingsFragment : Fragment() {
         binding.industryForward.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectIndustryFragment)
         }
+    }
+
+    private fun initClickListeners() {
         binding.checkboxNoSalary.setOnClickListener {
             viewModel.saveSalaryCheckBox(binding.checkboxNoSalary.isChecked)
         }

@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectWorkplaceBinding
+import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.filters.states.WorkplaceSelectionState
 import ru.practicum.android.diploma.presentation.filters.viewmodel.SelectWorkplaceViewModel
 
@@ -33,6 +35,11 @@ class SelectWorkplaceFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getCountryData()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.selectRegionButton.isVisible = isRegionButtonVisible
@@ -44,9 +51,17 @@ class SelectWorkplaceFragment : Fragment() {
         viewModel.countrySelectionState.observe(viewLifecycleOwner) { state ->
             handleCountrySelectionState(state)
         }
-
         viewModel.regionSelectionState.observe(viewLifecycleOwner) { state ->
             handleRegionSelectionState(state)
+        }
+        viewModel.countryData.observe(viewLifecycleOwner) {
+            renderCountryTextView(it)
+        }
+    }
+
+    private fun renderCountryTextView(country: Country?) {
+        if (country != null) {
+            (binding.countryEditText as TextView).text = country.name
         }
     }
 
