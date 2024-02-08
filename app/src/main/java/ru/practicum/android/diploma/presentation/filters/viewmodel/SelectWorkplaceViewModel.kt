@@ -43,7 +43,7 @@ class SelectWorkplaceViewModel(
     }
 
     fun clearSelectedCountry() {
-        filtersInteractor.clearCountryFilter()
+        DataTransfer.setCountry(null)
         _countrySelectionState.value = WorkplaceSelectionState.Empty
     }
 

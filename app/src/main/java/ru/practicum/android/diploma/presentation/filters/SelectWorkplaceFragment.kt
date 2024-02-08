@@ -23,7 +23,7 @@ class SelectWorkplaceFragment : Fragment() {
     private val viewModel: SelectWorkplaceViewModel by viewModel()
     private var isCountryButtonVisible = false
     private var isRegionButtonVisible = false
-    private var country:Country? = null
+    private var country: Country? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -113,12 +113,12 @@ class SelectWorkplaceFragment : Fragment() {
 
         binding.selectRegionButton.setOnClickListener {
             var countryId = ""
-            if(country!=null){
+            if (country != null) {
                 countryId = country!!.id
             }
             findNavController().navigate(
                 R.id.action_selectWorkplaceFragment_to_selectRegionFragment,
-                SelectRegionFragment.createArgs(id = countryId )
+                SelectRegionFragment.createArgs(id = countryId)
             )
         }
         binding.clearCountryName.setOnClickListener {
@@ -156,6 +156,7 @@ class SelectWorkplaceFragment : Fragment() {
     private fun clearCountryField() {
         isCountryButtonVisible = false
         binding.countryEditText.text = null
+        viewModel.clearSelectedCountry()
         updateButtonsVisibility()
     }
 
