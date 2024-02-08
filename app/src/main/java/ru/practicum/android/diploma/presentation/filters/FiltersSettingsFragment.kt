@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -17,6 +18,7 @@ import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.FilterSettings
 import ru.practicum.android.diploma.domain.models.Industry
+import ru.practicum.android.diploma.domain.models.PlainFilterSettings
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FiltersSettingsViewModel
 import ru.practicum.android.diploma.presentation.util.DataTransfer
 
@@ -56,17 +58,20 @@ class FiltersSettingsFragment : Fragment() {
         binding.checkboxNoSalary.setOnClickListener {
             viewModel.saveSalaryCheckBox(binding.checkboxNoSalary.isChecked)
         }
+
         binding.workplaceClear.setOnClickListener {
             (binding.workplaceEditText as TextView).text = ""
-            viewModel.clearWorkplace()
+            viewModel.compareFilters()
         }
+
         binding.industryClear.setOnClickListener {
             (binding.industryEditText as TextView).text = ""
-            viewModel.clearIndustry()
+            viewModel.compareFilters()
         }
+
         binding.salaryClear.setOnClickListener {
             (binding.salaryEditText as TextView).text = ""
-            viewModel.clearSalary()
+            viewModel.saveExpectedSalary("0")
         }
 
         binding.bottonSettingsSave.setOnClickListener {
@@ -84,7 +89,6 @@ class FiltersSettingsFragment : Fragment() {
             (binding.industryEditText as TextView).text = ""
             (binding.workplaceEditText as TextView).text = ""
             viewModel.resetFilters()
-            renderBottonApply()
         }
         binding.salaryEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
@@ -108,23 +112,20 @@ class FiltersSettingsFragment : Fragment() {
         }
         viewModel.countryData.observe(viewLifecycleOwner) {
             setCountryValue(it)
-            renderBottonApply()
         }
         viewModel.areaData.observe(viewLifecycleOwner) {
             setAreaValue(it)
-            renderBottonApply()
         }
         viewModel.industryData.observe(viewLifecycleOwner) {
             renderIndustryTextView(it)
-            renderBottonApply()
         }
         viewModel.equalFilter.observe(viewLifecycleOwner) {
             Log.d(TAG, "Observer compare result=$it")
-            renderBottonApply()
+            renderBottonApply(it)
         }
         viewModel.changedFilter.observe(viewLifecycleOwner) {
             Log.d(TAG, "changedFilter=$it")
-            renderBottonApply()
+            renderBottonApply(it)
         }
     }
 
@@ -196,7 +197,7 @@ class FiltersSettingsFragment : Fragment() {
             country = value.name
         }
         renderWorkplaceTextView()
-        renderBottonApply()
+        viewModel.equalFilter
     }
 
     private fun setAreaValue(value: Area?) {
@@ -204,7 +205,7 @@ class FiltersSettingsFragment : Fragment() {
             area = value.name
         }
         renderWorkplaceTextView()
-        renderBottonApply()
+        viewModel.equalFilter
     }
 
     private fun renderWorkplaceTextView() {
@@ -235,28 +236,24 @@ class FiltersSettingsFragment : Fragment() {
         binding.checkboxNoSalary.isChecked = isChecked
     }
 
-    private fun renderBottonApply() {
-        val textIsFill = binding.workplaceEditText.text.toString().isNotEmpty()
-            && binding.industryEditText.text.toString().isNotEmpty()
+    private fun renderBottonApply(isChange: Boolean) {
+        val isAreaOrIndusrtyNotEmpty = binding.workplaceEditText.text.toString().isNotEmpty()
+            || binding.industryEditText.text.toString().isNotEmpty()
         val isSalaryNotEmpty = binding.salaryEditText.text.toString().isNotEmpty()
         val isCheckboxChecked = binding.checkboxNoSalary.isChecked
 
-        if (textIsFill || isSalaryNotEmpty || isCheckboxChecked) {
-            binding.apply {
-                bottonSettingsSave.visibility = View.VISIBLE
-                bottonSettingsReset.visibility = View.VISIBLE
-            }
+        if (isAreaOrIndusrtyNotEmpty || isSalaryNotEmpty || isCheckboxChecked) {
+            binding.bottonSettingsReset.visibility = View.VISIBLE
         } else {
-            binding.apply {
-                bottonSettingsSave.visibility = View.GONE
-                bottonSettingsReset.visibility = View.GONE
-            }
+            binding.bottonSettingsReset.visibility = View.GONE
         }
+        binding.bottonSettingsSave.isVisible = isChange
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.loadData()
+        viewModel.compareFilters()
     }
 
     companion object {
