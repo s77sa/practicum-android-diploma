@@ -22,7 +22,6 @@ class SelectIndustryViewModel(
     private val dataTransfer: DataTransfer
 ) : ViewModel() {
 
-    private val TAG = SelectIndustryViewModel::class.java.simpleName
     private var selectedIndustry: Industry? = null
     private var foundIndustry: MutableList<Industry>? = null
     private var stateLiveData = MutableLiveData<FilterIndustryStates>()
@@ -106,5 +105,10 @@ class SelectIndustryViewModel(
                 stateLiveData.postValue(FilterIndustryStates.Success(industryList))
             }
         }
+    }
+
+    companion object {
+
+        const val TAG = "SelectIndustryViewModel"
     }
 }
