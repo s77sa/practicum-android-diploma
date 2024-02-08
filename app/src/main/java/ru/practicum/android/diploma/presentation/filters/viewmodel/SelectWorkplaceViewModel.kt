@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,7 +42,6 @@ class SelectWorkplaceViewModel(
 
     fun loadData() {
         val areaData = DataTransfer.getArea()
-        Log.i("loadData", "areaData ${DataTransfer.getArea()}")
         if (areaData != null) {
             _regionSelectionState.value = WorkplaceSelectionState.RegionFilled(Region(areaData.id, areaData.name))
         }
