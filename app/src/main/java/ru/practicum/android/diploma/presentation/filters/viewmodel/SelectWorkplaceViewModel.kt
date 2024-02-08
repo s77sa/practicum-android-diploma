@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.domain.api.FilterInteractor
 import ru.practicum.android.diploma.domain.api.RegionInteractor
+import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.filters.states.WorkplaceSelectionState
 import ru.practicum.android.diploma.presentation.util.DataTransfer
@@ -49,5 +50,12 @@ class SelectWorkplaceViewModel(
     fun clearSelectedRegion() {
         regionInteractor.clearRegionFilter()
         _regionSelectionState.value = WorkplaceSelectionState.Empty
+    }
+
+    fun loadData() {
+        val areaData = DataTransfer.getArea()
+        if (areaData != null) {
+            _regionSelectionState.value = WorkplaceSelectionState.RegionFilled(Region(areaData.id, areaData.name))
+        }
     }
 }

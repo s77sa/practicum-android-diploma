@@ -40,6 +40,7 @@ class SelectWorkplaceFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.getCountryData()
+        viewModel.loadData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,6 +76,8 @@ class SelectWorkplaceFragment : Fragment() {
 
             is WorkplaceSelectionState.RegionFilled -> {
                 binding.clearRegion.visibility = View.VISIBLE
+                binding.regionEditText.setText(state.region.name)
+                binding.filterSettingsApply.isVisible = true
             }
 
             else -> {}
@@ -89,6 +92,7 @@ class SelectWorkplaceFragment : Fragment() {
 
             is WorkplaceSelectionState.CountryFilled -> {
                 binding.clearCountryName.visibility = View.VISIBLE
+
             }
 
             else -> {}
