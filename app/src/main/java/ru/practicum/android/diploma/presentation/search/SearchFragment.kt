@@ -15,6 +15,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +30,7 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.search.models.SearchState
 import ru.practicum.android.diploma.presentation.search.recyclerview.VacanciesAdapter
 import ru.practicum.android.diploma.presentation.search.viewmodel.SearchViewModel
+import ru.practicum.android.diploma.presentation.search.viewmodel.SharedViewModel
 import ru.practicum.android.diploma.presentation.util.debounce
 import ru.practicum.android.diploma.presentation.vacancy.VacancyFragment
 
@@ -46,6 +49,7 @@ class SearchFragment : Fragment() {
     private var isNeedAddItems = true
     private var lastSearchText = ""
     private var newSearchText = ""
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,7 +75,13 @@ class SearchFragment : Fragment() {
 
         initRecyclerView()
         initClickListener()
-
+        sharedViewModel.isFilterOn.observe(viewLifecycleOwner, Observer { isFilterOn ->
+            if (isFilterOn) {
+                binding.filterButton.setImageResource(R.drawable.ic_filter_on)
+            } else {
+                binding.filterButton.setImageResource(R.drawable.ic_filter_off)
+            }
+        })
     }
 
     private fun initObservers() {
