@@ -32,7 +32,7 @@ val filterModule = module {
 
     single<IndustryRepository> {
 
-        IndustryRepositoryImpl(networkClient = get(), context = get(), mapper = get())
+        IndustryRepositoryImpl(networkClient = get(), mapper = get())
     }
     factory { IndustryMapper() }
 
@@ -42,7 +42,7 @@ val filterModule = module {
 
     single<AreaRepository> {
 
-        AreaRepositoryImpl(networkClient = get(), context = get(), converter = get())
+        AreaRepositoryImpl(networkClient = get(), converter = get())
     }
     factory { AreaMapper() }
 

@@ -21,12 +21,13 @@ class SelectIndustryViewModel(
     private val context: Context,
     private val dataTransfer: DataTransfer
 ) : ViewModel() {
-
     private var selectedIndustry: Industry? = null
     private var foundIndustry: MutableList<Industry>? = null
-    private var stateLiveData = MutableLiveData<FilterIndustryStates>()
-    fun getState(): LiveData<FilterIndustryStates> = stateLiveData
 
+    private val _stateLiveData = MutableLiveData<FilterIndustryStates>()
+    val stateLiveData: LiveData<FilterIndustryStates> get() = _stateLiveData
+
+    fun getState(): LiveData<FilterIndustryStates> = stateLiveData
     fun searchDebounce(changedText: String) {
         industrySearchDebounce(changedText)
     }
@@ -40,8 +41,7 @@ class SelectIndustryViewModel(
     }
 
     fun getIndustries() {
-        stateLiveData.postValue(FilterIndustryStates.Loading)
-
+        _stateLiveData.postValue(FilterIndustryStates.Loading)
         viewModelScope.launch {
             val result = industryInteractor.getIndustries()
             processResult(result.first, result.second)
@@ -49,15 +49,14 @@ class SelectIndustryViewModel(
     }
 
     fun filter(s: String) {
-        stateLiveData.postValue(FilterIndustryStates.Loading)
+        _stateLiveData.postValue(FilterIndustryStates.Loading)
         viewModelScope.launch {
             val filteredIndustry = foundIndustry?.filter { it.name.contains(s, ignoreCase = true) }
-            if (filteredIndustry!!.isEmpty()) {
-                stateLiveData.postValue(FilterIndustryStates.Empty)
+            if (filteredIndustry.isNullOrEmpty()) {
+                _stateLiveData.postValue(FilterIndustryStates.Empty)
             } else {
-                stateLiveData.postValue(FilterIndustryStates.Success(filteredIndustry))
+                _stateLiveData.postValue(FilterIndustryStates.Success(filteredIndustry))
             }
-
         }
     }
 
@@ -66,7 +65,7 @@ class SelectIndustryViewModel(
     }
 
     fun bufferIndustry() {
-        stateLiveData.postValue(FilterIndustryStates.HasSelected)
+        _stateLiveData.postValue(FilterIndustryStates.HasSelected)
     }
 
     fun getChecked(): Industry? {
@@ -87,28 +86,24 @@ class SelectIndustryViewModel(
         when {
             errorMessage != null -> {
                 if (errorMessage == getString(context, R.string.no_internet)) {
-                    stateLiveData.postValue(FilterIndustryStates.ConnectionError)
-
+                    _stateLiveData.postValue(FilterIndustryStates.ConnectionError)
                 } else {
-                    stateLiveData.postValue(FilterIndustryStates.ServerError)
-
+                    _stateLiveData.postValue(FilterIndustryStates.ServerError)
                 }
-
             }
 
             industryList.isEmpty() -> {
-                stateLiveData.postValue(FilterIndustryStates.Empty)
+                _stateLiveData.postValue(FilterIndustryStates.Empty)
             }
 
             else -> {
                 foundIndustry = industryList
-                stateLiveData.postValue(FilterIndustryStates.Success(industryList))
+                _stateLiveData.postValue(FilterIndustryStates.Success(industryList))
             }
         }
     }
 
     companion object {
-
         const val TAG = "SelectIndustryViewModel"
     }
 }

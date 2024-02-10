@@ -16,7 +16,7 @@ val repositoryModule = module {
     single { VacancyConverter() }
 
     single<FavouriteRepository> {
-        FavouriteRepositoryImpl(get(), get(), get())
+        FavouriteRepositoryImpl(get(), get())
     }
 
 }

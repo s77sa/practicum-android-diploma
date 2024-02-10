@@ -15,7 +15,7 @@ import ru.practicum.android.diploma.presentation.util.Resource
 class FavouriteRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val favouriteConverter: VacancyConverter,
-    private val context: Context
+
 ) : FavouriteRepository {
     override suspend fun addFavourite(vacancy: Vacancy) {
         appDatabase.favouriteDao().addFavourite(favouriteConverter.map(vacancy))
@@ -55,7 +55,7 @@ class FavouriteRepositoryImpl(
             val vacancyDb = appDatabase.favouriteDao().getVacancyById(vacancyId)
             Resource.Success(favouriteConverter.map(vacancyDb))
         } else {
-            Resource.Error(ContextCompat.getString(context, R.string.no_internet))
+            Resource.Error("No internet connection")
         }
     }
 }
