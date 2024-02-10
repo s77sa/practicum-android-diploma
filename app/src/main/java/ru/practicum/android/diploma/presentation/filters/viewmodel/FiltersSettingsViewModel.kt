@@ -145,16 +145,13 @@ class FiltersSettingsViewModel(
         _plainFiltersData.value = DataTransfer.getPlainFilters()
         _countryData.value = DataTransfer.getCountry()
         _industryData.value = DataTransfer.getIndustry()
-        Log.d("countryData", "country load from transfer ${DataTransfer.getCountry()}")
         _areaData.value = DataTransfer.getArea()
-        Log.d("countryData", "industryData from transfer ${DataTransfer.getIndustry()}")
         checkChangedFilters()
     }
 
     fun saveData() {
         DataTransfer.setPlainFilters(_plainFiltersData.value)
         DataTransfer.setCountry(_countryData.value)
-        Log.d("countryData", "Save ${DataTransfer.getCountry()}")
         DataTransfer.setIndustry(_industryData.value)
         DataTransfer.setArea(_areaData.value)
         checkChangedFilters()
