@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.presentation.filters
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -145,12 +144,10 @@ class SelectWorkplaceFragment : Fragment() {
         }
 
         binding.countryEditText.setOnClickListener {
-            Log.d("ClickerLogger", "нажали selectCountryButton")
             navigateToCountrySelection()
         }
 
         binding.regionEditText.setOnClickListener {
-            Log.d("ClickerLogger", "нажали region")
             navigateToRegionSelection()
         }
     }
