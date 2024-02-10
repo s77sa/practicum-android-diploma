@@ -11,9 +11,9 @@ import ru.practicum.android.diploma.presentation.util.Resource
 
 class FavouriteRepositoryImpl(
     private val appDatabase: AppDatabase,
-    private val favouriteConverter: VacancyConverter,
+    private val favouriteConverter: VacancyConverter
+) : FavouriteRepository {
 
-    ) : FavouriteRepository {
     override suspend fun addFavourite(vacancy: Vacancy) {
         appDatabase.favouriteDao().addFavourite(favouriteConverter.map(vacancy))
     }
