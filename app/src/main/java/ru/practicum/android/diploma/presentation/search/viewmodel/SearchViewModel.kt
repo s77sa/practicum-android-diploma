@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.presentation.search.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -61,19 +60,16 @@ class SearchViewModel(
 
     fun loadFilter() {
         filter = loadFilterSettings()
-        Log.d("search", "Filter $filter")
     }
 
     private fun loadFilterSettings(): Filter {
         val settings = filterInteractor.loadFilterSettings()
-        Log.d("search", "$settings")
         val showSalary = settings?.plainFilterSettings?.notShowWithoutSalary ?: false
         val country = settings?.country?.id
         var area = settings?.area?.id
         val industry = settings?.industry?.id
         val salary = settings?.plainFilterSettings?.expectedSalary
         if (area.isNullOrEmpty()) area = country
-        Log.d("search", "$area")
         return Filter(
             area = area,
             pageLimit = 20,
@@ -81,8 +77,6 @@ class SearchViewModel(
             industry = industry,
             salary = salary
         )
-
-
     }
 
     private fun searchVacancy(changedText: String, page: Int) {

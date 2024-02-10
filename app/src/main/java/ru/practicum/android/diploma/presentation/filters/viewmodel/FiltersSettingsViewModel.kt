@@ -41,12 +41,10 @@ class FiltersSettingsViewModel(
     fun loadFromShared() {
         if (loadStatus == 0) {
             filterSettings = filterInteractor.loadFilterSettings()
-            Log.d("countryData", "load from shared ${filterSettings}")
             writeToLiveData()
             loadStatus = 1
             saveData()
         }
-
     }
 
     private fun writeToLiveData() {
@@ -72,6 +70,7 @@ class FiltersSettingsViewModel(
             plainFilterSettings = _plainFiltersData.value
         )
     }
+
     private fun checkChangedFilters() {
         var value = false
         if (_industryData.value != null) value = true
@@ -142,7 +141,7 @@ class FiltersSettingsViewModel(
         compareFilters()
     }
 
-   fun loadData() {
+    fun loadData() {
         _plainFiltersData.value = DataTransfer.getPlainFilters()
         _countryData.value = DataTransfer.getCountry()
         _industryData.value = DataTransfer.getIndustry()
@@ -151,6 +150,7 @@ class FiltersSettingsViewModel(
         Log.d("countryData", "industryData from transfer ${DataTransfer.getIndustry()}")
         checkChangedFilters()
     }
+
     fun saveData() {
         DataTransfer.setPlainFilters(_plainFiltersData.value)
         DataTransfer.setCountry(_countryData.value)
