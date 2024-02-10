@@ -88,7 +88,6 @@ class SearchViewModel(
             industry = industry,
             salary = salary
         )
-
     }
 
     private fun searchVacancy(changedText: String, page: Int) {

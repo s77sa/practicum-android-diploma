@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,7 @@ class SelectWorkplaceViewModel(
 
     fun saveCountry(country: Country?) {
         dataTransfer.setCountry(country)
+        Log.d("countryData", " Save ${DataTransfer.getCountry()}")
     }
 
     fun saveRegion(region: Area?) {

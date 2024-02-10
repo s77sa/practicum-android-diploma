@@ -36,9 +36,15 @@ class FiltersSettingsViewModel(
 
     private var filterSettings: FilterSettings? = null
 
+    private var loadStatus = 0
+
     fun loadFromShared() {
-        filterSettings = filterInteractor.loadFilterSettings()
-        writeToLiveData()
+        if (loadStatus == 0) {
+            filterSettings = filterInteractor.loadFilterSettings()
+            writeToLiveData()
+            loadStatus = 1
+            saveData()
+        }
     }
 
     private fun writeToLiveData() {
@@ -103,12 +109,14 @@ class FiltersSettingsViewModel(
     fun clearIndustry() {
         _industryData.value = null
         saveData()
+        compareFilters()
     }
 
     fun clearWorkplace() {
         _countryData.value = null
         _areaData.value = null
         saveData()
+        compareFilters()
     }
 
     fun clearSalary() {
@@ -141,7 +149,7 @@ class FiltersSettingsViewModel(
         checkChangedFilters()
     }
 
-    private fun saveData() {
+    fun saveData() {
         DataTransfer.setPlainFilters(_plainFiltersData.value)
         DataTransfer.setCountry(_countryData.value)
         DataTransfer.setIndustry(_industryData.value)
@@ -152,6 +160,7 @@ class FiltersSettingsViewModel(
 
     fun applyFilterSettings(filter: FilterSettings) {
         filterInteractor.writeFilterSettings(filter)
+        loadStatus = 0
     }
 
     companion object {
