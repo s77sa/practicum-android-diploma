@@ -33,6 +33,8 @@ class SearchViewModel(
     private var page: Int = 0
     private var pages = 1
     private var filter: Filter? = null
+    private val _isFilterOn = MutableLiveData<Boolean>()
+    val isFilterOn get() = _isFilterOn
 
     init {
         loadFilter()
@@ -69,6 +71,12 @@ class SearchViewModel(
         val area = settings?.area?.id
         val industry = settings?.industry?.id
         val salary = settings?.plainFilterSettings?.expectedSalary
+
+        // Проверка если все значения фильтра пустые - подсветку кнопки убрать
+        _isFilterOn.value = ! (area.isNullOrEmpty() &&
+            industry.isNullOrEmpty() && !showSalary &&
+            salary == null)
+
         return Filter(
             area = area,
             pageLimit = 20,
@@ -76,6 +84,7 @@ class SearchViewModel(
             industry = industry,
             salary = salary
         )
+
     }
 
     private fun searchVacancy(changedText: String, page: Int) {

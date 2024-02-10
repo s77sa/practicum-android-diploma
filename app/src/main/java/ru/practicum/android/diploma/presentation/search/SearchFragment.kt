@@ -49,7 +49,7 @@ class SearchFragment : Fragment() {
     private var isNeedAddItems = true
     private var lastSearchText = ""
     private var newSearchText = ""
-    private val sharedViewModel: SharedViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -75,13 +75,15 @@ class SearchFragment : Fragment() {
 
         initRecyclerView()
         initClickListener()
-        sharedViewModel.isFilterOn.observe(viewLifecycleOwner, Observer { isFilterOn ->
-            if (isFilterOn) {
-                binding.filterButton.setImageResource(R.drawable.ic_filter_on)
-            } else {
-                binding.filterButton.setImageResource(R.drawable.ic_filter_off)
-            }
-        })
+        viewModel.isFilterOn.observe(viewLifecycleOwner, Observer { isFilterOn -> setOnButtonFilter(isFilterOn) })
+    }
+
+    private fun setOnButtonFilter(isFilterOn: Boolean) {
+        if (isFilterOn) {
+            binding.filterButton.setImageResource(R.drawable.ic_filter_on)
+        } else {
+            binding.filterButton.setImageResource(R.drawable.ic_filter_off)
+        }
     }
 
     private fun initObservers() {
@@ -157,7 +159,7 @@ class SearchFragment : Fragment() {
 
             PlaceholdersSearchEnum.SHOW_NO_INTERNET -> {
                 if (vacancies.size > 0) {
-                    showAnackBar()
+                    showSnackBar()
                     binding.recyclerView.visibility = View.VISIBLE
                 } else {
                     binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.VISIBLE
@@ -185,7 +187,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun showAnackBar() {
+    private fun showSnackBar() {
         Snackbar.make(binding.recyclerView, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
             .show()
         updateScreen(SearchState.Content(vacancies, foundVacancies))
