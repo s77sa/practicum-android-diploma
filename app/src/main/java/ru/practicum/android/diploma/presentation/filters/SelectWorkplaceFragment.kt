@@ -122,6 +122,8 @@ class SelectWorkplaceFragment : Fragment() {
         binding.selectWorkplaceBack.setOnClickListener {
             viewModel.clearSelectedRegion()
             viewModel.clearSelectedCountry()
+            viewModel.saveCountry(country)
+            viewModel.saveRegion(region)
             findNavController().popBackStack()
         }
         binding.selectCountryButton.setOnClickListener {
@@ -168,9 +170,10 @@ class SelectWorkplaceFragment : Fragment() {
     }
 
     private fun navigateToFiltersSettingsFragment() {
-        findNavController().popBackStack()
         viewModel.saveCountry(country)
         viewModel.saveRegion(region)
+        findNavController().popBackStack()
+
     }
 
     private fun clearRegionField() {

@@ -83,7 +83,6 @@ class SelectRegionViewModel(
             }
 
         }
-
     }
 
     fun selectRegion(region: Area) {
