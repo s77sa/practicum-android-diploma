@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.domain.api.SearchInteractor
 import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.search.PlaceholdersSearchEnum
+import ru.practicum.android.diploma.presentation.search.SearchFragment
 import ru.practicum.android.diploma.presentation.search.models.SearchState
 import ru.practicum.android.diploma.presentation.util.IsLastPage
 import ru.practicum.android.diploma.presentation.util.debounce
@@ -33,11 +34,13 @@ class SearchViewModel(
     private var page: Int = 0
     private var pages = 1
     private var filter: Filter? = null
+    private var filterNotInstalled = true
     private val _isFilterOn = MutableLiveData<Boolean>()
+
     val isFilterOn get() = _isFilterOn
 
     init {
-        loadFilter()
+        loadFilter(null)
     }
 
     private fun setPlaceholder(placeholdersSearchEnum: PlaceholdersSearchEnum) {
@@ -60,22 +63,24 @@ class SearchViewModel(
         searchVacancy(changedText, 0)
     }
 
-    fun loadFilter() {
+    fun loadFilter(searchText: String?) {
         filter = loadFilterSettings()
-
+        if (filterNotInstalled == false && ! searchText.isNullOrEmpty()) vacancySearchDebounce(searchText!!)
     }
 
     private fun loadFilterSettings(): Filter {
         val settings = filterInteractor.loadFilterSettings()
         val showSalary = settings?.plainFilterSettings?.notShowWithoutSalary ?: false
-        val area = settings?.area?.id
+        val country = settings?.country?.id
+        var area = settings?.area?.id
         val industry = settings?.industry?.id
-        val salary = settings?.plainFilterSettings?.expectedSalary
-
+        var salary = settings?.plainFilterSettings?.expectedSalary
+        if (area.isNullOrEmpty()) area = country
+        if (salary == 0) salary = null
         // Проверка если все значения фильтра пустые - подсветку кнопки убрать
-        _isFilterOn.value = ! (area.isNullOrEmpty() &&
-            industry.isNullOrEmpty() && !showSalary &&
-            salary == null)
+        filterNotInstalled = area.isNullOrEmpty() && country.isNullOrEmpty() && industry.isNullOrEmpty()
+             && !showSalary && salary == null
+        _isFilterOn.value = ! filterNotInstalled
 
         return Filter(
             area = area,
@@ -86,6 +91,8 @@ class SearchViewModel(
         )
 
     }
+
+
 
     private fun searchVacancy(changedText: String, page: Int) {
         if (changedText.isNotEmpty()) {

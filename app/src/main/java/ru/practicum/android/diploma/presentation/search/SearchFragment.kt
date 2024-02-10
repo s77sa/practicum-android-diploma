@@ -13,9 +13,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -76,6 +79,9 @@ class SearchFragment : Fragment() {
         initRecyclerView()
         initClickListener()
         viewModel.isFilterOn.observe(viewLifecycleOwner, Observer { isFilterOn -> setOnButtonFilter(isFilterOn) })
+        savedInstanceState?.let {
+            newSearchText = it.get(SEARCH_TEXT) as String
+        }
     }
 
     private fun setOnButtonFilter(isFilterOn: Boolean) {
@@ -272,9 +278,17 @@ class SearchFragment : Fragment() {
         binding.searchInput.clearFocus()
     }
 
+    override fun onPause() {
+        super.onPause()
+        searchText = binding.searchInput.text.toString()
+    }
+
     override fun onResume() {
         super.onResume()
-        viewModel.loadFilter()
+
+        viewModel.loadFilter(searchText)
+        if (searchText != null) binding.searchInput.setText(searchText)
+
         if (vacancies.size > 0) {
             setPlaceholder(PlaceholdersSearchEnum.SHOW_RESULT)
         } else {
@@ -284,8 +298,10 @@ class SearchFragment : Fragment() {
     }
 
     companion object {
+        private var searchText: String? = null
         const val CLICK_DEBOUNCE_DELAY = 300L
         const val FOUND_REPLACE_PATTERN = "[found]"
+        const val SEARCH_TEXT = "SEARCH_TEXT"
         val TAG: String = SearchFragment::class.java.simpleName
     }
 }
