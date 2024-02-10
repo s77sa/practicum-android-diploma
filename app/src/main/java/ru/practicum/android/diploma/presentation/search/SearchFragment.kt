@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +12,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,7 +28,6 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.search.models.SearchState
 import ru.practicum.android.diploma.presentation.search.recyclerview.VacanciesAdapter
 import ru.practicum.android.diploma.presentation.search.viewmodel.SearchViewModel
-import ru.practicum.android.diploma.presentation.search.viewmodel.SharedViewModel
 import ru.practicum.android.diploma.presentation.util.debounce
 import ru.practicum.android.diploma.presentation.vacancy.VacancyFragment
 
@@ -75,13 +69,9 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRecyclerView()
         initClickListener()
         viewModel.isFilterOn.observe(viewLifecycleOwner, Observer { isFilterOn -> setOnButtonFilter(isFilterOn) })
-        savedInstanceState?.let {
-            newSearchText = it.get(SEARCH_TEXT) as String
-        }
     }
 
     private fun setOnButtonFilter(isFilterOn: Boolean) {
@@ -127,10 +117,7 @@ class SearchFragment : Fragment() {
                 }
             }
         })
-
-        iconSearch?.setOnClickListener {
-            clearSearch()
-        }
+        iconSearch?.setOnClickListener { clearSearch() }
     }
 
     private fun clearSearch() {
@@ -171,31 +158,25 @@ class SearchFragment : Fragment() {
                     binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.VISIBLE
                 }
             }
-
             PlaceholdersSearchEnum.SHOW_NO_VACANCY -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoVacancy).visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.SHOW_PROGRESS_CENTER -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.SHOW_PROGRESS_BOTTOM -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.SHOW_RESULT -> {
                 binding.recyclerView.visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.HIDE_ALL -> {}
         }
     }
 
     private fun showSnackBar() {
-        Snackbar.make(binding.recyclerView, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
-            .show()
+        Snackbar.make(binding.recyclerView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
         updateScreen(SearchState.Content(vacancies, foundVacancies))
     }
 
@@ -222,7 +203,6 @@ class SearchFragment : Fragment() {
             is SearchState.Empty -> {
                 showFoundResultBar(0)
             }
-
             else -> {}
         }
         hideKeyBoard()
@@ -233,21 +213,16 @@ class SearchFragment : Fragment() {
             null -> {
                 binding.foundResults.visibility = View.GONE
                 binding.recyclerView.visibility = View.GONE
-                Log.d(TAG, "showFoundResultBar null")
             }
-
             0 -> {
                 binding.foundResults.text = getString(R.string.status_no_results)
                 binding.foundResults.isVisible = true
-                Log.d(TAG, "showFoundResultBar 0")
             }
-
             else -> {
                 var value = getString(R.string.status_results)
                 value = value.replace(FOUND_REPLACE_PATTERN, foundItems.toString())
                 binding.foundResults.text = value
                 binding.foundResults.isVisible = true
-                Log.d(TAG, "showFoundResultBar else")
             }
         }
     }
@@ -285,7 +260,6 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         viewModel.loadFilter(searchText)
         if (searchText != null) binding.searchInput.setText(searchText)
 

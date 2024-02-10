@@ -13,7 +13,6 @@ import ru.practicum.android.diploma.domain.api.SearchInteractor
 import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.search.PlaceholdersSearchEnum
-import ru.practicum.android.diploma.presentation.search.SearchFragment
 import ru.practicum.android.diploma.presentation.search.models.SearchState
 import ru.practicum.android.diploma.presentation.util.IsLastPage
 import ru.practicum.android.diploma.presentation.util.debounce
@@ -65,7 +64,7 @@ class SearchViewModel(
 
     fun loadFilter(searchText: String?) {
         filter = loadFilterSettings()
-        if (filterNotInstalled == false && ! searchText.isNullOrEmpty()) vacancySearchDebounce(searchText!!)
+        if (filterNotInstalled == false && !searchText.isNullOrEmpty()) vacancySearchDebounce(searchText!!)
     }
 
     private fun loadFilterSettings(): Filter {
@@ -79,8 +78,8 @@ class SearchViewModel(
         if (salary == 0) salary = null
         // Проверка если все значения фильтра пустые - подсветку кнопки убрать
         filterNotInstalled = area.isNullOrEmpty() && country.isNullOrEmpty() && industry.isNullOrEmpty()
-             && !showSalary && salary == null
-        _isFilterOn.value = ! filterNotInstalled
+            && !showSalary && salary == null
+        _isFilterOn.value = !filterNotInstalled
 
         return Filter(
             area = area,
@@ -91,8 +90,6 @@ class SearchViewModel(
         )
 
     }
-
-
 
     private fun searchVacancy(changedText: String, page: Int) {
         if (changedText.isNotEmpty()) {
