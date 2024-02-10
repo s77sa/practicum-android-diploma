@@ -109,7 +109,7 @@ class SelectWorkplaceFragment : Fragment() {
             is WorkplaceSelectionState.CountryFilled -> {
                 country = state.country
                 binding.clearCountryName.visibility = View.VISIBLE
-                binding.selectCountryBottom.isVisible = false
+                binding.selectCountryButton.isVisible = false
                 binding.countryEditText.setText(state.country.name)
                 binding.filterSettingsApply.isVisible = true
             }
@@ -124,19 +124,12 @@ class SelectWorkplaceFragment : Fragment() {
             viewModel.clearSelectedCountry()
             findNavController().popBackStack()
         }
-        binding.selectCountryBottom.setOnClickListener {
-            findNavController().navigate(R.id.action_selectWorkplaceFragment_to_selectCountryFragment)
+        binding.selectCountryButton.setOnClickListener {
+            navigateToCountrySelection()
         }
 
         binding.selectRegionButton.setOnClickListener {
-            var countryId = ""
-            if (country != null) {
-                countryId = country!!.id
-            }
-            findNavController().navigate(
-                R.id.action_selectWorkplaceFragment_to_selectRegionFragment,
-                SelectRegionFragment.createArgs(id = countryId)
-            )
+            navigateToRegionSelection()
         }
         binding.clearCountryName.setOnClickListener {
             clearCountryField()
@@ -149,6 +142,29 @@ class SelectWorkplaceFragment : Fragment() {
         binding.filterSettingsApply.setOnClickListener {
             navigateToFiltersSettingsFragment()
         }
+
+        binding.countryEditText.setOnClickListener {
+            navigateToCountrySelection()
+        }
+
+        binding.regionEditText.setOnClickListener {
+            navigateToRegionSelection()
+        }
+    }
+
+    private fun navigateToRegionSelection() {
+        var countryId = ""
+        if (country != null) {
+            countryId = country!!.id
+        }
+        findNavController().navigate(
+            R.id.action_selectWorkplaceFragment_to_selectRegionFragment,
+            SelectRegionFragment.createArgs(id = countryId)
+        )
+    }
+
+    private fun navigateToCountrySelection() {
+        findNavController().navigate(R.id.action_selectWorkplaceFragment_to_selectCountryFragment)
     }
 
     private fun navigateToFiltersSettingsFragment() {
@@ -177,7 +193,7 @@ class SelectWorkplaceFragment : Fragment() {
         val selectedCountry = country
         val isCountryFieldEmpty = binding.countryEditText.text.isNullOrEmpty()
         binding.clearCountryName.isVisible = selectedCountry != null && !isCountryFieldEmpty
-        binding.selectCountryBottom.isVisible = selectedCountry == null || isCountryFieldEmpty
+        binding.selectCountryButton.isVisible = selectedCountry == null || isCountryFieldEmpty
 
         val isRegionFieldEmpty = binding.regionEditText.text.isNullOrEmpty()
         binding.clearRegion.isVisible = !isRegionFieldEmpty
