@@ -149,6 +149,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private fun chooseIndustry(industry: Industry) {
         Log.i("Industry", "industry Choosed")
         selectedIndustry = industry
+        Log.i("Industry", "${industry.name}")
         hideKeyboard()
         viewModel.bufferIndustry()
 
