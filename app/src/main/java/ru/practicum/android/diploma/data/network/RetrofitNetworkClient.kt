@@ -26,7 +26,7 @@ class RetrofitNetworkClient(
         return withContext(Dispatchers.IO) {
             try {
                 val response = hhApi.search(request)
-
+                Log.d("search", "$response")
                 when (response.isSuccessful) {
                     true -> VacancyResponse(
                         items = response.body()?.items,

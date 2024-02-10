@@ -60,15 +60,16 @@ class SearchViewModel(
 
     fun loadFilter() {
         filter = loadFilterSettings()
-
     }
 
     private fun loadFilterSettings(): Filter {
         val settings = filterInteractor.loadFilterSettings()
         val showSalary = settings?.plainFilterSettings?.notShowWithoutSalary ?: false
-        val area = settings?.area?.id
+        val country = settings?.country?.id
+        var area = settings?.area?.id
         val industry = settings?.industry?.id
         val salary = settings?.plainFilterSettings?.expectedSalary
+        if (area.isNullOrEmpty()) area = country
         return Filter(
             area = area,
             pageLimit = 20,
