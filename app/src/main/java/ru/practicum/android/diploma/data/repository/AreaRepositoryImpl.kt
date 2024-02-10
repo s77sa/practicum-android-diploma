@@ -1,8 +1,5 @@
 package ru.practicum.android.diploma.data.repository
 
-import android.content.Context
-import androidx.core.content.ContextCompat.getString
-import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.data.conventers.AreaMapper
 import ru.practicum.android.diploma.data.dto.AreaRequest
 import ru.practicum.android.diploma.data.dto.AreaResponse
@@ -13,49 +10,45 @@ import ru.practicum.android.diploma.presentation.util.Resource
 
 class AreaRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val context: Context,
     private val converter: AreaMapper
 ) : AreaRepository {
 
+    private val noInternetConnectionErrorMessage = "No internet connection"
+    private val networkErrorMessage = "Network error"
+
     override suspend fun getCountries(): Resource<List<Area>> {
         val response = networkClient.getAreas()
-
-        if (response.resultCode == NO_CONNECTION) {
-            return Resource.Error(getString(context, R.string.no_internet))
-        }
-        return if (response.resultCode == SUCCESS) {
+        return if (response.resultCode == NO_CONNECTION) {
+            Resource.Error(noInternetConnectionErrorMessage)
+        } else if (response.resultCode == SUCCESS) {
             val areas = response as AreaResponse
             Resource.Success(converter.map(areas))
         } else {
-            Resource.Error(getString(context, R.string.net_error))
+            Resource.Error(networkErrorMessage)
         }
     }
 
     override suspend fun getCities(expression: String): Resource<List<Area>> {
         val response = networkClient.getNestedAreas(AreaRequest(expression))
-        if (response.resultCode == NO_CONNECTION) {
-            return Resource.Error(getString(context, R.string.no_internet))
-        }
-        return if (response.resultCode == SUCCESS) {
+        return if (response.resultCode == NO_CONNECTION) {
+            Resource.Error(noInternetConnectionErrorMessage)
+        } else if (response.resultCode == SUCCESS) {
             val areas = response as AreaResponse
             Resource.Success(converter.mapCity(areas))
-
         } else {
-            Resource.Error(getString(context, R.string.net_error))
+            Resource.Error(networkErrorMessage)
         }
     }
 
     override suspend fun getCitiesAll(): Resource<List<Area>> {
         val response = networkClient.getAreas()
-        if (response.resultCode == NO_CONNECTION) {
-            return Resource.Error(getString(context, R.string.no_internet))
-        }
-        return if (response.resultCode == SUCCESS) {
+        return if (response.resultCode == NO_CONNECTION) {
+            Resource.Error(noInternetConnectionErrorMessage)
+        } else if (response.resultCode == SUCCESS) {
             val areas = response as AreaResponse
             Resource.Success(converter.mapCityAll(areas))
         } else {
-            Resource.Error(getString(context, R.string.net_error))
+            Resource.Error(networkErrorMessage)
         }
     }
-
 }
