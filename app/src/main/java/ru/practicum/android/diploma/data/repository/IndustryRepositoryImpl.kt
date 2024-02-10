@@ -11,11 +11,15 @@ class IndustryRepositoryImpl(
     private val networkClient: NetworkClient,
     private val mapper: IndustryMapper
 ) : IndustryRepository {
+
+    private val noInternetConnectionErrorMessage = "No internet connection"
+    private val networkErrorMessage = "Network error"
+
     override suspend fun getIndustries(): Resource<List<Industry>> {
         val response = networkClient.getIndustries()
         return when (response.resultCode) {
             NO_CONNECTION -> {
-                Resource.Error("No internet connection")
+                Resource.Error(noInternetConnectionErrorMessage)
             }
 
             SUCCESS -> {
@@ -25,7 +29,7 @@ class IndustryRepositoryImpl(
             }
 
             else -> {
-                Resource.Error("Error ${response.resultCode}")
+                Resource.Error(networkErrorMessage)
             }
         }
     }

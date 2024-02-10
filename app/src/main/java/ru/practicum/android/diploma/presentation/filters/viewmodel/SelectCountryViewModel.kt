@@ -38,4 +38,3 @@ class SelectCountryViewModel(
         dataTransfer.setCountry(country)
     }
 }
-
