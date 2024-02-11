@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
-import android.os.Build
-import androidx.annotation.RequiresExtension
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +20,6 @@ class SelectCountryViewModel(
     private val _countrySelectionState = MutableLiveData<CountrySelectionState>()
     val countrySelectionState: LiveData<CountrySelectionState> get() = _countrySelectionState
 
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun getCountries() {
         viewModelScope.launch {
             _countrySelectionState.value = CountrySelectionState.Loading
@@ -38,6 +36,7 @@ class SelectCountryViewModel(
                 }
             } catch (e: SocketException) {
                 _countrySelectionState.value = CountrySelectionState.ServerIssue
+                Log.e("SelectCountryViewModel", "SocketException: ${e.message}", e)
             }
         }
     }
