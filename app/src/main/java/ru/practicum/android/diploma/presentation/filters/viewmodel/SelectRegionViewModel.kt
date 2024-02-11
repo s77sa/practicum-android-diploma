@@ -71,7 +71,7 @@ class SelectRegionViewModel(
         regionSelectionState.value = RegionSelectionState.Loading
         viewModelScope.launch {
             val filteredRegions = foundRegions?.filter { it.name.contains(text, ignoreCase = true) }
-            if (filteredRegions!!.isEmpty()) {
+            if (filteredRegions.isNullOrEmpty()) {
                 regionSelectionState.postValue(RegionSelectionState.NoData)
             } else {
                 regionSelectionState.postValue(RegionSelectionState.Success(filteredRegions))
