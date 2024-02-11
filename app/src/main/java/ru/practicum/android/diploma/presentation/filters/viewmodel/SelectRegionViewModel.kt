@@ -23,12 +23,9 @@ class SelectRegionViewModel(
 ) : ViewModel() {
 
     private var countryId = id
-
     private val regionSelectionState = MutableLiveData<RegionSelectionState>()
     fun regionSelectionState(): LiveData<RegionSelectionState> = regionSelectionState
-
     private var selectedRegion: String = ""
-
     private var foundRegions: MutableList<Area>? = null
 
     init {
@@ -56,9 +53,7 @@ class SelectRegionViewModel(
         if (countryId != "") {
             viewModelScope.launch {
                 val regions = countryId?.let { areaInteractor.getCities(it) }
-                if (regions != null) {
-                    processRegionResult(regions.first, regions.second)
-                }
+                regions?.let { processRegionResult(it.first, it.second) }
             }
         } else {
             getAllRegions()
@@ -81,7 +76,6 @@ class SelectRegionViewModel(
             } else {
                 regionSelectionState.postValue(RegionSelectionState.Success(filteredRegions))
             }
-
         }
     }
 
@@ -93,34 +87,24 @@ class SelectRegionViewModel(
         return selectedRegion
     }
 
-    fun processRegionResult(found: List<Area>?, errorMessage: String?) {
-        val areaList = mutableListOf<Area>()
-        if (found != null) {
-            areaList.clear()
-            areaList.addAll(found)
-        }
-        when {
-            errorMessage != null -> {
-                if (errorMessage == getString(context, R.string.no_internet)) {
-                    regionSelectionState.postValue(RegionSelectionState.NoInternet)
-
-                } else {
-                    regionSelectionState.postValue(RegionSelectionState.Error)
-
-                }
-
+    private fun processRegionResult(found: List<Area>?, errorMessage: String?) {
+        if (errorMessage != null) {
+            if (errorMessage == getString(context, R.string.no_internet)) {
+                regionSelectionState.postValue(RegionSelectionState.NoInternet)
+            } else {
+                regionSelectionState.postValue(RegionSelectionState.Error)
             }
-
-            areaList.isEmpty() -> {
+        } else {
+            val areaList = mutableListOf<Area>()
+            found?.let {
+                areaList.addAll(it)
+            }
+            if (areaList.isEmpty()) {
                 regionSelectionState.postValue(RegionSelectionState.NoData)
-            }
-
-            else -> {
+            } else {
                 foundRegions = areaList
                 regionSelectionState.postValue(RegionSelectionState.Success(areaList))
             }
         }
-
     }
-
 }

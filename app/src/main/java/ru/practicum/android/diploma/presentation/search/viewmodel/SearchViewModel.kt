@@ -24,10 +24,10 @@ class SearchViewModel(
 ) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchState>()
-    fun observeState(): LiveData<SearchState> = stateLiveData
+    val observeState: LiveData<SearchState> get() = stateLiveData
 
     private val placeholderStatusMutable = MutableLiveData<PlaceholdersSearchEnum>(PlaceholdersSearchEnum.SHOW_BLANK)
-    val placeholderStatusData get() = placeholderStatusMutable
+    val placeholderStatusData: LiveData<PlaceholdersSearchEnum> get() = placeholderStatusMutable
     private var latestSearchText: String? = null
     private var isNextPageLoading = true
     private var page: Int = 0
@@ -77,7 +77,9 @@ class SearchViewModel(
         if (area.isNullOrEmpty()) area = country
         if (salary == 0) salary = null
         // Проверка если все значения фильтра пустые - подсветку кнопки убрать
-        filterNotInstalled = area.isNullOrEmpty() && country.isNullOrEmpty() && industry.isNullOrEmpty()
+        filterNotInstalled = area.isNullOrEmpty()
+            && country.isNullOrEmpty()
+            && industry.isNullOrEmpty()
             && !showSalary && salary == null
         _isFilterOn.value = !filterNotInstalled
 
@@ -99,12 +101,7 @@ class SearchViewModel(
                 IsLastPage.IS_LAST_PAGE = true
             }
             viewModelScope.launch {
-                searchInteractor
-                    .searchVacancies(
-                        changedText,
-                        filter!!,
-                        page = page
-                    )
+                searchInteractor.searchVacancies(changedText, filter!!, page = page)
                     .collect { pair ->
                         processResult(pair.first, pair.second, searchInteractor.foundItems)
                     }
