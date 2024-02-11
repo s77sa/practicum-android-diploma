@@ -130,7 +130,7 @@ class SearchFragment : Fragment() {
         val len = searchInput?.text?.length
         if (len != null) {
             if (len > 0) {
-                iconSearch?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_close))
+                iconSearch?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_close_blk))
             } else {
                 iconSearch?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_search))
             }
