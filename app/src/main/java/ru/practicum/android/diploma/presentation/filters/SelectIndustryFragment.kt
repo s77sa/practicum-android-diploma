@@ -41,7 +41,6 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getState().observe(viewLifecycleOwner) {
-            Log.i("Industry", "State is $it")
             initStates(it)
         }
         viewModel.getIndustries()
