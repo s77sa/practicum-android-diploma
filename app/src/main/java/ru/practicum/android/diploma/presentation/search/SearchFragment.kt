@@ -158,24 +158,19 @@ class SearchFragment : Fragment() {
                     binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.VISIBLE
                 }
             }
-
             PlaceholdersSearchEnum.SHOW_NO_VACANCY -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoVacancy).visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.SHOW_PROGRESS_CENTER -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.SHOW_PROGRESS_BOTTOM -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.SHOW_RESULT -> {
                 binding.recyclerView.visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.HIDE_ALL -> {}
         }
     }
@@ -268,6 +263,8 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        lastSearchText = ""
+        newSearchText = ""
         viewModel.loadFilter(searchText)
         if (searchText != null) binding.searchInput.setText(searchText)
 
