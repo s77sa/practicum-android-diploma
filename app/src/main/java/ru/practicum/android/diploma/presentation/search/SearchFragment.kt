@@ -86,7 +86,7 @@ class SearchFragment : Fragment() {
         viewModel.placeholderStatusData.observe(viewLifecycleOwner) {
             setPlaceholder(it)
         }
-        viewModel.observeState().observe(viewLifecycleOwner) {
+        viewModel.observeState.observe(viewLifecycleOwner) {
             updateScreen(it)
         }
     }
@@ -158,19 +158,24 @@ class SearchFragment : Fragment() {
                     binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.VISIBLE
                 }
             }
+
             PlaceholdersSearchEnum.SHOW_NO_VACANCY -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoVacancy).visibility = View.VISIBLE
             }
+
             PlaceholdersSearchEnum.SHOW_PROGRESS_CENTER -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility = View.VISIBLE
             }
+
             PlaceholdersSearchEnum.SHOW_PROGRESS_BOTTOM -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.VISIBLE
             }
+
             PlaceholdersSearchEnum.SHOW_RESULT -> {
                 binding.recyclerView.visibility = View.VISIBLE
             }
+
             PlaceholdersSearchEnum.HIDE_ALL -> {}
         }
     }
@@ -203,6 +208,7 @@ class SearchFragment : Fragment() {
             is SearchState.Empty -> {
                 showFoundResultBar(0)
             }
+
             else -> {}
         }
         hideKeyBoard()
@@ -214,10 +220,12 @@ class SearchFragment : Fragment() {
                 binding.foundResults.visibility = View.GONE
                 binding.recyclerView.visibility = View.GONE
             }
+
             0 -> {
                 binding.foundResults.text = getString(R.string.status_no_results)
                 binding.foundResults.isVisible = true
             }
+
             else -> {
                 var value = getString(R.string.status_results)
                 value = value.replace(FOUND_REPLACE_PATTERN, foundItems.toString())
