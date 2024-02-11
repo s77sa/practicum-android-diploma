@@ -246,7 +246,12 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderExpectedSalary(salary: Int) {
-        salaryExpected = salary
+        salaryExpected = if (salary == -1) {
+            null
+        } else {
+            salary
+        }
+
         val oldValue = (binding.salaryEditText as TextView).text.toString()
         if (salary > 0 && oldValue != salary.toString()) {
             (binding.salaryEditText as TextView).text = salary.toString()
