@@ -62,7 +62,13 @@ class FiltersSettingsFragment : Fragment() {
         binding.workplaceForward.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectWorkplaceFragment)
         }
+        binding.workplaceEditText.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectWorkplaceFragment)
+        }
         binding.industryForward.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectIndustryFragment)
+        }
+        binding.industryEditText.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectIndustryFragment)
         }
     }

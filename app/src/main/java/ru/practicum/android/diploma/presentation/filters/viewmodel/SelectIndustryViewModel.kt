@@ -86,9 +86,9 @@ class SelectIndustryViewModel(
         when {
             errorMessage != null -> {
                 if (errorMessage == getString(context, R.string.no_internet)) {
-                    _stateLiveData.postValue(FilterIndustryStates.ConnectionError)
-                } else {
                     _stateLiveData.postValue(FilterIndustryStates.ServerError)
+                } else {
+                    _stateLiveData.postValue(FilterIndustryStates.ConnectionError)
                 }
             }
 
