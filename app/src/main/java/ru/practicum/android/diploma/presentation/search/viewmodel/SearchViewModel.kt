@@ -64,7 +64,7 @@ class SearchViewModel(
 
     fun loadFilter(searchText: String?) {
         filter = loadFilterSettings()
-        if (filterNotInstalled == false && !searchText.isNullOrEmpty()) vacancySearchDebounce(searchText!!)
+        if (!searchText.isNullOrEmpty()) vacancySearchDebounce(searchText!!)
     }
 
     private fun loadFilterSettings(): Filter {
