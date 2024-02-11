@@ -65,7 +65,6 @@ class SearchViewModel(
     fun loadFilter(searchText: String?) {
         filter = loadFilterSettings()
         if (!searchText.isNullOrEmpty()) {
-            stateLiveData.postValue(SearchState.Loading)
             searchVacancy(searchText!!, 0)
         }
     }
