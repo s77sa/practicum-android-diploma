@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +11,7 @@ import ru.practicum.android.diploma.domain.api.AreaInteractor
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.filters.states.CountrySelectionState
 import ru.practicum.android.diploma.presentation.util.DataTransfer
+import java.net.SocketException
 
 class SelectCountryViewModel(
     private val areaInteractor: AreaInteractor,
@@ -18,6 +21,7 @@ class SelectCountryViewModel(
     private val _countrySelectionState = MutableLiveData<CountrySelectionState>()
     val countrySelectionState: LiveData<CountrySelectionState> get() = _countrySelectionState
 
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun getCountries() {
         viewModelScope.launch {
             _countrySelectionState.value = CountrySelectionState.Loading
@@ -32,7 +36,7 @@ class SelectCountryViewModel(
                 } else {
                     _countrySelectionState.value = CountrySelectionState.ServerIssue
                 }
-            } catch (e: Exception) {
+            } catch (e: SocketException) {
                 _countrySelectionState.value = CountrySelectionState.ServerIssue
             }
         }
