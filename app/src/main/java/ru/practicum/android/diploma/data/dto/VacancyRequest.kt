@@ -17,7 +17,7 @@ class VacancyRequest(
         if (filter.industry != null) {
             options["area"] = filter.industry
         }
-        if (filter.salary != null) {
+        if (filter.salary != null && filter.salary != 0) {
             options["salary"] = filter.salary.toString()
         }
         if (page != null) {

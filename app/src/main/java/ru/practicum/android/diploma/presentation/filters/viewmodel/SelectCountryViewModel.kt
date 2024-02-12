@@ -1,42 +1,47 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.api.AreaInteractor
-import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.filters.states.CountrySelectionState
 import ru.practicum.android.diploma.presentation.util.DataTransfer
+import java.net.SocketException
 
 class SelectCountryViewModel(
     private val areaInteractor: AreaInteractor,
+    private val dataTransfer: DataTransfer,
 ) : ViewModel() {
 
     private val _countrySelectionState = MutableLiveData<CountrySelectionState>()
     val countrySelectionState: LiveData<CountrySelectionState> get() = _countrySelectionState
 
-    private var selectedCountry: String = ""
-
-    suspend fun getCountries(): List<Area> {
-        _countrySelectionState.value = CountrySelectionState.Loading
-        val (countries, error) = areaInteractor.getCountries()
-        if (countries != null) {
-            if (countries.isEmpty()) {
-                _countrySelectionState.value = CountrySelectionState.NoData
-            } else {
-                _countrySelectionState.value = CountrySelectionState.Success(countries)
+    fun getCountries() {
+        viewModelScope.launch {
+            _countrySelectionState.value = CountrySelectionState.Loading
+            try {
+                val (countries, _) = areaInteractor.getCountries()
+                if (countries != null) {
+                    if (countries.isEmpty()) {
+                        _countrySelectionState.value = CountrySelectionState.NoData
+                    } else {
+                        _countrySelectionState.value = CountrySelectionState.Success(countries)
+                    }
+                } else {
+                    _countrySelectionState.value = CountrySelectionState.ServerIssue
+                }
+            } catch (e: SocketException) {
+                _countrySelectionState.value = CountrySelectionState.ServerIssue
+                Log.e("SelectCountryViewModel", "SocketException: ${e.message}", e)
             }
-        } else {
-            _countrySelectionState.value = CountrySelectionState.ServerIssue
         }
-        return countries ?: emptyList()
     }
 
     fun applyCountryFilter(country: Country) {
-        selectedCountry = country.name
-        DataTransfer.setCountry(country)
-        _countrySelectionState.value = CountrySelectionState.Success(listOf())
-
+        dataTransfer.setCountry(country)
     }
 }

@@ -13,6 +13,7 @@ object DataTransfer {
     private var country: Country? = null
     private var area: Area? = null
     private var industry: Industry? = null
+    private var changed: Int = 0
 
     fun getIndustry(): Industry? {
         return industry
@@ -21,6 +22,7 @@ object DataTransfer {
     fun setIndustry(industryValue: Industry?) {
         industry = industryValue
         Log.i(TAG, " Установлен industry=${industry?.name}")
+        changed = 1
     }
 
     fun getArea(): Area? {
@@ -30,6 +32,7 @@ object DataTransfer {
     fun setArea(areaValue: Area?) {
         area = areaValue
         Log.i(TAG, " Установлен area=${area?.name}")
+        changed = 1
     }
 
     fun getCountry(): Country? {
@@ -39,6 +42,7 @@ object DataTransfer {
     fun setCountry(countryValue: Country?) {
         country = countryValue
         Log.i(TAG, " Установлен country=${country?.name}")
+        changed = 1
     }
 
     fun getPlainFilters(): PlainFilterSettings? {
@@ -47,6 +51,13 @@ object DataTransfer {
 
     fun setPlainFilters(plainFilter: PlainFilterSettings?) {
         plainFilterSettings = plainFilter
-        Log.i(TAG, " Установлен industry=${plainFilterSettings?.expectedSalary}")
+        Log.i(TAG, " Установлен salary=${plainFilterSettings?.expectedSalary}")
+    }
+
+    fun getStatus(): Int {
+        return changed
+    }
+    fun setStatus() {
+        changed = 0
     }
 }

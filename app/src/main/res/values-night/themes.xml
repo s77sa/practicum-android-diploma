@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <item name="colorPrimary">@color/black</item>
         <item name="android:textColorPrimary">@color/white</item>
@@ -12,7 +12,7 @@
         <item name="colorOnSecondary">@color/white</item>
         <item name="android:textColorSecondary">@color/black</item>
 
-        <item name="android:windowBackground">@color/black</item>
+        <item name="android:windowBackground">@color/yp_black</item>
 
         <item name="colorAccent">@color/yp_blue</item>
         <item name="colorControlActivated">@color/yp_blue</item>

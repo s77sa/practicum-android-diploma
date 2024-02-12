@@ -24,18 +24,22 @@ class SearchViewModel(
 ) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchState>()
-    fun observeState(): LiveData<SearchState> = stateLiveData
+    val observeState: LiveData<SearchState> get() = stateLiveData
 
     private val placeholderStatusMutable = MutableLiveData<PlaceholdersSearchEnum>(PlaceholdersSearchEnum.SHOW_BLANK)
-    val placeholderStatusData get() = placeholderStatusMutable
+    val placeholderStatusData: LiveData<PlaceholdersSearchEnum> get() = placeholderStatusMutable
     private var latestSearchText: String? = null
     private var isNextPageLoading = true
     private var page: Int = 0
     private var pages = 1
     private var filter: Filter? = null
+    private var filterNotInstalled = true
+    private val _isFilterOn = MutableLiveData<Boolean>()
+
+    val isFilterOn get() = _isFilterOn
 
     init {
-        loadFilter()
+        loadFilter(null)
     }
 
     private fun setPlaceholder(placeholdersSearchEnum: PlaceholdersSearchEnum) {
@@ -58,17 +62,29 @@ class SearchViewModel(
         searchVacancy(changedText, 0)
     }
 
-    fun loadFilter() {
+    fun loadFilter(searchText: String?) {
         filter = loadFilterSettings()
-
+        if (!searchText.isNullOrEmpty()) {
+            searchVacancy(searchText!!, 0)
+        }
     }
 
     private fun loadFilterSettings(): Filter {
         val settings = filterInteractor.loadFilterSettings()
         val showSalary = settings?.plainFilterSettings?.notShowWithoutSalary ?: false
-        val area = settings?.area?.id
+        val country = settings?.country?.id
+        var area = settings?.area?.id
         val industry = settings?.industry?.id
-        val salary = settings?.plainFilterSettings?.expectedSalary
+        var salary = settings?.plainFilterSettings?.expectedSalary
+        if (area.isNullOrEmpty()) area = country
+        if (salary == 0) salary = null
+        // Проверка если все значения фильтра пустые - подсветку кнопки убрать
+        filterNotInstalled = area.isNullOrEmpty()
+            && country.isNullOrEmpty()
+            && industry.isNullOrEmpty()
+            && !showSalary && salary == null
+        _isFilterOn.value = !filterNotInstalled
+
         return Filter(
             area = area,
             pageLimit = 20,
@@ -87,12 +103,7 @@ class SearchViewModel(
                 IsLastPage.IS_LAST_PAGE = true
             }
             viewModelScope.launch {
-                searchInteractor
-                    .searchVacancies(
-                        changedText,
-                        filter!!,
-                        page = page
-                    )
+                searchInteractor.searchVacancies(changedText, filter!!, page = page)
                     .collect { pair ->
                         processResult(pair.first, pair.second, searchInteractor.foundItems)
                     }

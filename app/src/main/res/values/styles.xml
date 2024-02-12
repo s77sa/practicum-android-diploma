@@ -127,4 +127,11 @@
         <item name="colorControlActivated">@color/yp_blue</item>
     </style>
 
+    <style name="TextInputLayoutFilled" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="colorPrimary">@color/yp_blue</item>
+        <item name="cursorColor">@color/yp_blue</item>
+        <item name="hintTextColor">@color/yp_gray</item>
+        <item name="android:textColorHint">@color/yp_gray</item>
+    </style>
+
 </resources>

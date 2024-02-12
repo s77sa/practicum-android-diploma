@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -49,44 +50,37 @@ class SelectCountryFragment : Fragment() {
                 pbLoading.isVisible = when (state) {
                     is CountrySelectionState.Loading -> true
                     is CountrySelectionState.Success -> {
-                        lifecycleScope.launch {
-                            val countries = state.selectedCountry
-                            val countriesList = countries.map { area ->
-                                Country(area.id, area.name)
-                            }
-                            countryAdapter?.countries = countriesList.toMutableList()
-                            countryAdapter?.notifyDataSetChanged()
+                        val countries = state.selectedCountry
+                        val countriesList = countries.map { area ->
+                            Country(area.id, area.name)
                         }
+                        countryAdapter?.countries = countriesList.toMutableList()
+                        countryAdapter?.notifyDataSetChanged()
+                        recyclerFilterCountry.isVisible = !countriesList.isNullOrEmpty()
                         false
                     }
 
                     is CountrySelectionState.ServerIssue,
-                    is CountrySelectionState.NoData -> false
+                    is CountrySelectionState.NoData,
+                    -> {
+                        val errorLayout = binding.root.findViewById<ConstraintLayout>(R.id.errorLayout)
+                        recyclerFilterCountry.isVisible = false
+                        errorLayout?.isVisible = true
+                        false
+                    }
                 }
-
-                tvError.isVisible = state is CountrySelectionState.ServerIssue || state is CountrySelectionState.NoData
-                ivError.isVisible = state is CountrySelectionState.ServerIssue || state is CountrySelectionState.NoData
-                recyclerFilterCountry.isVisible = state is CountrySelectionState.Success
             }
         }
     }
 
     private fun initRecyclerView() {
         countryAdapter = FilterCountryAdapter { country ->
-            viewModel.applyCountryFilter(country)
-            navigateToSelectWorkplaceFragment(country.name)
+            selectCountry(country)
         }
         binding.recyclerFilterCountry.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = countryAdapter
         }
-    }
-
-    private fun navigateToSelectWorkplaceFragment(selectedCountry: String) {
-        val bundle = Bundle()
-        bundle.putString(SELECTED_COUNTRY, selectedCountry)
-        findNavController().navigateUp()
-        findNavController().navigate(R.id.selectWorkplaceFragment, bundle)
     }
 
     private fun initListeners() {
@@ -95,12 +89,13 @@ class SelectCountryFragment : Fragment() {
         }
     }
 
+    private fun selectCountry(country: Country) {
+        viewModel.applyCountryFilter(country)
+        findNavController().popBackStack()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        const val SELECTED_COUNTRY = "selectedCountry"
     }
 }

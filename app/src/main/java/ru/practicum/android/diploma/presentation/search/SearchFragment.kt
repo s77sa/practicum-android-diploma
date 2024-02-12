@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,6 +46,7 @@ class SearchFragment : Fragment() {
     private var isNeedAddItems = true
     private var lastSearchText = ""
     private var newSearchText = ""
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,17 +69,24 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRecyclerView()
         initClickListener()
+        viewModel.isFilterOn.observe(viewLifecycleOwner, Observer { isFilterOn -> setOnButtonFilter(isFilterOn) })
+    }
 
+    private fun setOnButtonFilter(isFilterOn: Boolean) {
+        if (isFilterOn) {
+            binding.filterButton.setImageResource(R.drawable.ic_filter_on)
+        } else {
+            binding.filterButton.setImageResource(R.drawable.ic_filter_off)
+        }
     }
 
     private fun initObservers() {
         viewModel.placeholderStatusData.observe(viewLifecycleOwner) {
             setPlaceholder(it)
         }
-        viewModel.observeState().observe(viewLifecycleOwner) {
+        viewModel.observeState.observe(viewLifecycleOwner) {
             updateScreen(it)
         }
     }
@@ -109,10 +117,7 @@ class SearchFragment : Fragment() {
                 }
             }
         })
-
-        iconSearch?.setOnClickListener {
-            clearSearch()
-        }
+        iconSearch?.setOnClickListener { clearSearch() }
     }
 
     private fun clearSearch() {
@@ -125,7 +130,7 @@ class SearchFragment : Fragment() {
         val len = searchInput?.text?.length
         if (len != null) {
             if (len > 0) {
-                iconSearch?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_close))
+                iconSearch?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_close_blk))
             } else {
                 iconSearch?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_search))
             }
@@ -147,37 +152,31 @@ class SearchFragment : Fragment() {
 
             PlaceholdersSearchEnum.SHOW_NO_INTERNET -> {
                 if (vacancies.size > 0) {
-                    showAnackBar()
+                    showSnackBar()
                     binding.recyclerView.visibility = View.VISIBLE
                 } else {
                     binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoInternet).visibility = View.VISIBLE
                 }
             }
-
             PlaceholdersSearchEnum.SHOW_NO_VACANCY -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderNoVacancy).visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.SHOW_PROGRESS_CENTER -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressCenter).visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.SHOW_PROGRESS_BOTTOM -> {
                 binding.root.findViewById<ConstraintLayout>(R.id.placeholderProgressBottom).visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.SHOW_RESULT -> {
                 binding.recyclerView.visibility = View.VISIBLE
             }
-
             PlaceholdersSearchEnum.HIDE_ALL -> {}
         }
     }
 
-    private fun showAnackBar() {
-        Snackbar.make(binding.recyclerView, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
-            .show()
+    private fun showSnackBar() {
+        Snackbar.make(binding.recyclerView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
         updateScreen(SearchState.Content(vacancies, foundVacancies))
     }
 
@@ -215,13 +214,11 @@ class SearchFragment : Fragment() {
             null -> {
                 binding.foundResults.visibility = View.GONE
                 binding.recyclerView.visibility = View.GONE
-                Log.d(TAG, "showFoundResultBar null")
             }
 
             0 -> {
                 binding.foundResults.text = getString(R.string.status_no_results)
                 binding.foundResults.isVisible = true
-                Log.d(TAG, "showFoundResultBar 0")
             }
 
             else -> {
@@ -229,7 +226,6 @@ class SearchFragment : Fragment() {
                 value = value.replace(FOUND_REPLACE_PATTERN, foundItems.toString())
                 binding.foundResults.text = value
                 binding.foundResults.isVisible = true
-                Log.d(TAG, "showFoundResultBar else")
             }
         }
     }
@@ -260,9 +256,18 @@ class SearchFragment : Fragment() {
         binding.searchInput.clearFocus()
     }
 
+    override fun onPause() {
+        super.onPause()
+        searchText = binding.searchInput.text.toString()
+    }
+
     override fun onResume() {
         super.onResume()
-        viewModel.loadFilter()
+        lastSearchText = ""
+        newSearchText = ""
+        viewModel.loadFilter(searchText)
+        if (searchText != null) binding.searchInput.setText(searchText)
+
         if (vacancies.size > 0) {
             setPlaceholder(PlaceholdersSearchEnum.SHOW_RESULT)
         } else {
@@ -272,8 +277,10 @@ class SearchFragment : Fragment() {
     }
 
     companion object {
+        private var searchText: String? = null
         const val CLICK_DEBOUNCE_DELAY = 300L
         const val FOUND_REPLACE_PATTERN = "[found]"
+        const val SEARCH_TEXT = "SEARCH_TEXT"
         val TAG: String = SearchFragment::class.java.simpleName
     }
 }

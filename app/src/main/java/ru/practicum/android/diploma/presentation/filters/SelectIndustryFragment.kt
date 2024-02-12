@@ -41,7 +41,6 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getState().observe(viewLifecycleOwner) {
-            Log.i("Industry", "State is $it")
             initStates(it)
         }
         viewModel.getIndustries()
@@ -149,6 +148,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private fun chooseIndustry(industry: Industry) {
         Log.i("Industry", "industry Choosed")
         selectedIndustry = industry
+        Log.i("Industry", "${industry.name}")
         hideKeyboard()
         viewModel.bufferIndustry()
 

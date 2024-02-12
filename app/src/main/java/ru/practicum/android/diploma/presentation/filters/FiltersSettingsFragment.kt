@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -18,16 +19,21 @@ import ru.practicum.android.diploma.domain.models.Area
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.FilterSettings
 import ru.practicum.android.diploma.domain.models.Industry
+import ru.practicum.android.diploma.domain.models.PlainFilterSettings
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FiltersSettingsViewModel
-import ru.practicum.android.diploma.presentation.util.DataTransfer
+import ru.practicum.android.diploma.presentation.search.viewmodel.SharedViewModel
 
 class FiltersSettingsFragment : Fragment() {
     private var _binding: FragmentFiltersSettingsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: FiltersSettingsViewModel by viewModel()
-    private var country: String? = null
-    private var area: String? = null
+    private var country: Country? = null
+    private var area: Area? = null
+    private var industry: Industry? = null
+    private var salaryShow: Boolean = false
+    private var salaryExpected: Int? = null
     private val compareFilters = true
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
 
@@ -40,31 +46,29 @@ class FiltersSettingsFragment : Fragment() {
         initClickListenersNav()
         initObservers()
         initTextChangedListeners()
-        viewModel.loadData()
         viewModel.loadFromShared()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val selectedCountry = arguments?.getString(SelectWorkplaceFragment.SELECTED_COUNTRY)
-        val selectedRegion = arguments?.getString(SelectWorkplaceFragment.SELECTED_REGION)
-        val combinedText = if (!selectedRegion.isNullOrEmpty()) {
-            "$selectedCountry, $selectedRegion"
-        } else {
-            selectedCountry.orEmpty()
-        }
-        binding.workplaceEditText.setText(combinedText)
+
     }
 
     private fun initClickListenersNav() {
         binding.filterSettingsHeaderBack.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.action_settingsFiltersFragment_to_searchFragment)
         }
         binding.workplaceForward.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectWorkplaceFragment)
         }
+        binding.workplaceEditText.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectWorkplaceFragment)
+        }
         binding.industryForward.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectIndustryFragment)
+        }
+        binding.industryEditText.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFiltersFragment_to_selectIndustryFragment)
         }
     }
@@ -76,11 +80,13 @@ class FiltersSettingsFragment : Fragment() {
 
         binding.workplaceClear.setOnClickListener {
             (binding.workplaceEditText as TextView).text = ""
+            viewModel.clearWorkplace()
             viewModel.compareFilters()
         }
 
         binding.industryClear.setOnClickListener {
             (binding.industryEditText as TextView).text = ""
+            viewModel.clearIndustry()
             viewModel.compareFilters()
         }
 
@@ -90,21 +96,24 @@ class FiltersSettingsFragment : Fragment() {
         }
 
         binding.bottonSettingsSave.setOnClickListener {
-            val country = DataTransfer.getCountry()
-            val area = DataTransfer.getArea()
-            val industry = DataTransfer.getIndustry()
-            val plainFilterSettings = DataTransfer.getPlainFilters()
-
+            val country = country
+            val area = area
+            val industry = industry
+            val plainFilterSettings =
+                PlainFilterSettings(expectedSalary = salaryExpected, notShowWithoutSalary = salaryShow)
             val filterSettings = FilterSettings(country, area, industry, plainFilterSettings)
             viewModel.applyFilterSettings(filterSettings)
             findNavController().popBackStack()
+            sharedViewModel.isFilterOn.value = true
         }
         binding.bottonSettingsReset.setOnClickListener {
             (binding.salaryEditText as TextView).text = ""
             (binding.industryEditText as TextView).text = ""
             (binding.workplaceEditText as TextView).text = ""
             viewModel.resetFilters()
+            sharedViewModel.isFilterOn.value = false
         }
+
         binding.salaryEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -132,7 +141,8 @@ class FiltersSettingsFragment : Fragment() {
             setAreaValue(it)
         }
         viewModel.industryData.observe(viewLifecycleOwner) {
-            renderIndustryTextView(it)
+            setIndustryValue(it)
+            Log.d("industryData.observe", "$it")
         }
         viewModel.equalFilter.observe(viewLifecycleOwner) {
             Log.d(TAG, "Observer compare result=$it")
@@ -208,26 +218,28 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun setCountryValue(value: Country?) {
-        if (value != null) {
-            country = value.name
-        }
+        country = value
         renderWorkplaceTextView()
         viewModel.equalFilter
     }
 
     private fun setAreaValue(value: Area?) {
-        if (value != null) {
-            area = value.name
-        }
+        area = value
         renderWorkplaceTextView()
         viewModel.equalFilter
     }
 
+    private fun setIndustryValue(value: Industry?) {
+        industry = value
+        renderIndustryTextView(value)
+        viewModel.equalFilter
+    }
+
     private fun renderWorkplaceTextView() {
-        if (country?.isNotEmpty() == true) {
-            (binding.workplaceEditText as TextView).text = country
-            if (area?.isNotEmpty() == true) {
-                val text = "$country, $area"
+        if (country?.name?.isNotEmpty() == true) {
+            (binding.workplaceEditText as TextView).text = country!!.name
+            if (area?.name?.isNotEmpty() == true) {
+                val text = "${country?.name}, ${area?.name}"
                 (binding.workplaceEditText as TextView).text = text
             }
         }
@@ -240,6 +252,12 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderExpectedSalary(salary: Int) {
+        salaryExpected = if (salary == -1) {
+            null
+        } else {
+            salary
+        }
+
         val oldValue = (binding.salaryEditText as TextView).text.toString()
         if (salary > 0 && oldValue != salary.toString()) {
             (binding.salaryEditText as TextView).text = salary.toString()
@@ -247,7 +265,7 @@ class FiltersSettingsFragment : Fragment() {
     }
 
     private fun renderCheckbox(isChecked: Boolean) {
-        // Log.d(TAG, "renderCheckbox = $isChecked")
+        salaryShow = isChecked
         binding.checkboxNoSalary.isChecked = isChecked
     }
 

@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.domain.api.FilterInteractor
@@ -15,30 +16,34 @@ import ru.practicum.android.diploma.presentation.util.FiltersCompare
 class FiltersSettingsViewModel(
     private val filterInteractor: FilterInteractor
 ) : ViewModel() {
-
     private val _countryData = MutableLiveData<Country?>()
-    val countryData get() = _countryData
+    val countryData: LiveData<Country?> get() = _countryData
 
     private val _industryData = MutableLiveData<Industry?>()
-    val industryData get() = _industryData
+    val industryData: LiveData<Industry?> get() = _industryData
 
     private val _areaData = MutableLiveData<Area?>()
-    val areaData get() = _areaData
+    val areaData: LiveData<Area?> get() = _areaData
 
     private val _plainFiltersData = MutableLiveData<PlainFilterSettings?>()
-    val plainFiltersData get() = _plainFiltersData
+    val plainFiltersData: LiveData<PlainFilterSettings?> get() = _plainFiltersData
 
     private val _equalFilter = MutableLiveData<Boolean>(false)
-    val equalFilter get() = _equalFilter
+    val equalFilter: LiveData<Boolean> get() = _equalFilter
 
     private val _changedFilter = MutableLiveData<Boolean>(false)
-    val changedFilter get() = _changedFilter
+    val changedFilter: LiveData<Boolean> get() = _changedFilter
 
     private var filterSettings: FilterSettings? = null
+    private var loadStatus = 0
 
     fun loadFromShared() {
-        filterSettings = filterInteractor.loadFilterSettings()
-        writeToLiveData()
+        if (loadStatus == 0) {
+            filterSettings = filterInteractor.loadFilterSettings()
+            writeToLiveData()
+            loadStatus = 1
+            saveData()
+        }
     }
 
     private fun writeToLiveData() {
@@ -102,13 +107,13 @@ class FiltersSettingsViewModel(
 
     fun clearIndustry() {
         _industryData.value = null
-        saveData()
+        saveAndCompareFilters()
     }
 
     fun clearWorkplace() {
         _countryData.value = null
         _areaData.value = null
-        saveData()
+        saveAndCompareFilters()
     }
 
     fun clearSalary() {
@@ -117,7 +122,7 @@ class FiltersSettingsViewModel(
             notShowWithoutSalary = _plainFiltersData.value?.notShowWithoutSalary
         )
         Log.d(TAG, "${_plainFiltersData.value}")
-        saveData()
+        savePlainFiltersData()
     }
 
     fun saveExpectedSalary(salary: String) {
@@ -128,9 +133,8 @@ class FiltersSettingsViewModel(
                     expectedSalary = salary.toInt(),
                     notShowWithoutSalary = _plainFiltersData.value?.notShowWithoutSalary
                 )
+            savePlainFiltersData()
         }
-        DataTransfer.setPlainFilters(_plainFiltersData.value)
-        compareFilters()
     }
 
     fun loadData() {
@@ -141,7 +145,7 @@ class FiltersSettingsViewModel(
         checkChangedFilters()
     }
 
-    private fun saveData() {
+    fun saveData() {
         DataTransfer.setPlainFilters(_plainFiltersData.value)
         DataTransfer.setCountry(_countryData.value)
         DataTransfer.setIndustry(_industryData.value)
@@ -150,8 +154,20 @@ class FiltersSettingsViewModel(
         compareFilters()
     }
 
+    private fun saveAndCompareFilters() {
+        savePlainFiltersData()
+        compareFilters()
+    }
+
+    private fun savePlainFiltersData() {
+        DataTransfer.setPlainFilters(_plainFiltersData.value)
+        checkChangedFilters()
+        compareFilters()
+    }
+
     fun applyFilterSettings(filter: FilterSettings) {
         filterInteractor.writeFilterSettings(filter)
+        loadStatus = 0
     }
 
     companion object {
