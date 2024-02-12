@@ -145,8 +145,8 @@
         android:layout_marginTop="@dimen/dp_8"
         android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/foundResults"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/foundResults"
         tools:itemCount="10" />
 
     <include

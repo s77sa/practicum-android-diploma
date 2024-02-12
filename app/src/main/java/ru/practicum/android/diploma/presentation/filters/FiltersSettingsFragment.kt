@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.presentation.filters
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,11 +47,6 @@ class FiltersSettingsFragment : Fragment() {
         initTextChangedListeners()
         viewModel.loadFromShared()
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 
     private fun initClickListenersNav() {
@@ -142,14 +136,11 @@ class FiltersSettingsFragment : Fragment() {
         }
         viewModel.industryData.observe(viewLifecycleOwner) {
             setIndustryValue(it)
-            Log.d("industryData.observe", "$it")
         }
         viewModel.equalFilter.observe(viewLifecycleOwner) {
-            Log.d(TAG, "Observer compare result=$it")
             renderBottonApply(it)
         }
         viewModel.changedFilter.observe(viewLifecycleOwner) {
-            Log.d(TAG, "changedFilter=$it")
             renderBottonApply(it)
         }
     }
