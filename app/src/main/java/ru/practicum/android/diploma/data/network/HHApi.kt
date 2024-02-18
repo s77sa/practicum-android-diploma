@@ -7,6 +7,7 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.dto.AreaNestedDto
+import ru.practicum.android.diploma.data.dto.IndustryDto
 import ru.practicum.android.diploma.data.dto.VacancyDetailResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 
@@ -34,5 +35,8 @@ interface HHApi {
 
     @GET("/areas/{area_id}/")
     suspend fun getNestedArea(@Path("area_id") id: String): Response<AreaNestedDto>
+
+    @GET("/industries/")
+    suspend fun getIndustries(): Response<List<IndustryDto>>
 
 }

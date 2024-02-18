@@ -6,12 +6,249 @@
     android:layout_height="match_parent"
     tools:context="ru.practicum.android.diploma.presentation.filters.FiltersSettingsFragment">
 
-    <TextView
-        android:id="@+id/textView"
-        style="@style/HeaderStyle"
-        android:text="@string/filters_header"
+    <ImageView
+        android:id="@+id/filterSettingsHeaderBack"
+        style="@style/HeaderBackArrowStyle"
+        android:contentDescription="@string/description"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </TextView>
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/filterSettingsHeader"
+        style="@style/SelectHeaderStyle"
+        android:text="@string/filters_header"
+        app:layout_constraintStart_toEndOf="@+id/filterSettingsHeaderBack"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/workplaceLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_60"
+        android:layout_marginTop="@dimen/dp_36"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/ys_display_regular"
+        android:hint="@string/hint_workplace"
+        android:imeOptions="actionDone|flagNoExtractUi"
+        android:inputType="textCapSentences"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAlignment="viewStart"
+        android:textColorHint="@color/yp_gray"
+        android:textSize="@dimen/sp_12"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:errorEnabled="false"
+        app:hintTextColor="@color/blackDayWhiteNight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterSettingsHeader">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/workplaceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="false"
+            android:fontFamily="@font/ys_display_regular"
+            android:maxLines="1"
+            android:textAlignment="viewStart"
+            android:textSize="@dimen/sp_16"
+            app:boxBackgroundColor="@android:color/transparent" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/workplaceForward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:contentDescription="@string/description"
+        android:src="@drawable/ic_forward"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/workplaceLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/workplaceLayout" />
+
+    <ImageView
+        android:id="@+id/workplaceClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:contentDescription="@string/description"
+        android:src="@drawable/ic_close"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/workplaceLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/workplaceLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/industryLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_60"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/ys_display_regular"
+        android:hint="@string/hint_industry"
+        android:imeOptions="actionDone|flagNoExtractUi"
+        android:inputType="textCapSentences"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAlignment="viewStart"
+        android:textColorHint="@color/yp_gray"
+        android:textSize="@dimen/sp_12"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:errorEnabled="false"
+        app:hintTextColor="@color/blackDayWhiteNight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workplaceLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/industryEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="false"
+            android:fontFamily="@font/ys_display_regular"
+            android:maxLines="1"
+            android:textAlignment="viewStart"
+            android:textSize="@dimen/sp_16"
+            app:boxBackgroundColor="@android:color/transparent" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/industryForward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:contentDescription="@string/description"
+        android:src="@drawable/ic_forward"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/industryLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workplaceLayout" />
+
+    <ImageView
+        android:id="@+id/industryClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:contentDescription="@string/description"
+        android:src="@drawable/ic_close"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/industryLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workplaceLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/salaryLayout"
+        style="@style/TextInputLayoutFilled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_24"
+        android:hint="@string/hint_exp_salary"
+        android:textColorHint="@color/grayDayWhiteNight"
+        app:boxCollapsedPaddingTop="@dimen/dp_8"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:expandedHintEnabled="false"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/yp_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/industryLayout"
+        app:placeholderTextColor="@color/yp_gray">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/salaryEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/filter_ext_rounded"
+            android:fontFamily="@font/ys_display_regular"
+            android:hint="@string/hint_enter_salary"
+            android:inputType="number"
+            android:textColor="@color/yp_black"
+            android:textColorHint="@color/grayDayWhiteNight"
+            android:textSize="@dimen/sp_16" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/salaryClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:contentDescription="@string/description"
+        android:src="@drawable/ic_close"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/salaryLayout"
+        app:layout_constraintEnd_toEndOf="@+id/salaryLayout"
+        app:layout_constraintTop_toTopOf="@+id/salaryLayout"
+        app:tint="@color/yp_black" />
+
+    <TextView
+        android:id="@+id/textNoSalary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_44"
+        android:fontFamily="@font/ys_display_regular"
+        android:text="@string/filter_no_show_salary"
+        android:textColor="@color/blackDayWhiteNight"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/salaryLayout" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkboxNoSalary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_4"
+        android:theme="@style/salary_check"
+        app:buttonTint="@color/yp_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/textNoSalary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textNoSalary"
+        app:layout_constraintVertical_bias="0.31" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bottonSettingsSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:background="@drawable/filter_ext_rounded"
+        android:backgroundTint="@color/yp_blue"
+        android:paddingVertical="@dimen/dp_20"
+        android:text="@string/filter_settings_apply"
+        android:textAllCaps="false"
+        android:textColor="@color/yp_white"
+        android:textSize="@dimen/sp_16"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/bottonSettingsReset"
+        app:layout_constraintEnd_toEndOf="@+id/bottonSettingsReset"
+        app:layout_constraintStart_toStartOf="@+id/bottonSettingsReset" />
+
+    <TextView
+        android:id="@+id/bottonSettingsReset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_24"
+        android:fontFamily="@font/ys_display_medium"
+        android:gravity="center"
+        android:paddingVertical="@dimen/dp_20"
+        android:text="@string/filter_settings_reset"
+        android:textColor="@color/yp_red"
+        android:textSize="@dimen/sp_16"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+

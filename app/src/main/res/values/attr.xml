@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorLightGreyGrey" format="reference"/>
+    <attr name="colorGreyWhite" format="reference"/>
+    <attr name="colorbottomNavMenuActive" format="reference"/>
+    <attr name="colorbottomNavMenuNotActive" format="reference"/>
+    <attr name="colorbottomNavDivider" format="reference"/>
+    <attr name="colorbottomNavBack" format="reference"/>
+    <attr name="colorredbuttom" format="reference"/>
+</resources>

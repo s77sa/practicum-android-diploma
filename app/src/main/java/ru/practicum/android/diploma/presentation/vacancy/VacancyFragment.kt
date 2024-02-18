@@ -32,6 +32,7 @@ class VacancyFragment : Fragment() {
     private var vacancyId: String? = null
     private var isFavourite: Boolean = false
     private var currentVacancy: Vacancy? = null
+    private val formatVacancyHTML get() = FormatVacancyHTML(requireContext())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -162,7 +163,7 @@ class VacancyFragment : Fragment() {
     }
 
     private fun loadJobDescription(vacancy: Vacancy) {
-        val jobDescriptionHtml = currentVacancy?.description?.let { getHMLDescription(vacancy, it, requireContext()) }
+        val jobDescriptionHtml = currentVacancy?.description?.let { formatVacancyHTML.getHMLDescription(vacancy, it) }
         if (jobDescriptionHtml != null) {
             binding.wvJobDescription.loadDataWithBaseURL(null, jobDescriptionHtml, "text/html", "utf-8", null)
         }
@@ -173,7 +174,8 @@ class VacancyFragment : Fragment() {
             binding.tvKeySkillsTitle.text = getString(R.string.key_skills)
             binding.wvKeySkills.loadDataWithBaseURL(
                 null,
-                formatSkillsList(vacancy.skills, requireContext()),
+                formatVacancyHTML.formatSkillsList(vacancy.skills),
+
                 "text/html",
                 "utf-8",
                 null

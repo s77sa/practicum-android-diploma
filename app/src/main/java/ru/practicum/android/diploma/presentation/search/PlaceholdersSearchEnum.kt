@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.presentation.search
 
-enum class PlaceholdersEnum {
+enum class PlaceholdersSearchEnum {
     HIDE_ALL,
     SHOW_RESULT,
     SHOW_BLANK,
