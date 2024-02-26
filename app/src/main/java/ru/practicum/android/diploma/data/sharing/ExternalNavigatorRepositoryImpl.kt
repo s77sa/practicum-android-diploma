@@ -4,7 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import ru.practicum.android.diploma.domain.sharing.ExternalNavigatorRepository
+import ru.practicum.android.diploma.domain.api.ExternalNavigatorRepository
 
 class ExternalNavigatorRepositoryImpl(private val context: Context) : ExternalNavigatorRepository {
 
@@ -40,6 +40,7 @@ class ExternalNavigatorRepositoryImpl(private val context: Context) : ExternalNa
         return try {
             val shareIntent = Intent(Intent.ACTION_DIAL)
             shareIntent.data = Uri.parse("tel:$number")
+            shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(shareIntent)
             null
         } catch (e: ActivityNotFoundException) {

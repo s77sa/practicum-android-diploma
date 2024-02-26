@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="ru.practicum.android.diploma.presentation.SearchFragment"
+        android:name="ru.practicum.android.diploma.presentation.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/favouriteFragment"
-        android:name="ru.practicum.android.diploma.presentation.FavouriteFragment"
+        android:name="ru.practicum.android.diploma.presentation.favourite.FavouriteFragment"
         android:label="fragment_favourite"
         tools:layout="@layout/fragment_favourite">
         <action
@@ -30,33 +30,20 @@
 
     <fragment
         android:id="@+id/teamFragment"
-        android:name="ru.practicum.android.diploma.presentation.TeamFragment"
+        android:name="ru.practicum.android.diploma.presentation.team.TeamFragment"
         android:label="fragment_team"
         tools:layout="@layout/fragment_team" />
 
     <fragment
         android:id="@+id/vacancyFragment"
-        android:name="ru.practicum.android.diploma.presentation.VacancyFragment"
+        android:name="ru.practicum.android.diploma.presentation.vacancy.VacancyFragment"
         android:label="VacancyFragment"
-        tools:layout="@layout/fragment_vacancy">
-        <action
-            android:id="@+id/action_vacancyFragment_to_similarVacanciesFragment"
-            app:destination="@id/similarVacanciesFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_vacancy"></fragment>
 
-    <fragment
-        android:id="@+id/similarVacanciesFragment"
-        android:name="ru.practicum.android.diploma.presentation.SimilarVacanciesFragment"
-        android:label="fragment_similar_vacancies"
-        tools:layout="@layout/fragment_similar_vacancies">
-        <action
-            android:id="@+id/action_similarVacanciesFragment_to_vacancyFragment"
-            app:destination="@id/vacancyFragment" />
-    </fragment>
 
     <fragment
         android:id="@+id/filtersSettingsFragment"
-        android:name="ru.practicum.android.diploma.presentation.FiltersSettingsFragment"
+        android:name="ru.practicum.android.diploma.presentation.filters.FiltersSettingsFragment"
         android:label="fragment_settings_filters"
         tools:layout="@layout/fragment_filters_settings">
         <action
@@ -72,17 +59,21 @@
 
     <fragment
         android:id="@+id/selectCountryFragment"
-        android:name="ru.practicum.android.diploma.presentation.SelectCountryFragment"
+        android:name="ru.practicum.android.diploma.presentation.filters.SelectCountryFragment"
         android:label="fragment_select_country"
         tools:layout="@layout/fragment_select_country">
         <action
             android:id="@+id/action_selectCountryFragment_to_selectWorkplaceFragment"
             app:destination="@id/selectWorkplaceFragment" />
+        <argument
+            android:name="selectedCountry"
+            android:defaultValue=""
+            app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/selectRegionFragment"
-        android:name="ru.practicum.android.diploma.presentation.SelectRegionFragment"
+        android:name="ru.practicum.android.diploma.presentation.filters.SelectRegionFragment"
         android:label="fragment_select_region"
         tools:layout="@layout/fragment_select_region">
         <action
@@ -92,7 +83,7 @@
 
     <fragment
         android:id="@+id/selectWorkplaceFragment"
-        android:name="ru.practicum.android.diploma.presentation.SelectWorkplaceFragment"
+        android:name="ru.practicum.android.diploma.presentation.filters.SelectWorkplaceFragment"
         android:label="fragment_select_workplace"
         tools:layout="@layout/fragment_select_workplace">
         <action
@@ -108,7 +99,7 @@
 
     <fragment
         android:id="@+id/selectIndustryFragment"
-        android:name="ru.practicum.android.diploma.presentation.SelectIndustryFragment"
+        android:name="ru.practicum.android.diploma.presentation.filters.SelectIndustryFragment"
         android:label="SelectIndustryFragment"
         tools:layout="@layout/fragment_select_industry">
         <action

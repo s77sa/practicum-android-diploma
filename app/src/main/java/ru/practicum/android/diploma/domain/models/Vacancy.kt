@@ -12,15 +12,15 @@ data class Vacancy(
     val salaryTo: Int?,
     val contactEmail: String?,
     val contactName: String?,
-    val contactPhones: String?,
-    val contactComment: String?,
+    val contactPhones: List<String>,
+    val contactComment: List<String?>?,
     val description: String,
-    val url: String,
+    val url: String?,
     val area: String,
     val logo: String?,
     val experience: String?,
-    val skills: String,
+    val skills: List<String>?,
     val schedule: String?,
     val isFavourite: Boolean?,
+    val address: String?
 )
-

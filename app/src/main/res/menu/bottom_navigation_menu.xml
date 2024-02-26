@@ -4,16 +4,16 @@
     <item
         android:id="@+id/searchFragment"
         android:icon="@drawable/ic_main_menu"
-        android:title="Главная" />
+        android:title="@string/main" />
 
     <item
         android:id="@+id/favouriteFragment"
         android:icon="@drawable/bottomnav_favorite"
-        android:title="Избранное" />
+        android:title="@string/favourite" />
 
     <item
         android:id="@+id/teamFragment"
         android:icon="@drawable/bottomnav_team"
-        android:title="Команда" />
+        android:title="@string/team" />
 
 </menu>
