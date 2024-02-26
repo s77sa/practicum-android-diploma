@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ru.practicum.android.diploma.presentation.filters.SelectCountryFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/size_16" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/size_16" />
+
+    <ImageView
+        android:id="@+id/select_country_back_arrow_imageview"
+        style="@style/HeaderBackArrowStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/select_country_header_textview"
+        style="@style/SelectHeaderStyle"
+        android:text="@string/country_header"
+        app:layout_constraintStart_toEndOf="@+id/select_country_back_arrow_imageview"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_filter_country"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/size_16"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/right_border"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/left_border"
+        app:layout_constraintTop_toBottomOf="@+id/select_country_header_textview"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <include
+        android:id="@+id/errorLayout"
+        layout="@layout/placeholder_item_no_region_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:indeterminateTint="@color/yp_blue"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_country_header_textview" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
